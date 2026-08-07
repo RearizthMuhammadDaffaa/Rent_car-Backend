@@ -1,0 +1,60 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id        String     @id @default(uuid())
+  name      String
+  email     String     @unique
+  password  String
+  role      RoleStatus @default(CUSTOMER)
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @default(now()) @updatedAt
+}
+
+model Vehicles {
+  id           String          @id @default(uuid())
+  category_id  String
+  brand_id     String
+  plate_number String
+  model        String
+  year         Int
+  color        String
+  seat         String
+  status       Status_vehicles @default(AVAILABLE)
+  thumbnail    String
+  description  String
+  createdAt    DateTime        @default(now())
+  updatedAt    DateTime        @default(now()) @updatedAt
+}
+
+model Brands {
+  id   String @id @default(uuid())
+  name String
+  logo String
+}
+
+model Vehicle_Categories {
+  id          String   @id @default(uuid())
+  name        String
+  description String?
+}
+
+enum RoleStatus {
+  GUEST
+  CUSTOMER
+  ADMIN
+  SUPERADMIN
+}
+
+enum Status_vehicles {
+  AVAILABLE
+  BOOKED
+  MAINTENANCE
+  INACTIVE
+}
