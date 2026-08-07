@@ -15,7 +15,7 @@ export const createVehicleSchema = z.object({
   status: z
     .enum(["AVAILABLE", "BOOKED", "MAINTENANCE", "INACTIVE"])
     .default("AVAILABLE"),
-  thumbnail: z.string().trim().min(1, "Thumbnail wajib diisi test"),
+  thumbnail: z.string().trim().min(1, "Thumbnail wajib diisi"),
   description: z.string().trim().min(5, "Description minimal 5 karakter"),
 });
 
