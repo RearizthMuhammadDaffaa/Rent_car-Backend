@@ -9,13 +9,19 @@ export const createVehicleSchema = z.object({
     .min(3, "Plate number minimal 3 karakter")
     .max(20),
   model: z.string().trim().min(2, "Model minimal 2 karakter").max(100),
-  year: z.number().int().min(1900).max(new Date().getFullYear() + 1),
+  year: z
+    .union([z.number().int(), z.string().trim().regex(/^\d+$/).transform(Number)])
+    .transform((value) => (typeof value === "string" ? Number(value) : value))
+    .refine((value) => Number.isInteger(value) && value >= 1900 && value <= new Date().getFullYear() + 1, {
+      message: "Tahun kendaraan tidak valid",
+    }),
   color: z.string().trim().min(2, "Color minimal 2 karakter").max(50),
   seat: z.string().trim().min(1, "Seat wajib diisi").max(20),
   status: z
     .enum(["AVAILABLE", "BOOKED", "MAINTENANCE", "INACTIVE"])
     .default("AVAILABLE"),
-  thumbnail: z.string().trim().min(1, "Thumbnail wajib diisi"),
+  thumbnail: z.string().url("Thumbnail harus berupa URL"),
+  thumbnailPublicId: z.string().optional(),
   description: z.string().trim().min(5, "Description minimal 5 karakter"),
 });
 

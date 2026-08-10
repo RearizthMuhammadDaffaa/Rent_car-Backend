@@ -61,3 +61,13 @@ export type Brands = Prisma.BrandsModel
  * 
  */
 export type Vehicle_Categories = Prisma.Vehicle_CategoriesModel
+/**
+ * Model Coupons
+ * 
+ */
+export type Coupons = Prisma.CouponsModel
+/**
+ * Model VehicleImage
+ * 
+ */
+export type VehicleImage = Prisma.VehicleImageModel

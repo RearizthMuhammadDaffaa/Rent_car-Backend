@@ -166,12 +166,14 @@ export type Vehicle_CategoriesWhereInput = {
   id?: Prisma.StringFilter<"Vehicle_Categories"> | string
   name?: Prisma.StringFilter<"Vehicle_Categories"> | string
   description?: Prisma.StringNullableFilter<"Vehicle_Categories"> | string | null
+  vehicles?: Prisma.VehiclesListRelationFilter
 }
 
 export type Vehicle_CategoriesOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
+  vehicles?: Prisma.VehiclesOrderByRelationAggregateInput
 }
 
 export type Vehicle_CategoriesWhereUniqueInput = Prisma.AtLeast<{
@@ -181,6 +183,7 @@ export type Vehicle_CategoriesWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.Vehicle_CategoriesWhereInput | Prisma.Vehicle_CategoriesWhereInput[]
   name?: Prisma.StringFilter<"Vehicle_Categories"> | string
   description?: Prisma.StringNullableFilter<"Vehicle_Categories"> | string | null
+  vehicles?: Prisma.VehiclesListRelationFilter
 }, "id">
 
 export type Vehicle_CategoriesOrderByWithAggregationInput = {
@@ -205,24 +208,28 @@ export type Vehicle_CategoriesCreateInput = {
   id?: string
   name: string
   description?: string | null
+  vehicles?: Prisma.VehiclesCreateNestedManyWithoutCategoryInput
 }
 
 export type Vehicle_CategoriesUncheckedCreateInput = {
   id?: string
   name: string
   description?: string | null
+  vehicles?: Prisma.VehiclesUncheckedCreateNestedManyWithoutCategoryInput
 }
 
 export type Vehicle_CategoriesUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  vehicles?: Prisma.VehiclesUpdateManyWithoutCategoryNestedInput
 }
 
 export type Vehicle_CategoriesUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  vehicles?: Prisma.VehiclesUncheckedUpdateManyWithoutCategoryNestedInput
 }
 
 export type Vehicle_CategoriesCreateManyInput = {
@@ -243,6 +250,11 @@ export type Vehicle_CategoriesUncheckedUpdateManyInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
+export type Vehicle_CategoriesScalarRelationFilter = {
+  is?: Prisma.Vehicle_CategoriesWhereInput
+  isNot?: Prisma.Vehicle_CategoriesWhereInput
+}
+
 export type Vehicle_CategoriesCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
@@ -261,16 +273,97 @@ export type Vehicle_CategoriesMinOrderByAggregateInput = {
   description?: Prisma.SortOrder
 }
 
-export type NullableStringFieldUpdateOperationsInput = {
-  set?: string | null
+export type Vehicle_CategoriesCreateNestedOneWithoutVehiclesInput = {
+  create?: Prisma.XOR<Prisma.Vehicle_CategoriesCreateWithoutVehiclesInput, Prisma.Vehicle_CategoriesUncheckedCreateWithoutVehiclesInput>
+  connectOrCreate?: Prisma.Vehicle_CategoriesCreateOrConnectWithoutVehiclesInput
+  connect?: Prisma.Vehicle_CategoriesWhereUniqueInput
 }
 
+export type Vehicle_CategoriesUpdateOneRequiredWithoutVehiclesNestedInput = {
+  create?: Prisma.XOR<Prisma.Vehicle_CategoriesCreateWithoutVehiclesInput, Prisma.Vehicle_CategoriesUncheckedCreateWithoutVehiclesInput>
+  connectOrCreate?: Prisma.Vehicle_CategoriesCreateOrConnectWithoutVehiclesInput
+  upsert?: Prisma.Vehicle_CategoriesUpsertWithoutVehiclesInput
+  connect?: Prisma.Vehicle_CategoriesWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.Vehicle_CategoriesUpdateToOneWithWhereWithoutVehiclesInput, Prisma.Vehicle_CategoriesUpdateWithoutVehiclesInput>, Prisma.Vehicle_CategoriesUncheckedUpdateWithoutVehiclesInput>
+}
+
+export type Vehicle_CategoriesCreateWithoutVehiclesInput = {
+  id?: string
+  name: string
+  description?: string | null
+}
+
+export type Vehicle_CategoriesUncheckedCreateWithoutVehiclesInput = {
+  id?: string
+  name: string
+  description?: string | null
+}
+
+export type Vehicle_CategoriesCreateOrConnectWithoutVehiclesInput = {
+  where: Prisma.Vehicle_CategoriesWhereUniqueInput
+  create: Prisma.XOR<Prisma.Vehicle_CategoriesCreateWithoutVehiclesInput, Prisma.Vehicle_CategoriesUncheckedCreateWithoutVehiclesInput>
+}
+
+export type Vehicle_CategoriesUpsertWithoutVehiclesInput = {
+  update: Prisma.XOR<Prisma.Vehicle_CategoriesUpdateWithoutVehiclesInput, Prisma.Vehicle_CategoriesUncheckedUpdateWithoutVehiclesInput>
+  create: Prisma.XOR<Prisma.Vehicle_CategoriesCreateWithoutVehiclesInput, Prisma.Vehicle_CategoriesUncheckedCreateWithoutVehiclesInput>
+  where?: Prisma.Vehicle_CategoriesWhereInput
+}
+
+export type Vehicle_CategoriesUpdateToOneWithWhereWithoutVehiclesInput = {
+  where?: Prisma.Vehicle_CategoriesWhereInput
+  data: Prisma.XOR<Prisma.Vehicle_CategoriesUpdateWithoutVehiclesInput, Prisma.Vehicle_CategoriesUncheckedUpdateWithoutVehiclesInput>
+}
+
+export type Vehicle_CategoriesUpdateWithoutVehiclesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+}
+
+export type Vehicle_CategoriesUncheckedUpdateWithoutVehiclesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+}
+
+
+/**
+ * Count Type Vehicle_CategoriesCountOutputType
+ */
+
+export type Vehicle_CategoriesCountOutputType = {
+  vehicles: number
+}
+
+export type Vehicle_CategoriesCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  vehicles?: boolean | Vehicle_CategoriesCountOutputTypeCountVehiclesArgs
+}
+
+/**
+ * Vehicle_CategoriesCountOutputType without action
+ */
+export type Vehicle_CategoriesCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Vehicle_CategoriesCountOutputType
+   */
+  select?: Prisma.Vehicle_CategoriesCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * Vehicle_CategoriesCountOutputType without action
+ */
+export type Vehicle_CategoriesCountOutputTypeCountVehiclesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.VehiclesWhereInput
+}
 
 
 export type Vehicle_CategoriesSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   name?: boolean
   description?: boolean
+  vehicles?: boolean | Prisma.Vehicle_Categories$vehiclesArgs<ExtArgs>
+  _count?: boolean | Prisma.Vehicle_CategoriesCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["vehicle_Categories"]>
 
 export type Vehicle_CategoriesSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -292,10 +385,18 @@ export type Vehicle_CategoriesSelectScalar = {
 }
 
 export type Vehicle_CategoriesOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "description", ExtArgs["result"]["vehicle_Categories"]>
+export type Vehicle_CategoriesInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  vehicles?: boolean | Prisma.Vehicle_Categories$vehiclesArgs<ExtArgs>
+  _count?: boolean | Prisma.Vehicle_CategoriesCountOutputTypeDefaultArgs<ExtArgs>
+}
+export type Vehicle_CategoriesIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
+export type Vehicle_CategoriesIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
 
 export type $Vehicle_CategoriesPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Vehicle_Categories"
-  objects: {}
+  objects: {
+    vehicles: Prisma.$VehiclesPayload<ExtArgs>[]
+  }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     name: string
@@ -694,6 +795,7 @@ readonly fields: Vehicle_CategoriesFieldRefs;
  */
 export interface Prisma__Vehicle_CategoriesClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  vehicles<T extends Prisma.Vehicle_Categories$vehiclesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Vehicle_Categories$vehiclesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$VehiclesPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -743,6 +845,10 @@ export type Vehicle_CategoriesFindUniqueArgs<ExtArgs extends runtime.Types.Exten
    */
   omit?: Prisma.Vehicle_CategoriesOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.Vehicle_CategoriesInclude<ExtArgs> | null
+  /**
    * Filter, which Vehicle_Categories to fetch.
    */
   where: Prisma.Vehicle_CategoriesWhereUniqueInput
@@ -761,6 +867,10 @@ export type Vehicle_CategoriesFindUniqueOrThrowArgs<ExtArgs extends runtime.Type
    */
   omit?: Prisma.Vehicle_CategoriesOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.Vehicle_CategoriesInclude<ExtArgs> | null
+  /**
    * Filter, which Vehicle_Categories to fetch.
    */
   where: Prisma.Vehicle_CategoriesWhereUniqueInput
@@ -778,6 +888,10 @@ export type Vehicle_CategoriesFindFirstArgs<ExtArgs extends runtime.Types.Extens
    * Omit specific fields from the Vehicle_Categories
    */
   omit?: Prisma.Vehicle_CategoriesOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.Vehicle_CategoriesInclude<ExtArgs> | null
   /**
    * Filter, which Vehicle_Categories to fetch.
    */
@@ -827,6 +941,10 @@ export type Vehicle_CategoriesFindFirstOrThrowArgs<ExtArgs extends runtime.Types
    */
   omit?: Prisma.Vehicle_CategoriesOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.Vehicle_CategoriesInclude<ExtArgs> | null
+  /**
    * Filter, which Vehicle_Categories to fetch.
    */
   where?: Prisma.Vehicle_CategoriesWhereInput
@@ -874,6 +992,10 @@ export type Vehicle_CategoriesFindManyArgs<ExtArgs extends runtime.Types.Extensi
    * Omit specific fields from the Vehicle_Categories
    */
   omit?: Prisma.Vehicle_CategoriesOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.Vehicle_CategoriesInclude<ExtArgs> | null
   /**
    * Filter, which Vehicle_Categories to fetch.
    */
@@ -923,6 +1045,10 @@ export type Vehicle_CategoriesCreateArgs<ExtArgs extends runtime.Types.Extension
    */
   omit?: Prisma.Vehicle_CategoriesOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.Vehicle_CategoriesInclude<ExtArgs> | null
+  /**
    * The data needed to create a Vehicle_Categories.
    */
   data: Prisma.XOR<Prisma.Vehicle_CategoriesCreateInput, Prisma.Vehicle_CategoriesUncheckedCreateInput>
@@ -970,6 +1096,10 @@ export type Vehicle_CategoriesUpdateArgs<ExtArgs extends runtime.Types.Extension
    * Omit specific fields from the Vehicle_Categories
    */
   omit?: Prisma.Vehicle_CategoriesOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.Vehicle_CategoriesInclude<ExtArgs> | null
   /**
    * The data needed to update a Vehicle_Categories.
    */
@@ -1037,6 +1167,10 @@ export type Vehicle_CategoriesUpsertArgs<ExtArgs extends runtime.Types.Extension
    */
   omit?: Prisma.Vehicle_CategoriesOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.Vehicle_CategoriesInclude<ExtArgs> | null
+  /**
    * The filter to search for the Vehicle_Categories to update in case it exists.
    */
   where: Prisma.Vehicle_CategoriesWhereUniqueInput
@@ -1063,6 +1197,10 @@ export type Vehicle_CategoriesDeleteArgs<ExtArgs extends runtime.Types.Extension
    */
   omit?: Prisma.Vehicle_CategoriesOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.Vehicle_CategoriesInclude<ExtArgs> | null
+  /**
    * Filter which Vehicle_Categories to delete.
    */
   where: Prisma.Vehicle_CategoriesWhereUniqueInput
@@ -1083,6 +1221,30 @@ export type Vehicle_CategoriesDeleteManyArgs<ExtArgs extends runtime.Types.Exten
 }
 
 /**
+ * Vehicle_Categories.vehicles
+ */
+export type Vehicle_Categories$vehiclesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Vehicles
+   */
+  select?: Prisma.VehiclesSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Vehicles
+   */
+  omit?: Prisma.VehiclesOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.VehiclesInclude<ExtArgs> | null
+  where?: Prisma.VehiclesWhereInput
+  orderBy?: Prisma.VehiclesOrderByWithRelationInput | Prisma.VehiclesOrderByWithRelationInput[]
+  cursor?: Prisma.VehiclesWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.VehiclesScalarFieldEnum | Prisma.VehiclesScalarFieldEnum[]
+}
+
+/**
  * Vehicle_Categories without action
  */
 export type Vehicle_CategoriesDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1094,4 +1256,8 @@ export type Vehicle_CategoriesDefaultArgs<ExtArgs extends runtime.Types.Extensio
    * Omit specific fields from the Vehicle_Categories
    */
   omit?: Prisma.Vehicle_CategoriesOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.Vehicle_CategoriesInclude<ExtArgs> | null
 }

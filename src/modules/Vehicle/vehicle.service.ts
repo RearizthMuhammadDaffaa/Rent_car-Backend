@@ -1,4 +1,5 @@
 import { NotFoundError } from "../../errors/NotFoundError";
+import { cloudinaryService } from "../../shared/service/cloudinary.service";
 import { vehicleRepository } from "./vehicle.repository";
 import {
   CreateVehicleDto,
@@ -29,8 +30,13 @@ export const VehicleService = {
     }
 
     const validatedData = updateVehicleSchema.parse(data);
+    const updatedVehicle = await vehicleRepository.update(id, validatedData);
 
-    return vehicleRepository.update(id, validatedData);
+    if (validatedData.thumbnail && validatedData.thumbnailPublicId && vehicle.thumbnailPublicId) {
+      await cloudinaryService.deleteImage(vehicle.thumbnailPublicId);
+    }
+
+    return updatedVehicle;
   },
 
   deleteVehicle: async (id: string) => {
@@ -38,6 +44,10 @@ export const VehicleService = {
 
     if (!vehicle) {
       throw new NotFoundError("Vehicle Not Found");
+    }
+
+    if (vehicle.thumbnailPublicId) {
+      await cloudinaryService.deleteImage(vehicle.thumbnailPublicId);
     }
 
     return vehicleRepository.delete(id);
