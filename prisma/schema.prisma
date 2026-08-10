@@ -18,31 +18,42 @@ model User {
 }
 
 model Vehicles {
-  id           String          @id @default(uuid())
-  category_id  String
-  brand_id     String
-  plate_number String
-  model        String
-  year         Int
-  color        String
-  seat         String
-  status       Status_vehicles @default(AVAILABLE)
-  thumbnail    String
-  description  String
-  createdAt    DateTime        @default(now())
-  updatedAt    DateTime        @default(now()) @updatedAt
+  id               String          @id @default(uuid())
+  category_id      String
+  brand_id         String
+  plate_number     String
+  model            String
+  year             Int
+  color            String
+  seat             String
+  status           Status_vehicles @default(AVAILABLE)
+  thumbnail        String
+  thumbnailPublicId String?
+  description      String
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @default(now()) @updatedAt
+  VehicleImage     VehicleImage[]
+
+  category Vehicle_Categories @relation(fields: [category_id], references: [id])
+
+  brand Brands @relation(fields: [brand_id],references: [id])
 }
 
 model Brands {
   id   String @id @default(uuid())
   name String
-  logo String
+  logo String?
+  logoPublicId String?
+
+  vehicles Vehicles[]
 }
 
 model Vehicle_Categories {
   id          String   @id @default(uuid())
   name        String
   description String?
+
+  vehicles Vehicles[]
 }
 
 enum RoleStatus {
@@ -58,3 +69,26 @@ enum Status_vehicles {
   MAINTENANCE
   INACTIVE
 }
+
+model Coupons {
+  id String   @id @default(uuid())
+  code String  
+  discountValue Decimal
+  usageLimit Int
+  usedCount Int
+  expiredAt DateTime
+  isActive Boolean
+  createdAt    DateTime        @default(now())
+}
+
+model VehicleImage {
+  id            String   @id @default(uuid())
+  vehicle_id    String
+  image_url     String
+  imagePublicId String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @default(now()) @updatedAt
+
+   vehicle Vehicles @relation(fields: [vehicle_id], references: [id])
+}
+

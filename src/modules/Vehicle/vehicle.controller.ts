@@ -1,11 +1,24 @@
 import { Request, Response } from "express";
+import { cloudinaryService } from "../../shared/service/cloudinary.service";
 import { VehicleService } from "./vehicle.service";
 import { vehicleParamSchema, VehicleParamsDto } from "./vehicle.schema";
 
 export const vehicleController = {
   async createVehicle(req: Request, res: Response) {
     try {
-      const vehicle = await VehicleService.createVehicle(req.body);
+      if (!req.file) {
+        res.status(400).json({ message: "Thumbnail is required" });
+        return;
+      }
+
+      const fileName = `vehicle-${Date.now()}`;
+      const image = await cloudinaryService.uploadImage(req.file, fileName, "rent-car/vehicles");
+
+      const vehicle = await VehicleService.createVehicle({
+        ...req.body,
+        thumbnail: image.url,
+        thumbnailPublicId: image.publicId,
+      });
 
       return res.status(201).json({
         message: "Vehicle created successfully",
@@ -56,7 +69,22 @@ export const vehicleController = {
   async updateVehicle(req: Request<VehicleParamsDto>, res: Response) {
     try {
       const params = vehicleParamSchema.parse(req.params);
-      const vehicle = await VehicleService.updateVehicle(params.id, req.body);
+      let thumbnail: string | undefined;
+      let thumbnailPublicId: string | undefined;
+
+      if (req.file) {
+        const fileName = `vehicle-${Date.now()}`;
+        const image = await cloudinaryService.uploadImage(req.file, fileName, "rent-car/vehicles");
+
+        thumbnail = image.url;
+        thumbnailPublicId = image.publicId;
+      }
+
+      const vehicle = await VehicleService.updateVehicle(params.id, {
+        ...req.body,
+        thumbnail,
+        thumbnailPublicId,
+      });
 
       return res.status(200).json({
         vehicle,

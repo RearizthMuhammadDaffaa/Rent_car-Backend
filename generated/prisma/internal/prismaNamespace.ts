@@ -400,7 +400,9 @@ export const ModelName = {
   User: 'User',
   Vehicles: 'Vehicles',
   Brands: 'Brands',
-  Vehicle_Categories: 'Vehicle_Categories'
+  Vehicle_Categories: 'Vehicle_Categories',
+  Coupons: 'Coupons',
+  VehicleImage: 'VehicleImage'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -416,7 +418,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "vehicles" | "brands" | "vehicle_Categories"
+    modelProps: "user" | "vehicles" | "brands" | "vehicle_Categories" | "coupons" | "vehicleImage"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -716,6 +718,154 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    Coupons: {
+      payload: Prisma.$CouponsPayload<ExtArgs>
+      fields: Prisma.CouponsFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.CouponsFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CouponsPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.CouponsFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CouponsPayload>
+        }
+        findFirst: {
+          args: Prisma.CouponsFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CouponsPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.CouponsFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CouponsPayload>
+        }
+        findMany: {
+          args: Prisma.CouponsFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CouponsPayload>[]
+        }
+        create: {
+          args: Prisma.CouponsCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CouponsPayload>
+        }
+        createMany: {
+          args: Prisma.CouponsCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.CouponsCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CouponsPayload>[]
+        }
+        delete: {
+          args: Prisma.CouponsDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CouponsPayload>
+        }
+        update: {
+          args: Prisma.CouponsUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CouponsPayload>
+        }
+        deleteMany: {
+          args: Prisma.CouponsDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.CouponsUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.CouponsUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CouponsPayload>[]
+        }
+        upsert: {
+          args: Prisma.CouponsUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CouponsPayload>
+        }
+        aggregate: {
+          args: Prisma.CouponsAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateCoupons>
+        }
+        groupBy: {
+          args: Prisma.CouponsGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CouponsGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.CouponsCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CouponsCountAggregateOutputType> | number
+        }
+      }
+    }
+    VehicleImage: {
+      payload: Prisma.$VehicleImagePayload<ExtArgs>
+      fields: Prisma.VehicleImageFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.VehicleImageFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VehicleImagePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.VehicleImageFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VehicleImagePayload>
+        }
+        findFirst: {
+          args: Prisma.VehicleImageFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VehicleImagePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.VehicleImageFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VehicleImagePayload>
+        }
+        findMany: {
+          args: Prisma.VehicleImageFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VehicleImagePayload>[]
+        }
+        create: {
+          args: Prisma.VehicleImageCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VehicleImagePayload>
+        }
+        createMany: {
+          args: Prisma.VehicleImageCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.VehicleImageCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VehicleImagePayload>[]
+        }
+        delete: {
+          args: Prisma.VehicleImageDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VehicleImagePayload>
+        }
+        update: {
+          args: Prisma.VehicleImageUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VehicleImagePayload>
+        }
+        deleteMany: {
+          args: Prisma.VehicleImageDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.VehicleImageUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.VehicleImageUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VehicleImagePayload>[]
+        }
+        upsert: {
+          args: Prisma.VehicleImageUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VehicleImagePayload>
+        }
+        aggregate: {
+          args: Prisma.VehicleImageAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateVehicleImage>
+        }
+        groupBy: {
+          args: Prisma.VehicleImageGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.VehicleImageGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.VehicleImageCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.VehicleImageCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -779,6 +929,7 @@ export const VehiclesScalarFieldEnum = {
   seat: 'seat',
   status: 'status',
   thumbnail: 'thumbnail',
+  thumbnailPublicId: 'thumbnailPublicId',
   description: 'description',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -790,7 +941,8 @@ export type VehiclesScalarFieldEnum = (typeof VehiclesScalarFieldEnum)[keyof typ
 export const BrandsScalarFieldEnum = {
   id: 'id',
   name: 'name',
-  logo: 'logo'
+  logo: 'logo',
+  logoPublicId: 'logoPublicId'
 } as const
 
 export type BrandsScalarFieldEnum = (typeof BrandsScalarFieldEnum)[keyof typeof BrandsScalarFieldEnum]
@@ -803,6 +955,32 @@ export const Vehicle_CategoriesScalarFieldEnum = {
 } as const
 
 export type Vehicle_CategoriesScalarFieldEnum = (typeof Vehicle_CategoriesScalarFieldEnum)[keyof typeof Vehicle_CategoriesScalarFieldEnum]
+
+
+export const CouponsScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  discountValue: 'discountValue',
+  usageLimit: 'usageLimit',
+  usedCount: 'usedCount',
+  expiredAt: 'expiredAt',
+  isActive: 'isActive',
+  createdAt: 'createdAt'
+} as const
+
+export type CouponsScalarFieldEnum = (typeof CouponsScalarFieldEnum)[keyof typeof CouponsScalarFieldEnum]
+
+
+export const VehicleImageScalarFieldEnum = {
+  id: 'id',
+  vehicle_id: 'vehicle_id',
+  image_url: 'image_url',
+  imagePublicId: 'imagePublicId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type VehicleImageScalarFieldEnum = (typeof VehicleImageScalarFieldEnum)[keyof typeof VehicleImageScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -902,6 +1080,27 @@ export type EnumStatus_vehiclesFieldRefInput<$PrismaModel> = FieldRefInputType<$
  * Reference to a field of type 'Status_vehicles[]'
  */
 export type ListEnumStatus_vehiclesFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Status_vehicles[]'>
+    
+
+
+/**
+ * Reference to a field of type 'Decimal'
+ */
+export type DecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Decimal'>
+    
+
+
+/**
+ * Reference to a field of type 'Decimal[]'
+ */
+export type ListDecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Decimal[]'>
+    
+
+
+/**
+ * Reference to a field of type 'Boolean'
+ */
+export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
     
 
 
@@ -1073,6 +1272,8 @@ export type GlobalOmitConfig = {
   vehicles?: Prisma.VehiclesOmit
   brands?: Prisma.BrandsOmit
   vehicle_Categories?: Prisma.Vehicle_CategoriesOmit
+  coupons?: Prisma.CouponsOmit
+  vehicleImage?: Prisma.VehicleImageOmit
 }
 
 /* Types for Logging */

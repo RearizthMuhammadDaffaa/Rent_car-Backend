@@ -11,6 +11,9 @@ export const createBrandSchema = z.object({
     .string()
     .url("Logo harus berupa URL")
     ,
+  logoPublicId: z
+    .string()
+    .optional(),
 });
 
 export const brandParamSchema = z.object({

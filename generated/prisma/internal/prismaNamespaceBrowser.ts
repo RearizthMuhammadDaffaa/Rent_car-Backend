@@ -54,7 +54,9 @@ export const ModelName = {
   User: 'User',
   Vehicles: 'Vehicles',
   Brands: 'Brands',
-  Vehicle_Categories: 'Vehicle_Categories'
+  Vehicle_Categories: 'Vehicle_Categories',
+  Coupons: 'Coupons',
+  VehicleImage: 'VehicleImage'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -97,6 +99,7 @@ export const VehiclesScalarFieldEnum = {
   seat: 'seat',
   status: 'status',
   thumbnail: 'thumbnail',
+  thumbnailPublicId: 'thumbnailPublicId',
   description: 'description',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -108,7 +111,8 @@ export type VehiclesScalarFieldEnum = (typeof VehiclesScalarFieldEnum)[keyof typ
 export const BrandsScalarFieldEnum = {
   id: 'id',
   name: 'name',
-  logo: 'logo'
+  logo: 'logo',
+  logoPublicId: 'logoPublicId'
 } as const
 
 export type BrandsScalarFieldEnum = (typeof BrandsScalarFieldEnum)[keyof typeof BrandsScalarFieldEnum]
@@ -121,6 +125,32 @@ export const Vehicle_CategoriesScalarFieldEnum = {
 } as const
 
 export type Vehicle_CategoriesScalarFieldEnum = (typeof Vehicle_CategoriesScalarFieldEnum)[keyof typeof Vehicle_CategoriesScalarFieldEnum]
+
+
+export const CouponsScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  discountValue: 'discountValue',
+  usageLimit: 'usageLimit',
+  usedCount: 'usedCount',
+  expiredAt: 'expiredAt',
+  isActive: 'isActive',
+  createdAt: 'createdAt'
+} as const
+
+export type CouponsScalarFieldEnum = (typeof CouponsScalarFieldEnum)[keyof typeof CouponsScalarFieldEnum]
+
+
+export const VehicleImageScalarFieldEnum = {
+  id: 'id',
+  vehicle_id: 'vehicle_id',
+  image_url: 'image_url',
+  imagePublicId: 'imagePublicId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type VehicleImageScalarFieldEnum = (typeof VehicleImageScalarFieldEnum)[keyof typeof VehicleImageScalarFieldEnum]
 
 
 export const SortOrder = {
