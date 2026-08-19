@@ -18,7 +18,7 @@ export const authMiddleware = (
     next: NextFunction
   ): Promise<void> => {
     console.log("Auth middleware reached");
-
+  
     let token: string | undefined;
 
     // Get token from Authorization header
@@ -91,11 +91,13 @@ export const authMiddleware = (
       req.user = user;
 
       console.log("User Role:", user.role);
+      console.log("User ID:",user.id);
+      
 
       next();
     } catch (error) {
       console.error("Auth middleware error:", error);
-
+      
       res.status(401).json({
         success: false,
         message: "Unauthorized - invalid or expired token",

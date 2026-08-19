@@ -4,6 +4,7 @@ import { authController } from "./auth.controller";
 
 const router = Router();
 
+router.post('/create-admin',authController.create)
 router.post('/login',authController.login)
 router.post('/sign-up',authController.register)
 router.delete('/logout',authController.logout)

@@ -82,5 +82,38 @@ export const authController = {
       message: "Logged out successfully",
     });
   },
+  create:async (
+    req: Request,
+    res: Response):Promise<void> => {
+      try {
+      const data = registerSchema.parse(req.body);
+
+      const result = await authService.createAdmin(
+        data,
+        res
+      );
+
+      res.status(201).json({
+        status: "success",
+        data: result,
+      });
+    } catch (error) {
+      console.error(error);
+
+      if (error instanceof Error) {
+        res.status(400).json({
+          status: "error",
+          message: error.message,
+        });
+
+        return;
+      }
+
+      res.status(500).json({
+        status: "error",
+        message: "Internal server error",
+      });
+    }
+    },
 };
 
