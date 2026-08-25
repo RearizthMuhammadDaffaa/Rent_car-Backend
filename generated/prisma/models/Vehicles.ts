@@ -28,10 +28,12 @@ export type AggregateVehicles = {
 
 export type VehiclesAvgAggregateOutputType = {
   year: number | null
+  pricePerDay: runtime.Decimal | null
 }
 
 export type VehiclesSumAggregateOutputType = {
   year: number | null
+  pricePerDay: runtime.Decimal | null
 }
 
 export type VehiclesMinAggregateOutputType = {
@@ -41,6 +43,7 @@ export type VehiclesMinAggregateOutputType = {
   plate_number: string | null
   model: string | null
   year: number | null
+  pricePerDay: runtime.Decimal | null
   color: string | null
   seat: string | null
   status: $Enums.Status_vehicles | null
@@ -58,6 +61,7 @@ export type VehiclesMaxAggregateOutputType = {
   plate_number: string | null
   model: string | null
   year: number | null
+  pricePerDay: runtime.Decimal | null
   color: string | null
   seat: string | null
   status: $Enums.Status_vehicles | null
@@ -75,6 +79,7 @@ export type VehiclesCountAggregateOutputType = {
   plate_number: number
   model: number
   year: number
+  pricePerDay: number
   color: number
   seat: number
   status: number
@@ -89,10 +94,12 @@ export type VehiclesCountAggregateOutputType = {
 
 export type VehiclesAvgAggregateInputType = {
   year?: true
+  pricePerDay?: true
 }
 
 export type VehiclesSumAggregateInputType = {
   year?: true
+  pricePerDay?: true
 }
 
 export type VehiclesMinAggregateInputType = {
@@ -102,6 +109,7 @@ export type VehiclesMinAggregateInputType = {
   plate_number?: true
   model?: true
   year?: true
+  pricePerDay?: true
   color?: true
   seat?: true
   status?: true
@@ -119,6 +127,7 @@ export type VehiclesMaxAggregateInputType = {
   plate_number?: true
   model?: true
   year?: true
+  pricePerDay?: true
   color?: true
   seat?: true
   status?: true
@@ -136,6 +145,7 @@ export type VehiclesCountAggregateInputType = {
   plate_number?: true
   model?: true
   year?: true
+  pricePerDay?: true
   color?: true
   seat?: true
   status?: true
@@ -240,6 +250,7 @@ export type VehiclesGroupByOutputType = {
   plate_number: string
   model: string
   year: number
+  pricePerDay: runtime.Decimal
   color: string
   seat: string
   status: $Enums.Status_vehicles
@@ -280,6 +291,7 @@ export type VehiclesWhereInput = {
   plate_number?: Prisma.StringFilter<"Vehicles"> | string
   model?: Prisma.StringFilter<"Vehicles"> | string
   year?: Prisma.IntFilter<"Vehicles"> | number
+  pricePerDay?: Prisma.DecimalFilter<"Vehicles"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   color?: Prisma.StringFilter<"Vehicles"> | string
   seat?: Prisma.StringFilter<"Vehicles"> | string
   status?: Prisma.EnumStatus_vehiclesFilter<"Vehicles"> | $Enums.Status_vehicles
@@ -289,6 +301,7 @@ export type VehiclesWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"Vehicles"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Vehicles"> | Date | string
   VehicleImage?: Prisma.VehicleImageListRelationFilter
+  bookings?: Prisma.BookingsListRelationFilter
   category?: Prisma.XOR<Prisma.Vehicle_CategoriesScalarRelationFilter, Prisma.Vehicle_CategoriesWhereInput>
   brand?: Prisma.XOR<Prisma.BrandsScalarRelationFilter, Prisma.BrandsWhereInput>
 }
@@ -300,6 +313,7 @@ export type VehiclesOrderByWithRelationInput = {
   plate_number?: Prisma.SortOrder
   model?: Prisma.SortOrder
   year?: Prisma.SortOrder
+  pricePerDay?: Prisma.SortOrder
   color?: Prisma.SortOrder
   seat?: Prisma.SortOrder
   status?: Prisma.SortOrder
@@ -309,6 +323,7 @@ export type VehiclesOrderByWithRelationInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   VehicleImage?: Prisma.VehicleImageOrderByRelationAggregateInput
+  bookings?: Prisma.BookingsOrderByRelationAggregateInput
   category?: Prisma.Vehicle_CategoriesOrderByWithRelationInput
   brand?: Prisma.BrandsOrderByWithRelationInput
 }
@@ -323,6 +338,7 @@ export type VehiclesWhereUniqueInput = Prisma.AtLeast<{
   plate_number?: Prisma.StringFilter<"Vehicles"> | string
   model?: Prisma.StringFilter<"Vehicles"> | string
   year?: Prisma.IntFilter<"Vehicles"> | number
+  pricePerDay?: Prisma.DecimalFilter<"Vehicles"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   color?: Prisma.StringFilter<"Vehicles"> | string
   seat?: Prisma.StringFilter<"Vehicles"> | string
   status?: Prisma.EnumStatus_vehiclesFilter<"Vehicles"> | $Enums.Status_vehicles
@@ -332,6 +348,7 @@ export type VehiclesWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeFilter<"Vehicles"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Vehicles"> | Date | string
   VehicleImage?: Prisma.VehicleImageListRelationFilter
+  bookings?: Prisma.BookingsListRelationFilter
   category?: Prisma.XOR<Prisma.Vehicle_CategoriesScalarRelationFilter, Prisma.Vehicle_CategoriesWhereInput>
   brand?: Prisma.XOR<Prisma.BrandsScalarRelationFilter, Prisma.BrandsWhereInput>
 }, "id">
@@ -343,6 +360,7 @@ export type VehiclesOrderByWithAggregationInput = {
   plate_number?: Prisma.SortOrder
   model?: Prisma.SortOrder
   year?: Prisma.SortOrder
+  pricePerDay?: Prisma.SortOrder
   color?: Prisma.SortOrder
   seat?: Prisma.SortOrder
   status?: Prisma.SortOrder
@@ -368,6 +386,7 @@ export type VehiclesScalarWhereWithAggregatesInput = {
   plate_number?: Prisma.StringWithAggregatesFilter<"Vehicles"> | string
   model?: Prisma.StringWithAggregatesFilter<"Vehicles"> | string
   year?: Prisma.IntWithAggregatesFilter<"Vehicles"> | number
+  pricePerDay?: Prisma.DecimalWithAggregatesFilter<"Vehicles"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   color?: Prisma.StringWithAggregatesFilter<"Vehicles"> | string
   seat?: Prisma.StringWithAggregatesFilter<"Vehicles"> | string
   status?: Prisma.EnumStatus_vehiclesWithAggregatesFilter<"Vehicles"> | $Enums.Status_vehicles
@@ -383,6 +402,7 @@ export type VehiclesCreateInput = {
   plate_number: string
   model: string
   year: number
+  pricePerDay: runtime.Decimal | runtime.DecimalJsLike | number | string
   color: string
   seat: string
   status?: $Enums.Status_vehicles
@@ -392,6 +412,7 @@ export type VehiclesCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   VehicleImage?: Prisma.VehicleImageCreateNestedManyWithoutVehicleInput
+  bookings?: Prisma.BookingsCreateNestedManyWithoutCarInput
   category: Prisma.Vehicle_CategoriesCreateNestedOneWithoutVehiclesInput
   brand: Prisma.BrandsCreateNestedOneWithoutVehiclesInput
 }
@@ -403,6 +424,7 @@ export type VehiclesUncheckedCreateInput = {
   plate_number: string
   model: string
   year: number
+  pricePerDay: runtime.Decimal | runtime.DecimalJsLike | number | string
   color: string
   seat: string
   status?: $Enums.Status_vehicles
@@ -412,6 +434,7 @@ export type VehiclesUncheckedCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   VehicleImage?: Prisma.VehicleImageUncheckedCreateNestedManyWithoutVehicleInput
+  bookings?: Prisma.BookingsUncheckedCreateNestedManyWithoutCarInput
 }
 
 export type VehiclesUpdateInput = {
@@ -419,6 +442,7 @@ export type VehiclesUpdateInput = {
   plate_number?: Prisma.StringFieldUpdateOperationsInput | string
   model?: Prisma.StringFieldUpdateOperationsInput | string
   year?: Prisma.IntFieldUpdateOperationsInput | number
+  pricePerDay?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   color?: Prisma.StringFieldUpdateOperationsInput | string
   seat?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumStatus_vehiclesFieldUpdateOperationsInput | $Enums.Status_vehicles
@@ -428,6 +452,7 @@ export type VehiclesUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   VehicleImage?: Prisma.VehicleImageUpdateManyWithoutVehicleNestedInput
+  bookings?: Prisma.BookingsUpdateManyWithoutCarNestedInput
   category?: Prisma.Vehicle_CategoriesUpdateOneRequiredWithoutVehiclesNestedInput
   brand?: Prisma.BrandsUpdateOneRequiredWithoutVehiclesNestedInput
 }
@@ -439,6 +464,7 @@ export type VehiclesUncheckedUpdateInput = {
   plate_number?: Prisma.StringFieldUpdateOperationsInput | string
   model?: Prisma.StringFieldUpdateOperationsInput | string
   year?: Prisma.IntFieldUpdateOperationsInput | number
+  pricePerDay?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   color?: Prisma.StringFieldUpdateOperationsInput | string
   seat?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumStatus_vehiclesFieldUpdateOperationsInput | $Enums.Status_vehicles
@@ -448,6 +474,7 @@ export type VehiclesUncheckedUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   VehicleImage?: Prisma.VehicleImageUncheckedUpdateManyWithoutVehicleNestedInput
+  bookings?: Prisma.BookingsUncheckedUpdateManyWithoutCarNestedInput
 }
 
 export type VehiclesCreateManyInput = {
@@ -457,6 +484,7 @@ export type VehiclesCreateManyInput = {
   plate_number: string
   model: string
   year: number
+  pricePerDay: runtime.Decimal | runtime.DecimalJsLike | number | string
   color: string
   seat: string
   status?: $Enums.Status_vehicles
@@ -472,6 +500,7 @@ export type VehiclesUpdateManyMutationInput = {
   plate_number?: Prisma.StringFieldUpdateOperationsInput | string
   model?: Prisma.StringFieldUpdateOperationsInput | string
   year?: Prisma.IntFieldUpdateOperationsInput | number
+  pricePerDay?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   color?: Prisma.StringFieldUpdateOperationsInput | string
   seat?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumStatus_vehiclesFieldUpdateOperationsInput | $Enums.Status_vehicles
@@ -489,6 +518,7 @@ export type VehiclesUncheckedUpdateManyInput = {
   plate_number?: Prisma.StringFieldUpdateOperationsInput | string
   model?: Prisma.StringFieldUpdateOperationsInput | string
   year?: Prisma.IntFieldUpdateOperationsInput | number
+  pricePerDay?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   color?: Prisma.StringFieldUpdateOperationsInput | string
   seat?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumStatus_vehiclesFieldUpdateOperationsInput | $Enums.Status_vehicles
@@ -506,6 +536,7 @@ export type VehiclesCountOrderByAggregateInput = {
   plate_number?: Prisma.SortOrder
   model?: Prisma.SortOrder
   year?: Prisma.SortOrder
+  pricePerDay?: Prisma.SortOrder
   color?: Prisma.SortOrder
   seat?: Prisma.SortOrder
   status?: Prisma.SortOrder
@@ -518,6 +549,7 @@ export type VehiclesCountOrderByAggregateInput = {
 
 export type VehiclesAvgOrderByAggregateInput = {
   year?: Prisma.SortOrder
+  pricePerDay?: Prisma.SortOrder
 }
 
 export type VehiclesMaxOrderByAggregateInput = {
@@ -527,6 +559,7 @@ export type VehiclesMaxOrderByAggregateInput = {
   plate_number?: Prisma.SortOrder
   model?: Prisma.SortOrder
   year?: Prisma.SortOrder
+  pricePerDay?: Prisma.SortOrder
   color?: Prisma.SortOrder
   seat?: Prisma.SortOrder
   status?: Prisma.SortOrder
@@ -544,6 +577,7 @@ export type VehiclesMinOrderByAggregateInput = {
   plate_number?: Prisma.SortOrder
   model?: Prisma.SortOrder
   year?: Prisma.SortOrder
+  pricePerDay?: Prisma.SortOrder
   color?: Prisma.SortOrder
   seat?: Prisma.SortOrder
   status?: Prisma.SortOrder
@@ -556,6 +590,7 @@ export type VehiclesMinOrderByAggregateInput = {
 
 export type VehiclesSumOrderByAggregateInput = {
   year?: Prisma.SortOrder
+  pricePerDay?: Prisma.SortOrder
 }
 
 export type VehiclesListRelationFilter = {
@@ -579,6 +614,14 @@ export type IntFieldUpdateOperationsInput = {
   decrement?: number
   multiply?: number
   divide?: number
+}
+
+export type DecimalFieldUpdateOperationsInput = {
+  set?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  increment?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  decrement?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  multiply?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  divide?: runtime.Decimal | runtime.DecimalJsLike | number | string
 }
 
 export type EnumStatus_vehiclesFieldUpdateOperationsInput = {
@@ -687,11 +730,26 @@ export type VehiclesUpdateOneRequiredWithoutVehicleImageNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.VehiclesUpdateToOneWithWhereWithoutVehicleImageInput, Prisma.VehiclesUpdateWithoutVehicleImageInput>, Prisma.VehiclesUncheckedUpdateWithoutVehicleImageInput>
 }
 
+export type VehiclesCreateNestedOneWithoutBookingsInput = {
+  create?: Prisma.XOR<Prisma.VehiclesCreateWithoutBookingsInput, Prisma.VehiclesUncheckedCreateWithoutBookingsInput>
+  connectOrCreate?: Prisma.VehiclesCreateOrConnectWithoutBookingsInput
+  connect?: Prisma.VehiclesWhereUniqueInput
+}
+
+export type VehiclesUpdateOneRequiredWithoutBookingsNestedInput = {
+  create?: Prisma.XOR<Prisma.VehiclesCreateWithoutBookingsInput, Prisma.VehiclesUncheckedCreateWithoutBookingsInput>
+  connectOrCreate?: Prisma.VehiclesCreateOrConnectWithoutBookingsInput
+  upsert?: Prisma.VehiclesUpsertWithoutBookingsInput
+  connect?: Prisma.VehiclesWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.VehiclesUpdateToOneWithWhereWithoutBookingsInput, Prisma.VehiclesUpdateWithoutBookingsInput>, Prisma.VehiclesUncheckedUpdateWithoutBookingsInput>
+}
+
 export type VehiclesCreateWithoutBrandInput = {
   id?: string
   plate_number: string
   model: string
   year: number
+  pricePerDay: runtime.Decimal | runtime.DecimalJsLike | number | string
   color: string
   seat: string
   status?: $Enums.Status_vehicles
@@ -701,6 +759,7 @@ export type VehiclesCreateWithoutBrandInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   VehicleImage?: Prisma.VehicleImageCreateNestedManyWithoutVehicleInput
+  bookings?: Prisma.BookingsCreateNestedManyWithoutCarInput
   category: Prisma.Vehicle_CategoriesCreateNestedOneWithoutVehiclesInput
 }
 
@@ -710,6 +769,7 @@ export type VehiclesUncheckedCreateWithoutBrandInput = {
   plate_number: string
   model: string
   year: number
+  pricePerDay: runtime.Decimal | runtime.DecimalJsLike | number | string
   color: string
   seat: string
   status?: $Enums.Status_vehicles
@@ -719,6 +779,7 @@ export type VehiclesUncheckedCreateWithoutBrandInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   VehicleImage?: Prisma.VehicleImageUncheckedCreateNestedManyWithoutVehicleInput
+  bookings?: Prisma.BookingsUncheckedCreateNestedManyWithoutCarInput
 }
 
 export type VehiclesCreateOrConnectWithoutBrandInput = {
@@ -757,6 +818,7 @@ export type VehiclesScalarWhereInput = {
   plate_number?: Prisma.StringFilter<"Vehicles"> | string
   model?: Prisma.StringFilter<"Vehicles"> | string
   year?: Prisma.IntFilter<"Vehicles"> | number
+  pricePerDay?: Prisma.DecimalFilter<"Vehicles"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   color?: Prisma.StringFilter<"Vehicles"> | string
   seat?: Prisma.StringFilter<"Vehicles"> | string
   status?: Prisma.EnumStatus_vehiclesFilter<"Vehicles"> | $Enums.Status_vehicles
@@ -772,6 +834,7 @@ export type VehiclesCreateWithoutCategoryInput = {
   plate_number: string
   model: string
   year: number
+  pricePerDay: runtime.Decimal | runtime.DecimalJsLike | number | string
   color: string
   seat: string
   status?: $Enums.Status_vehicles
@@ -781,6 +844,7 @@ export type VehiclesCreateWithoutCategoryInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   VehicleImage?: Prisma.VehicleImageCreateNestedManyWithoutVehicleInput
+  bookings?: Prisma.BookingsCreateNestedManyWithoutCarInput
   brand: Prisma.BrandsCreateNestedOneWithoutVehiclesInput
 }
 
@@ -790,6 +854,7 @@ export type VehiclesUncheckedCreateWithoutCategoryInput = {
   plate_number: string
   model: string
   year: number
+  pricePerDay: runtime.Decimal | runtime.DecimalJsLike | number | string
   color: string
   seat: string
   status?: $Enums.Status_vehicles
@@ -799,6 +864,7 @@ export type VehiclesUncheckedCreateWithoutCategoryInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   VehicleImage?: Prisma.VehicleImageUncheckedCreateNestedManyWithoutVehicleInput
+  bookings?: Prisma.BookingsUncheckedCreateNestedManyWithoutCarInput
 }
 
 export type VehiclesCreateOrConnectWithoutCategoryInput = {
@@ -832,6 +898,7 @@ export type VehiclesCreateWithoutVehicleImageInput = {
   plate_number: string
   model: string
   year: number
+  pricePerDay: runtime.Decimal | runtime.DecimalJsLike | number | string
   color: string
   seat: string
   status?: $Enums.Status_vehicles
@@ -840,6 +907,7 @@ export type VehiclesCreateWithoutVehicleImageInput = {
   description: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  bookings?: Prisma.BookingsCreateNestedManyWithoutCarInput
   category: Prisma.Vehicle_CategoriesCreateNestedOneWithoutVehiclesInput
   brand: Prisma.BrandsCreateNestedOneWithoutVehiclesInput
 }
@@ -851,6 +919,7 @@ export type VehiclesUncheckedCreateWithoutVehicleImageInput = {
   plate_number: string
   model: string
   year: number
+  pricePerDay: runtime.Decimal | runtime.DecimalJsLike | number | string
   color: string
   seat: string
   status?: $Enums.Status_vehicles
@@ -859,6 +928,7 @@ export type VehiclesUncheckedCreateWithoutVehicleImageInput = {
   description: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  bookings?: Prisma.BookingsUncheckedCreateNestedManyWithoutCarInput
 }
 
 export type VehiclesCreateOrConnectWithoutVehicleImageInput = {
@@ -882,6 +952,7 @@ export type VehiclesUpdateWithoutVehicleImageInput = {
   plate_number?: Prisma.StringFieldUpdateOperationsInput | string
   model?: Prisma.StringFieldUpdateOperationsInput | string
   year?: Prisma.IntFieldUpdateOperationsInput | number
+  pricePerDay?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   color?: Prisma.StringFieldUpdateOperationsInput | string
   seat?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumStatus_vehiclesFieldUpdateOperationsInput | $Enums.Status_vehicles
@@ -890,6 +961,7 @@ export type VehiclesUpdateWithoutVehicleImageInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  bookings?: Prisma.BookingsUpdateManyWithoutCarNestedInput
   category?: Prisma.Vehicle_CategoriesUpdateOneRequiredWithoutVehiclesNestedInput
   brand?: Prisma.BrandsUpdateOneRequiredWithoutVehiclesNestedInput
 }
@@ -901,6 +973,7 @@ export type VehiclesUncheckedUpdateWithoutVehicleImageInput = {
   plate_number?: Prisma.StringFieldUpdateOperationsInput | string
   model?: Prisma.StringFieldUpdateOperationsInput | string
   year?: Prisma.IntFieldUpdateOperationsInput | number
+  pricePerDay?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   color?: Prisma.StringFieldUpdateOperationsInput | string
   seat?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumStatus_vehiclesFieldUpdateOperationsInput | $Enums.Status_vehicles
@@ -909,6 +982,99 @@ export type VehiclesUncheckedUpdateWithoutVehicleImageInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  bookings?: Prisma.BookingsUncheckedUpdateManyWithoutCarNestedInput
+}
+
+export type VehiclesCreateWithoutBookingsInput = {
+  id?: string
+  plate_number: string
+  model: string
+  year: number
+  pricePerDay: runtime.Decimal | runtime.DecimalJsLike | number | string
+  color: string
+  seat: string
+  status?: $Enums.Status_vehicles
+  thumbnail: string
+  thumbnailPublicId?: string | null
+  description: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  VehicleImage?: Prisma.VehicleImageCreateNestedManyWithoutVehicleInput
+  category: Prisma.Vehicle_CategoriesCreateNestedOneWithoutVehiclesInput
+  brand: Prisma.BrandsCreateNestedOneWithoutVehiclesInput
+}
+
+export type VehiclesUncheckedCreateWithoutBookingsInput = {
+  id?: string
+  category_id: string
+  brand_id: string
+  plate_number: string
+  model: string
+  year: number
+  pricePerDay: runtime.Decimal | runtime.DecimalJsLike | number | string
+  color: string
+  seat: string
+  status?: $Enums.Status_vehicles
+  thumbnail: string
+  thumbnailPublicId?: string | null
+  description: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  VehicleImage?: Prisma.VehicleImageUncheckedCreateNestedManyWithoutVehicleInput
+}
+
+export type VehiclesCreateOrConnectWithoutBookingsInput = {
+  where: Prisma.VehiclesWhereUniqueInput
+  create: Prisma.XOR<Prisma.VehiclesCreateWithoutBookingsInput, Prisma.VehiclesUncheckedCreateWithoutBookingsInput>
+}
+
+export type VehiclesUpsertWithoutBookingsInput = {
+  update: Prisma.XOR<Prisma.VehiclesUpdateWithoutBookingsInput, Prisma.VehiclesUncheckedUpdateWithoutBookingsInput>
+  create: Prisma.XOR<Prisma.VehiclesCreateWithoutBookingsInput, Prisma.VehiclesUncheckedCreateWithoutBookingsInput>
+  where?: Prisma.VehiclesWhereInput
+}
+
+export type VehiclesUpdateToOneWithWhereWithoutBookingsInput = {
+  where?: Prisma.VehiclesWhereInput
+  data: Prisma.XOR<Prisma.VehiclesUpdateWithoutBookingsInput, Prisma.VehiclesUncheckedUpdateWithoutBookingsInput>
+}
+
+export type VehiclesUpdateWithoutBookingsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  plate_number?: Prisma.StringFieldUpdateOperationsInput | string
+  model?: Prisma.StringFieldUpdateOperationsInput | string
+  year?: Prisma.IntFieldUpdateOperationsInput | number
+  pricePerDay?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  color?: Prisma.StringFieldUpdateOperationsInput | string
+  seat?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumStatus_vehiclesFieldUpdateOperationsInput | $Enums.Status_vehicles
+  thumbnail?: Prisma.StringFieldUpdateOperationsInput | string
+  thumbnailPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  VehicleImage?: Prisma.VehicleImageUpdateManyWithoutVehicleNestedInput
+  category?: Prisma.Vehicle_CategoriesUpdateOneRequiredWithoutVehiclesNestedInput
+  brand?: Prisma.BrandsUpdateOneRequiredWithoutVehiclesNestedInput
+}
+
+export type VehiclesUncheckedUpdateWithoutBookingsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  category_id?: Prisma.StringFieldUpdateOperationsInput | string
+  brand_id?: Prisma.StringFieldUpdateOperationsInput | string
+  plate_number?: Prisma.StringFieldUpdateOperationsInput | string
+  model?: Prisma.StringFieldUpdateOperationsInput | string
+  year?: Prisma.IntFieldUpdateOperationsInput | number
+  pricePerDay?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  color?: Prisma.StringFieldUpdateOperationsInput | string
+  seat?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumStatus_vehiclesFieldUpdateOperationsInput | $Enums.Status_vehicles
+  thumbnail?: Prisma.StringFieldUpdateOperationsInput | string
+  thumbnailPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  VehicleImage?: Prisma.VehicleImageUncheckedUpdateManyWithoutVehicleNestedInput
 }
 
 export type VehiclesCreateManyBrandInput = {
@@ -917,6 +1083,7 @@ export type VehiclesCreateManyBrandInput = {
   plate_number: string
   model: string
   year: number
+  pricePerDay: runtime.Decimal | runtime.DecimalJsLike | number | string
   color: string
   seat: string
   status?: $Enums.Status_vehicles
@@ -932,6 +1099,7 @@ export type VehiclesUpdateWithoutBrandInput = {
   plate_number?: Prisma.StringFieldUpdateOperationsInput | string
   model?: Prisma.StringFieldUpdateOperationsInput | string
   year?: Prisma.IntFieldUpdateOperationsInput | number
+  pricePerDay?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   color?: Prisma.StringFieldUpdateOperationsInput | string
   seat?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumStatus_vehiclesFieldUpdateOperationsInput | $Enums.Status_vehicles
@@ -941,6 +1109,7 @@ export type VehiclesUpdateWithoutBrandInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   VehicleImage?: Prisma.VehicleImageUpdateManyWithoutVehicleNestedInput
+  bookings?: Prisma.BookingsUpdateManyWithoutCarNestedInput
   category?: Prisma.Vehicle_CategoriesUpdateOneRequiredWithoutVehiclesNestedInput
 }
 
@@ -950,6 +1119,7 @@ export type VehiclesUncheckedUpdateWithoutBrandInput = {
   plate_number?: Prisma.StringFieldUpdateOperationsInput | string
   model?: Prisma.StringFieldUpdateOperationsInput | string
   year?: Prisma.IntFieldUpdateOperationsInput | number
+  pricePerDay?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   color?: Prisma.StringFieldUpdateOperationsInput | string
   seat?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumStatus_vehiclesFieldUpdateOperationsInput | $Enums.Status_vehicles
@@ -959,6 +1129,7 @@ export type VehiclesUncheckedUpdateWithoutBrandInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   VehicleImage?: Prisma.VehicleImageUncheckedUpdateManyWithoutVehicleNestedInput
+  bookings?: Prisma.BookingsUncheckedUpdateManyWithoutCarNestedInput
 }
 
 export type VehiclesUncheckedUpdateManyWithoutBrandInput = {
@@ -967,6 +1138,7 @@ export type VehiclesUncheckedUpdateManyWithoutBrandInput = {
   plate_number?: Prisma.StringFieldUpdateOperationsInput | string
   model?: Prisma.StringFieldUpdateOperationsInput | string
   year?: Prisma.IntFieldUpdateOperationsInput | number
+  pricePerDay?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   color?: Prisma.StringFieldUpdateOperationsInput | string
   seat?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumStatus_vehiclesFieldUpdateOperationsInput | $Enums.Status_vehicles
@@ -983,6 +1155,7 @@ export type VehiclesCreateManyCategoryInput = {
   plate_number: string
   model: string
   year: number
+  pricePerDay: runtime.Decimal | runtime.DecimalJsLike | number | string
   color: string
   seat: string
   status?: $Enums.Status_vehicles
@@ -998,6 +1171,7 @@ export type VehiclesUpdateWithoutCategoryInput = {
   plate_number?: Prisma.StringFieldUpdateOperationsInput | string
   model?: Prisma.StringFieldUpdateOperationsInput | string
   year?: Prisma.IntFieldUpdateOperationsInput | number
+  pricePerDay?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   color?: Prisma.StringFieldUpdateOperationsInput | string
   seat?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumStatus_vehiclesFieldUpdateOperationsInput | $Enums.Status_vehicles
@@ -1007,6 +1181,7 @@ export type VehiclesUpdateWithoutCategoryInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   VehicleImage?: Prisma.VehicleImageUpdateManyWithoutVehicleNestedInput
+  bookings?: Prisma.BookingsUpdateManyWithoutCarNestedInput
   brand?: Prisma.BrandsUpdateOneRequiredWithoutVehiclesNestedInput
 }
 
@@ -1016,6 +1191,7 @@ export type VehiclesUncheckedUpdateWithoutCategoryInput = {
   plate_number?: Prisma.StringFieldUpdateOperationsInput | string
   model?: Prisma.StringFieldUpdateOperationsInput | string
   year?: Prisma.IntFieldUpdateOperationsInput | number
+  pricePerDay?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   color?: Prisma.StringFieldUpdateOperationsInput | string
   seat?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumStatus_vehiclesFieldUpdateOperationsInput | $Enums.Status_vehicles
@@ -1025,6 +1201,7 @@ export type VehiclesUncheckedUpdateWithoutCategoryInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   VehicleImage?: Prisma.VehicleImageUncheckedUpdateManyWithoutVehicleNestedInput
+  bookings?: Prisma.BookingsUncheckedUpdateManyWithoutCarNestedInput
 }
 
 export type VehiclesUncheckedUpdateManyWithoutCategoryInput = {
@@ -1033,6 +1210,7 @@ export type VehiclesUncheckedUpdateManyWithoutCategoryInput = {
   plate_number?: Prisma.StringFieldUpdateOperationsInput | string
   model?: Prisma.StringFieldUpdateOperationsInput | string
   year?: Prisma.IntFieldUpdateOperationsInput | number
+  pricePerDay?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   color?: Prisma.StringFieldUpdateOperationsInput | string
   seat?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumStatus_vehiclesFieldUpdateOperationsInput | $Enums.Status_vehicles
@@ -1050,10 +1228,12 @@ export type VehiclesUncheckedUpdateManyWithoutCategoryInput = {
 
 export type VehiclesCountOutputType = {
   VehicleImage: number
+  bookings: number
 }
 
 export type VehiclesCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   VehicleImage?: boolean | VehiclesCountOutputTypeCountVehicleImageArgs
+  bookings?: boolean | VehiclesCountOutputTypeCountBookingsArgs
 }
 
 /**
@@ -1073,6 +1253,13 @@ export type VehiclesCountOutputTypeCountVehicleImageArgs<ExtArgs extends runtime
   where?: Prisma.VehicleImageWhereInput
 }
 
+/**
+ * VehiclesCountOutputType without action
+ */
+export type VehiclesCountOutputTypeCountBookingsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.BookingsWhereInput
+}
+
 
 export type VehiclesSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1081,6 +1268,7 @@ export type VehiclesSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   plate_number?: boolean
   model?: boolean
   year?: boolean
+  pricePerDay?: boolean
   color?: boolean
   seat?: boolean
   status?: boolean
@@ -1090,6 +1278,7 @@ export type VehiclesSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   createdAt?: boolean
   updatedAt?: boolean
   VehicleImage?: boolean | Prisma.Vehicles$VehicleImageArgs<ExtArgs>
+  bookings?: boolean | Prisma.Vehicles$bookingsArgs<ExtArgs>
   category?: boolean | Prisma.Vehicle_CategoriesDefaultArgs<ExtArgs>
   brand?: boolean | Prisma.BrandsDefaultArgs<ExtArgs>
   _count?: boolean | Prisma.VehiclesCountOutputTypeDefaultArgs<ExtArgs>
@@ -1102,6 +1291,7 @@ export type VehiclesSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exte
   plate_number?: boolean
   model?: boolean
   year?: boolean
+  pricePerDay?: boolean
   color?: boolean
   seat?: boolean
   status?: boolean
@@ -1121,6 +1311,7 @@ export type VehiclesSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
   plate_number?: boolean
   model?: boolean
   year?: boolean
+  pricePerDay?: boolean
   color?: boolean
   seat?: boolean
   status?: boolean
@@ -1140,6 +1331,7 @@ export type VehiclesSelectScalar = {
   plate_number?: boolean
   model?: boolean
   year?: boolean
+  pricePerDay?: boolean
   color?: boolean
   seat?: boolean
   status?: boolean
@@ -1150,9 +1342,10 @@ export type VehiclesSelectScalar = {
   updatedAt?: boolean
 }
 
-export type VehiclesOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "category_id" | "brand_id" | "plate_number" | "model" | "year" | "color" | "seat" | "status" | "thumbnail" | "thumbnailPublicId" | "description" | "createdAt" | "updatedAt", ExtArgs["result"]["vehicles"]>
+export type VehiclesOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "category_id" | "brand_id" | "plate_number" | "model" | "year" | "pricePerDay" | "color" | "seat" | "status" | "thumbnail" | "thumbnailPublicId" | "description" | "createdAt" | "updatedAt", ExtArgs["result"]["vehicles"]>
 export type VehiclesInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   VehicleImage?: boolean | Prisma.Vehicles$VehicleImageArgs<ExtArgs>
+  bookings?: boolean | Prisma.Vehicles$bookingsArgs<ExtArgs>
   category?: boolean | Prisma.Vehicle_CategoriesDefaultArgs<ExtArgs>
   brand?: boolean | Prisma.BrandsDefaultArgs<ExtArgs>
   _count?: boolean | Prisma.VehiclesCountOutputTypeDefaultArgs<ExtArgs>
@@ -1170,6 +1363,7 @@ export type $VehiclesPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
   name: "Vehicles"
   objects: {
     VehicleImage: Prisma.$VehicleImagePayload<ExtArgs>[]
+    bookings: Prisma.$BookingsPayload<ExtArgs>[]
     category: Prisma.$Vehicle_CategoriesPayload<ExtArgs>
     brand: Prisma.$BrandsPayload<ExtArgs>
   }
@@ -1180,6 +1374,7 @@ export type $VehiclesPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     plate_number: string
     model: string
     year: number
+    pricePerDay: runtime.Decimal
     color: string
     seat: string
     status: $Enums.Status_vehicles
@@ -1583,6 +1778,7 @@ readonly fields: VehiclesFieldRefs;
 export interface Prisma__VehiclesClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   VehicleImage<T extends Prisma.Vehicles$VehicleImageArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Vehicles$VehicleImageArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$VehicleImagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  bookings<T extends Prisma.Vehicles$bookingsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Vehicles$bookingsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BookingsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   category<T extends Prisma.Vehicle_CategoriesDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Vehicle_CategoriesDefaultArgs<ExtArgs>>): Prisma.Prisma__Vehicle_CategoriesClient<runtime.Types.Result.GetResult<Prisma.$Vehicle_CategoriesPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   brand<T extends Prisma.BrandsDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.BrandsDefaultArgs<ExtArgs>>): Prisma.Prisma__BrandsClient<runtime.Types.Result.GetResult<Prisma.$BrandsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
@@ -1620,6 +1816,7 @@ export interface VehiclesFieldRefs {
   readonly plate_number: Prisma.FieldRef<"Vehicles", 'String'>
   readonly model: Prisma.FieldRef<"Vehicles", 'String'>
   readonly year: Prisma.FieldRef<"Vehicles", 'Int'>
+  readonly pricePerDay: Prisma.FieldRef<"Vehicles", 'Decimal'>
   readonly color: Prisma.FieldRef<"Vehicles", 'String'>
   readonly seat: Prisma.FieldRef<"Vehicles", 'String'>
   readonly status: Prisma.FieldRef<"Vehicles", 'Status_vehicles'>
@@ -2050,6 +2247,30 @@ export type Vehicles$VehicleImageArgs<ExtArgs extends runtime.Types.Extensions.I
   take?: number
   skip?: number
   distinct?: Prisma.VehicleImageScalarFieldEnum | Prisma.VehicleImageScalarFieldEnum[]
+}
+
+/**
+ * Vehicles.bookings
+ */
+export type Vehicles$bookingsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Bookings
+   */
+  select?: Prisma.BookingsSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Bookings
+   */
+  omit?: Prisma.BookingsOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BookingsInclude<ExtArgs> | null
+  where?: Prisma.BookingsWhereInput
+  orderBy?: Prisma.BookingsOrderByWithRelationInput | Prisma.BookingsOrderByWithRelationInput[]
+  cursor?: Prisma.BookingsWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.BookingsScalarFieldEnum | Prisma.BookingsScalarFieldEnum[]
 }
 
 /**

@@ -54,13 +54,21 @@ export const authMiddleware = (
       const decoded = jwt.verify(token, secret) as AuthPayload;
 
       // Validate payload
-      if (!decoded.id) {
+      if (
+        typeof decoded !== "object" ||
+        decoded === null ||
+        typeof decoded.id !== "string"
+      ) {
+
         res.status(401).json({
           success: false,
-          message: "Unauthorized - invalid token",
+          message:
+            "Unauthorized - invalid token",
         });
+
         return;
       }
+
 
       // Find user
       const user = await prisma.user.findUnique({

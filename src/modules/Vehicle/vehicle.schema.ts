@@ -9,6 +9,9 @@ export const createVehicleSchema = z.object({
     .min(3, "Plate number minimal 3 karakter")
     .max(20),
   model: z.string().trim().min(2, "Model minimal 2 karakter").max(100),
+  pricePerDay: z.coerce
+    .number()
+    .positive("Harga harus lebih dari 0"),
   year: z
     .union([z.number().int(), z.string().trim().regex(/^\d+$/).transform(Number)])
     .transform((value) => (typeof value === "string" ? Number(value) : value))

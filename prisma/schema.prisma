@@ -13,6 +13,7 @@ model User {
   email     String     @unique
   password  String
   role      RoleStatus @default(CUSTOMER)
+  booking Bookings[]
   createdAt DateTime   @default(now())
   updatedAt DateTime   @default(now()) @updatedAt
 }
@@ -24,6 +25,7 @@ model Vehicles {
   plate_number     String
   model            String
   year             Int
+  pricePerDay      Decimal
   color            String
   seat             String
   status           Status_vehicles @default(AVAILABLE)
@@ -33,6 +35,7 @@ model Vehicles {
   createdAt        DateTime        @default(now())
   updatedAt        DateTime        @default(now()) @updatedAt
   VehicleImage     VehicleImage[]
+  bookings Bookings[]
 
   category Vehicle_Categories @relation(fields: [category_id], references: [id])
 
@@ -76,8 +79,11 @@ model Coupons {
   discountValue Decimal
   usageLimit Int
   usedCount Int
+  maximumDiscount  Decimal
   expiredAt DateTime
   isActive Boolean
+  bookings Bookings[]
+
   createdAt    DateTime        @default(now())
 }
 
@@ -91,4 +97,68 @@ model VehicleImage {
 
    vehicle Vehicles @relation(fields: [vehicle_id], references: [id])
 }
+
+model Bookings {
+  id            String   @id @default(uuid())
+  user_id       String 
+  car_id        String
+  coupon_id     String?
+  pickup_at     DateTime
+  return_at     DateTime
+  total_days    Int
+  subtotal      Decimal
+  grandTotal    Decimal
+  pricePerDay   Decimal? @db.Decimal(12,2)
+  tax           Decimal?
+  discount      Decimal?
+  status        BookingStatus @default(PENDING)
+  createdAt    DateTime @default(now())
+  updatedAt     DateTime @default(now()) @updatedAt
+
+  rental Rental[]
+
+  user User @relation(fields: [user_id],references: [id])
+  car Vehicles @relation(fields: [car_id],references: [id])
+  coupon Coupons? @relation(fields: [coupon_id],references: [id])
+   // Availability query
+  @@index([car_id, pickup_at, return_at])
+
+  // User booking history
+  @@index([user_id])
+
+  // Coupon lookup
+  @@index([coupon_id])
+}
+
+enum BookingStatus {
+  PENDING
+  CONFIRMED
+  CANCELLED
+  EXPIRED
+  COMPLETED
+}
+
+enum RentalStatus {
+  RESERVED
+  PICKED_UP
+  ONGOING
+  RETURNED
+  COMPLETED
+}
+
+model Rental {
+  id String   @id @default(uuid())
+  Booking_id String 
+  actual_pickup_at DateTime
+  actual_return_at DateTime
+  late_fee Decimal
+  damage_fee Decimal
+  Status RentalStatus @default(RESERVED)
+  createdAt    DateTime @default(now())
+  updatedAt     DateTime @default(now()) @updatedAt
+
+  booking Bookings @relation(fields: [Booking_id],references: [id])
+
+}
+
 

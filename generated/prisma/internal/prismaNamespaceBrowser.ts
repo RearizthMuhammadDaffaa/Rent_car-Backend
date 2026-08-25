@@ -56,7 +56,9 @@ export const ModelName = {
   Brands: 'Brands',
   Vehicle_Categories: 'Vehicle_Categories',
   Coupons: 'Coupons',
-  VehicleImage: 'VehicleImage'
+  VehicleImage: 'VehicleImage',
+  Bookings: 'Bookings',
+  Rental: 'Rental'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -95,6 +97,7 @@ export const VehiclesScalarFieldEnum = {
   plate_number: 'plate_number',
   model: 'model',
   year: 'year',
+  pricePerDay: 'pricePerDay',
   color: 'color',
   seat: 'seat',
   status: 'status',
@@ -133,6 +136,7 @@ export const CouponsScalarFieldEnum = {
   discountValue: 'discountValue',
   usageLimit: 'usageLimit',
   usedCount: 'usedCount',
+  maximumDiscount: 'maximumDiscount',
   expiredAt: 'expiredAt',
   isActive: 'isActive',
   createdAt: 'createdAt'
@@ -151,6 +155,42 @@ export const VehicleImageScalarFieldEnum = {
 } as const
 
 export type VehicleImageScalarFieldEnum = (typeof VehicleImageScalarFieldEnum)[keyof typeof VehicleImageScalarFieldEnum]
+
+
+export const BookingsScalarFieldEnum = {
+  id: 'id',
+  user_id: 'user_id',
+  car_id: 'car_id',
+  coupon_id: 'coupon_id',
+  pickup_at: 'pickup_at',
+  return_at: 'return_at',
+  total_days: 'total_days',
+  subtotal: 'subtotal',
+  grandTotal: 'grandTotal',
+  pricePerDay: 'pricePerDay',
+  tax: 'tax',
+  discount: 'discount',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type BookingsScalarFieldEnum = (typeof BookingsScalarFieldEnum)[keyof typeof BookingsScalarFieldEnum]
+
+
+export const RentalScalarFieldEnum = {
+  id: 'id',
+  Booking_id: 'Booking_id',
+  actual_pickup_at: 'actual_pickup_at',
+  actual_return_at: 'actual_return_at',
+  late_fee: 'late_fee',
+  damage_fee: 'damage_fee',
+  Status: 'Status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type RentalScalarFieldEnum = (typeof RentalScalarFieldEnum)[keyof typeof RentalScalarFieldEnum]
 
 
 export const SortOrder = {

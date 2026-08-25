@@ -47,3 +47,13 @@ export type Coupons = Prisma.CouponsModel
  * 
  */
 export type VehicleImage = Prisma.VehicleImageModel
+/**
+ * Model Bookings
+ * 
+ */
+export type Bookings = Prisma.BookingsModel
+/**
+ * Model Rental
+ * 
+ */
+export type Rental = Prisma.RentalModel

@@ -27,3 +27,25 @@ export const Status_vehicles = {
 } as const
 
 export type Status_vehicles = (typeof Status_vehicles)[keyof typeof Status_vehicles]
+
+
+export const BookingStatus = {
+  PENDING: 'PENDING',
+  CONFIRMED: 'CONFIRMED',
+  CANCELLED: 'CANCELLED',
+  EXPIRED: 'EXPIRED',
+  COMPLETED: 'COMPLETED'
+} as const
+
+export type BookingStatus = (typeof BookingStatus)[keyof typeof BookingStatus]
+
+
+export const RentalStatus = {
+  RESERVED: 'RESERVED',
+  PICKED_UP: 'PICKED_UP',
+  ONGOING: 'ONGOING',
+  RETURNED: 'RETURNED',
+  COMPLETED: 'COMPLETED'
+} as const
+
+export type RentalStatus = (typeof RentalStatus)[keyof typeof RentalStatus]

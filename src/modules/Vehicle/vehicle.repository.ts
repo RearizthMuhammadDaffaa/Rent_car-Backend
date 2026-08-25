@@ -1,10 +1,18 @@
+import { Prisma } from "../../../generated/prisma/client";
 import { prisma } from "../../config/db";
 import { CreateVehicleDto, UpdateVehicleDto } from "./vehicle.schema";
 
 export const vehicleRepository = {
   create: async (data: CreateVehicleDto) => {
     return prisma.vehicles.create({
-      data,
+       data: {
+        ...data,
+
+        pricePerDay:
+          new Prisma.Decimal(
+            data.pricePerDay
+          ),
+      },
     });
   },
 
@@ -21,7 +29,16 @@ export const vehicleRepository = {
   update: async (id: string, data: UpdateVehicleDto) => {
     return prisma.vehicles.update({
       where: { id },
-      data,
+      data: {
+        ...data,
+
+        ...(data.pricePerDay !== undefined && {
+          pricePerDay:
+            new Prisma.Decimal(
+              data.pricePerDay
+            ),
+          }),
+        },
     });
   },
 

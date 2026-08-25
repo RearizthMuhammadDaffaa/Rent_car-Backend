@@ -402,7 +402,9 @@ export const ModelName = {
   Brands: 'Brands',
   Vehicle_Categories: 'Vehicle_Categories',
   Coupons: 'Coupons',
-  VehicleImage: 'VehicleImage'
+  VehicleImage: 'VehicleImage',
+  Bookings: 'Bookings',
+  Rental: 'Rental'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -418,7 +420,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "vehicles" | "brands" | "vehicle_Categories" | "coupons" | "vehicleImage"
+    modelProps: "user" | "vehicles" | "brands" | "vehicle_Categories" | "coupons" | "vehicleImage" | "bookings" | "rental"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -866,6 +868,154 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    Bookings: {
+      payload: Prisma.$BookingsPayload<ExtArgs>
+      fields: Prisma.BookingsFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.BookingsFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BookingsPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.BookingsFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BookingsPayload>
+        }
+        findFirst: {
+          args: Prisma.BookingsFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BookingsPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.BookingsFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BookingsPayload>
+        }
+        findMany: {
+          args: Prisma.BookingsFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BookingsPayload>[]
+        }
+        create: {
+          args: Prisma.BookingsCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BookingsPayload>
+        }
+        createMany: {
+          args: Prisma.BookingsCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.BookingsCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BookingsPayload>[]
+        }
+        delete: {
+          args: Prisma.BookingsDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BookingsPayload>
+        }
+        update: {
+          args: Prisma.BookingsUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BookingsPayload>
+        }
+        deleteMany: {
+          args: Prisma.BookingsDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.BookingsUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.BookingsUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BookingsPayload>[]
+        }
+        upsert: {
+          args: Prisma.BookingsUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BookingsPayload>
+        }
+        aggregate: {
+          args: Prisma.BookingsAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateBookings>
+        }
+        groupBy: {
+          args: Prisma.BookingsGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.BookingsGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.BookingsCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.BookingsCountAggregateOutputType> | number
+        }
+      }
+    }
+    Rental: {
+      payload: Prisma.$RentalPayload<ExtArgs>
+      fields: Prisma.RentalFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.RentalFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RentalPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.RentalFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RentalPayload>
+        }
+        findFirst: {
+          args: Prisma.RentalFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RentalPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.RentalFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RentalPayload>
+        }
+        findMany: {
+          args: Prisma.RentalFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RentalPayload>[]
+        }
+        create: {
+          args: Prisma.RentalCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RentalPayload>
+        }
+        createMany: {
+          args: Prisma.RentalCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.RentalCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RentalPayload>[]
+        }
+        delete: {
+          args: Prisma.RentalDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RentalPayload>
+        }
+        update: {
+          args: Prisma.RentalUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RentalPayload>
+        }
+        deleteMany: {
+          args: Prisma.RentalDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.RentalUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.RentalUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RentalPayload>[]
+        }
+        upsert: {
+          args: Prisma.RentalUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RentalPayload>
+        }
+        aggregate: {
+          args: Prisma.RentalAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateRental>
+        }
+        groupBy: {
+          args: Prisma.RentalGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.RentalGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.RentalCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.RentalCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -925,6 +1075,7 @@ export const VehiclesScalarFieldEnum = {
   plate_number: 'plate_number',
   model: 'model',
   year: 'year',
+  pricePerDay: 'pricePerDay',
   color: 'color',
   seat: 'seat',
   status: 'status',
@@ -963,6 +1114,7 @@ export const CouponsScalarFieldEnum = {
   discountValue: 'discountValue',
   usageLimit: 'usageLimit',
   usedCount: 'usedCount',
+  maximumDiscount: 'maximumDiscount',
   expiredAt: 'expiredAt',
   isActive: 'isActive',
   createdAt: 'createdAt'
@@ -981,6 +1133,42 @@ export const VehicleImageScalarFieldEnum = {
 } as const
 
 export type VehicleImageScalarFieldEnum = (typeof VehicleImageScalarFieldEnum)[keyof typeof VehicleImageScalarFieldEnum]
+
+
+export const BookingsScalarFieldEnum = {
+  id: 'id',
+  user_id: 'user_id',
+  car_id: 'car_id',
+  coupon_id: 'coupon_id',
+  pickup_at: 'pickup_at',
+  return_at: 'return_at',
+  total_days: 'total_days',
+  subtotal: 'subtotal',
+  grandTotal: 'grandTotal',
+  pricePerDay: 'pricePerDay',
+  tax: 'tax',
+  discount: 'discount',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type BookingsScalarFieldEnum = (typeof BookingsScalarFieldEnum)[keyof typeof BookingsScalarFieldEnum]
+
+
+export const RentalScalarFieldEnum = {
+  id: 'id',
+  Booking_id: 'Booking_id',
+  actual_pickup_at: 'actual_pickup_at',
+  actual_return_at: 'actual_return_at',
+  late_fee: 'late_fee',
+  damage_fee: 'damage_fee',
+  Status: 'Status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type RentalScalarFieldEnum = (typeof RentalScalarFieldEnum)[keyof typeof RentalScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -1070,20 +1258,6 @@ export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel,
 
 
 /**
- * Reference to a field of type 'Status_vehicles'
- */
-export type EnumStatus_vehiclesFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Status_vehicles'>
-    
-
-
-/**
- * Reference to a field of type 'Status_vehicles[]'
- */
-export type ListEnumStatus_vehiclesFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Status_vehicles[]'>
-    
-
-
-/**
  * Reference to a field of type 'Decimal'
  */
 export type DecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Decimal'>
@@ -1098,9 +1272,51 @@ export type ListDecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaMo
 
 
 /**
+ * Reference to a field of type 'Status_vehicles'
+ */
+export type EnumStatus_vehiclesFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Status_vehicles'>
+    
+
+
+/**
+ * Reference to a field of type 'Status_vehicles[]'
+ */
+export type ListEnumStatus_vehiclesFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Status_vehicles[]'>
+    
+
+
+/**
  * Reference to a field of type 'Boolean'
  */
 export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
+    
+
+
+/**
+ * Reference to a field of type 'BookingStatus'
+ */
+export type EnumBookingStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BookingStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'BookingStatus[]'
+ */
+export type ListEnumBookingStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BookingStatus[]'>
+    
+
+
+/**
+ * Reference to a field of type 'RentalStatus'
+ */
+export type EnumRentalStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'RentalStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'RentalStatus[]'
+ */
+export type ListEnumRentalStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'RentalStatus[]'>
     
 
 
@@ -1274,6 +1490,8 @@ export type GlobalOmitConfig = {
   vehicle_Categories?: Prisma.Vehicle_CategoriesOmit
   coupons?: Prisma.CouponsOmit
   vehicleImage?: Prisma.VehicleImageOmit
+  bookings?: Prisma.BookingsOmit
+  rental?: Prisma.RentalOmit
 }
 
 /* Types for Logging */
