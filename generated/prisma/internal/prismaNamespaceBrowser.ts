@@ -133,6 +133,7 @@ export type Vehicle_CategoriesScalarFieldEnum = (typeof Vehicle_CategoriesScalar
 export const CouponsScalarFieldEnum = {
   id: 'id',
   code: 'code',
+  type: 'type',
   discountValue: 'discountValue',
   usageLimit: 'usageLimit',
   usedCount: 'usedCount',

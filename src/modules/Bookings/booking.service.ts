@@ -17,7 +17,7 @@ export const BookingService = {
     // return await BookingRepository.create(vehicleCatSchema)
     return prisma.$transaction(async (tx) => {
       // get Vehicle
-      const vehicle = await vehicleRepository.getById(data.car_id);
+      const vehicle = await vehicleRepository.getById(data.car_id,tx);
       if (!vehicle) {
         throw new Error("Vehicle tidak ditemukan");
       }
@@ -36,6 +36,7 @@ export const BookingService = {
         data.car_id,
         data.pickup_at,
         data.return_at,
+        tx
       );
 
       if (existingBooking) {
@@ -52,10 +53,11 @@ export const BookingService = {
       const subtotal = pricePerDay.mul(totalDays);
 
       //  coupon
+      let couponId:string | undefined;
       let discount = new Prisma.Decimal(0);
 
-      if (data.coupon_id) {
-        const coupon = await couponRepository.getById(data.coupon_id);
+      if (data.coupon_code) {
+        const coupon = await couponRepository.getByCode(data.coupon_code,tx);
 
         if (!coupon) {
           throw new Error("Coupon tidak ditemukan");
@@ -84,19 +86,26 @@ export const BookingService = {
           throw new Error("Coupon sudah mencapai batas penggunaan");
         }
 
-        // Maximum discount
-        if (
-          coupon.maximumDiscount &&
-          discount.greaterThan(coupon.maximumDiscount)
-        ) {
-          discount = coupon.maximumDiscount;
-        }
+        couponId = coupon.id;
+         if (coupon.type === "PERCENTAGE") {
+      discount = subtotal.mul(coupon.discountValue).div(100);
+
+    if (coupon.maximumDiscount && discount.greaterThan(coupon.maximumDiscount)) {
+      discount = coupon.maximumDiscount;
+    }
+  }
 
         // Discount tidak boleh
         // lebih besar dari subtotal
         if (discount.greaterThan(subtotal)) {
           discount = subtotal;
         }
+
+         // Increment usage
+        await couponRepository.incrementUsedCount(
+          coupon.id,
+          tx
+        );
       }
 
       // tax
@@ -121,10 +130,10 @@ export const BookingService = {
             },
           },
 
-          coupon: data.coupon_id
+          coupon: couponId
             ? {
                 connect: {
-                  id: data.coupon_id,
+                  id: couponId,
                 },
               }
             : undefined,
@@ -148,6 +157,8 @@ export const BookingService = {
           status: "PENDING",
         },
       });
+
+      await vehicleRepository.updateStatus(data.car_id,tx)
 
       return booking;
     });

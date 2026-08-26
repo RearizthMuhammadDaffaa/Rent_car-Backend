@@ -75,7 +75,8 @@ enum Status_vehicles {
 
 model Coupons {
   id String   @id @default(uuid())
-  code String  
+  code String  @unique
+  type CouponsType @default(PERCENTAGE)
   discountValue Decimal
   usageLimit Int
   usedCount Int
@@ -85,6 +86,11 @@ model Coupons {
   bookings Bookings[]
 
   createdAt    DateTime        @default(now())
+}
+
+enum CouponsType {
+  FIXED
+  PERCENTAGE
 }
 
 model VehicleImage {

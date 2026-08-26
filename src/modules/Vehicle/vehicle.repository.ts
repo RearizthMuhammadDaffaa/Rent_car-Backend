@@ -1,6 +1,7 @@
-import { Prisma } from "../../../generated/prisma/client";
+import { Prisma, Status_vehicles } from "../../../generated/prisma/client";
 import { prisma } from "../../config/db";
 import { CreateVehicleDto, UpdateVehicleDto } from "./vehicle.schema";
+type Tx = Prisma.TransactionClient;
 
 export const vehicleRepository = {
   create: async (data: CreateVehicleDto) => {
@@ -20,8 +21,9 @@ export const vehicleRepository = {
     return prisma.vehicles.findMany();
   },
 
-  getById: async (id: string) => {
-    return prisma.vehicles.findUnique({
+  getById: async (id: string,tx?:Tx) => {
+    const db = tx ?? prisma;
+    return db.vehicles.findUnique({
       where: { id },
     });
   },
@@ -40,6 +42,15 @@ export const vehicleRepository = {
           }),
         },
     });
+  },
+  updateStatus : async (id:string,tx?:Tx) => {
+    const db = tx ?? prisma;
+    return db.vehicles.update({
+      where: {id},
+      data : {
+        status : Status_vehicles.BOOKED
+      }
+    })
   },
 
   delete: async (id: string) => {

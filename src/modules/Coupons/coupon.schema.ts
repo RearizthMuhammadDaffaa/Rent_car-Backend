@@ -5,6 +5,8 @@ export const createCouponSchema = z.object({
   discountValue: z.number().min(0, "Discount value minimal 0"),
   usageLimit: z.number().int().min(1, "Usage limit minimal 1"),
   usedCount: z.number().int().min(0, "Used count minimal 0").default(0),
+  type: z.enum(["PERCENTAGE", "FIXED"]).default("PERCENTAGE"),
+  maximumDiscount: z.coerce.number().positive("Harga harus lebih dari 0"),
   expiredAt: z.coerce.date(),
   isActive: z.boolean().default(true),
 });

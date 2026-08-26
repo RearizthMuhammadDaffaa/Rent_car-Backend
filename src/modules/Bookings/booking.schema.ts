@@ -5,7 +5,7 @@ export const createBookingSchema = z
   .object({
     car_id: z.uuid(),
 
-    coupon_id: z.uuid().optional(),
+    coupon_code: z.string().trim().toUpperCase().optional(),
 
     pickup_at: z.coerce.date(),
 

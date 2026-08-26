@@ -29,6 +29,14 @@ export const Status_vehicles = {
 export type Status_vehicles = (typeof Status_vehicles)[keyof typeof Status_vehicles]
 
 
+export const CouponsType = {
+  FIXED: 'FIXED',
+  PERCENTAGE: 'PERCENTAGE'
+} as const
+
+export type CouponsType = (typeof CouponsType)[keyof typeof CouponsType]
+
+
 export const BookingStatus = {
   PENDING: 'PENDING',
   CONFIRMED: 'CONFIRMED',

@@ -1,7 +1,7 @@
 import { Prisma } from "../../../generated/prisma/client";
 import { prisma } from "../../config/db";
 import { CreateBookingDto, UpdateBookingDto } from "./booking.schema";
-
+type Tx = Prisma.TransactionClient;
 
 export const BookingRepository = {
   create: async (data: Prisma.BookingsCreateInput) => {
@@ -31,9 +31,11 @@ export const BookingRepository = {
     findOverlapping: async (
     carId: string,
     pickupAt: Date,
-    returnAt: Date
+    returnAt: Date,
+    tx?:Tx
   ) => {
-    return prisma.bookings.findFirst({
+    const db = tx ?? prisma
+    return db.bookings.findFirst({
       where: {
         car_id: carId,
 

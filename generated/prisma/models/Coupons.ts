@@ -43,6 +43,7 @@ export type CouponsSumAggregateOutputType = {
 export type CouponsMinAggregateOutputType = {
   id: string | null
   code: string | null
+  type: $Enums.CouponsType | null
   discountValue: runtime.Decimal | null
   usageLimit: number | null
   usedCount: number | null
@@ -55,6 +56,7 @@ export type CouponsMinAggregateOutputType = {
 export type CouponsMaxAggregateOutputType = {
   id: string | null
   code: string | null
+  type: $Enums.CouponsType | null
   discountValue: runtime.Decimal | null
   usageLimit: number | null
   usedCount: number | null
@@ -67,6 +69,7 @@ export type CouponsMaxAggregateOutputType = {
 export type CouponsCountAggregateOutputType = {
   id: number
   code: number
+  type: number
   discountValue: number
   usageLimit: number
   usedCount: number
@@ -95,6 +98,7 @@ export type CouponsSumAggregateInputType = {
 export type CouponsMinAggregateInputType = {
   id?: true
   code?: true
+  type?: true
   discountValue?: true
   usageLimit?: true
   usedCount?: true
@@ -107,6 +111,7 @@ export type CouponsMinAggregateInputType = {
 export type CouponsMaxAggregateInputType = {
   id?: true
   code?: true
+  type?: true
   discountValue?: true
   usageLimit?: true
   usedCount?: true
@@ -119,6 +124,7 @@ export type CouponsMaxAggregateInputType = {
 export type CouponsCountAggregateInputType = {
   id?: true
   code?: true
+  type?: true
   discountValue?: true
   usageLimit?: true
   usedCount?: true
@@ -218,6 +224,7 @@ export type CouponsGroupByArgs<ExtArgs extends runtime.Types.Extensions.Internal
 export type CouponsGroupByOutputType = {
   id: string
   code: string
+  type: $Enums.CouponsType
   discountValue: runtime.Decimal
   usageLimit: number
   usedCount: number
@@ -253,6 +260,7 @@ export type CouponsWhereInput = {
   NOT?: Prisma.CouponsWhereInput | Prisma.CouponsWhereInput[]
   id?: Prisma.StringFilter<"Coupons"> | string
   code?: Prisma.StringFilter<"Coupons"> | string
+  type?: Prisma.EnumCouponsTypeFilter<"Coupons"> | $Enums.CouponsType
   discountValue?: Prisma.DecimalFilter<"Coupons"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   usageLimit?: Prisma.IntFilter<"Coupons"> | number
   usedCount?: Prisma.IntFilter<"Coupons"> | number
@@ -266,6 +274,7 @@ export type CouponsWhereInput = {
 export type CouponsOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   code?: Prisma.SortOrder
+  type?: Prisma.SortOrder
   discountValue?: Prisma.SortOrder
   usageLimit?: Prisma.SortOrder
   usedCount?: Prisma.SortOrder
@@ -278,10 +287,11 @@ export type CouponsOrderByWithRelationInput = {
 
 export type CouponsWhereUniqueInput = Prisma.AtLeast<{
   id?: string
+  code?: string
   AND?: Prisma.CouponsWhereInput | Prisma.CouponsWhereInput[]
   OR?: Prisma.CouponsWhereInput[]
   NOT?: Prisma.CouponsWhereInput | Prisma.CouponsWhereInput[]
-  code?: Prisma.StringFilter<"Coupons"> | string
+  type?: Prisma.EnumCouponsTypeFilter<"Coupons"> | $Enums.CouponsType
   discountValue?: Prisma.DecimalFilter<"Coupons"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   usageLimit?: Prisma.IntFilter<"Coupons"> | number
   usedCount?: Prisma.IntFilter<"Coupons"> | number
@@ -290,11 +300,12 @@ export type CouponsWhereUniqueInput = Prisma.AtLeast<{
   isActive?: Prisma.BoolFilter<"Coupons"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Coupons"> | Date | string
   bookings?: Prisma.BookingsListRelationFilter
-}, "id">
+}, "id" | "code">
 
 export type CouponsOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   code?: Prisma.SortOrder
+  type?: Prisma.SortOrder
   discountValue?: Prisma.SortOrder
   usageLimit?: Prisma.SortOrder
   usedCount?: Prisma.SortOrder
@@ -315,6 +326,7 @@ export type CouponsScalarWhereWithAggregatesInput = {
   NOT?: Prisma.CouponsScalarWhereWithAggregatesInput | Prisma.CouponsScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"Coupons"> | string
   code?: Prisma.StringWithAggregatesFilter<"Coupons"> | string
+  type?: Prisma.EnumCouponsTypeWithAggregatesFilter<"Coupons"> | $Enums.CouponsType
   discountValue?: Prisma.DecimalWithAggregatesFilter<"Coupons"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   usageLimit?: Prisma.IntWithAggregatesFilter<"Coupons"> | number
   usedCount?: Prisma.IntWithAggregatesFilter<"Coupons"> | number
@@ -327,6 +339,7 @@ export type CouponsScalarWhereWithAggregatesInput = {
 export type CouponsCreateInput = {
   id?: string
   code: string
+  type?: $Enums.CouponsType
   discountValue: runtime.Decimal | runtime.DecimalJsLike | number | string
   usageLimit: number
   usedCount: number
@@ -340,6 +353,7 @@ export type CouponsCreateInput = {
 export type CouponsUncheckedCreateInput = {
   id?: string
   code: string
+  type?: $Enums.CouponsType
   discountValue: runtime.Decimal | runtime.DecimalJsLike | number | string
   usageLimit: number
   usedCount: number
@@ -353,6 +367,7 @@ export type CouponsUncheckedCreateInput = {
 export type CouponsUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumCouponsTypeFieldUpdateOperationsInput | $Enums.CouponsType
   discountValue?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   usageLimit?: Prisma.IntFieldUpdateOperationsInput | number
   usedCount?: Prisma.IntFieldUpdateOperationsInput | number
@@ -366,6 +381,7 @@ export type CouponsUpdateInput = {
 export type CouponsUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumCouponsTypeFieldUpdateOperationsInput | $Enums.CouponsType
   discountValue?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   usageLimit?: Prisma.IntFieldUpdateOperationsInput | number
   usedCount?: Prisma.IntFieldUpdateOperationsInput | number
@@ -379,6 +395,7 @@ export type CouponsUncheckedUpdateInput = {
 export type CouponsCreateManyInput = {
   id?: string
   code: string
+  type?: $Enums.CouponsType
   discountValue: runtime.Decimal | runtime.DecimalJsLike | number | string
   usageLimit: number
   usedCount: number
@@ -391,6 +408,7 @@ export type CouponsCreateManyInput = {
 export type CouponsUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumCouponsTypeFieldUpdateOperationsInput | $Enums.CouponsType
   discountValue?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   usageLimit?: Prisma.IntFieldUpdateOperationsInput | number
   usedCount?: Prisma.IntFieldUpdateOperationsInput | number
@@ -403,6 +421,7 @@ export type CouponsUpdateManyMutationInput = {
 export type CouponsUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumCouponsTypeFieldUpdateOperationsInput | $Enums.CouponsType
   discountValue?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   usageLimit?: Prisma.IntFieldUpdateOperationsInput | number
   usedCount?: Prisma.IntFieldUpdateOperationsInput | number
@@ -415,6 +434,7 @@ export type CouponsUncheckedUpdateManyInput = {
 export type CouponsCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   code?: Prisma.SortOrder
+  type?: Prisma.SortOrder
   discountValue?: Prisma.SortOrder
   usageLimit?: Prisma.SortOrder
   usedCount?: Prisma.SortOrder
@@ -434,6 +454,7 @@ export type CouponsAvgOrderByAggregateInput = {
 export type CouponsMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   code?: Prisma.SortOrder
+  type?: Prisma.SortOrder
   discountValue?: Prisma.SortOrder
   usageLimit?: Prisma.SortOrder
   usedCount?: Prisma.SortOrder
@@ -446,6 +467,7 @@ export type CouponsMaxOrderByAggregateInput = {
 export type CouponsMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   code?: Prisma.SortOrder
+  type?: Prisma.SortOrder
   discountValue?: Prisma.SortOrder
   usageLimit?: Prisma.SortOrder
   usedCount?: Prisma.SortOrder
@@ -465,6 +487,10 @@ export type CouponsSumOrderByAggregateInput = {
 export type CouponsNullableScalarRelationFilter = {
   is?: Prisma.CouponsWhereInput | null
   isNot?: Prisma.CouponsWhereInput | null
+}
+
+export type EnumCouponsTypeFieldUpdateOperationsInput = {
+  set?: $Enums.CouponsType
 }
 
 export type BoolFieldUpdateOperationsInput = {
@@ -490,6 +516,7 @@ export type CouponsUpdateOneWithoutBookingsNestedInput = {
 export type CouponsCreateWithoutBookingsInput = {
   id?: string
   code: string
+  type?: $Enums.CouponsType
   discountValue: runtime.Decimal | runtime.DecimalJsLike | number | string
   usageLimit: number
   usedCount: number
@@ -502,6 +529,7 @@ export type CouponsCreateWithoutBookingsInput = {
 export type CouponsUncheckedCreateWithoutBookingsInput = {
   id?: string
   code: string
+  type?: $Enums.CouponsType
   discountValue: runtime.Decimal | runtime.DecimalJsLike | number | string
   usageLimit: number
   usedCount: number
@@ -530,6 +558,7 @@ export type CouponsUpdateToOneWithWhereWithoutBookingsInput = {
 export type CouponsUpdateWithoutBookingsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumCouponsTypeFieldUpdateOperationsInput | $Enums.CouponsType
   discountValue?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   usageLimit?: Prisma.IntFieldUpdateOperationsInput | number
   usedCount?: Prisma.IntFieldUpdateOperationsInput | number
@@ -542,6 +571,7 @@ export type CouponsUpdateWithoutBookingsInput = {
 export type CouponsUncheckedUpdateWithoutBookingsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumCouponsTypeFieldUpdateOperationsInput | $Enums.CouponsType
   discountValue?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   usageLimit?: Prisma.IntFieldUpdateOperationsInput | number
   usedCount?: Prisma.IntFieldUpdateOperationsInput | number
@@ -585,6 +615,7 @@ export type CouponsCountOutputTypeCountBookingsArgs<ExtArgs extends runtime.Type
 export type CouponsSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   code?: boolean
+  type?: boolean
   discountValue?: boolean
   usageLimit?: boolean
   usedCount?: boolean
@@ -599,6 +630,7 @@ export type CouponsSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
 export type CouponsSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   code?: boolean
+  type?: boolean
   discountValue?: boolean
   usageLimit?: boolean
   usedCount?: boolean
@@ -611,6 +643,7 @@ export type CouponsSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
 export type CouponsSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   code?: boolean
+  type?: boolean
   discountValue?: boolean
   usageLimit?: boolean
   usedCount?: boolean
@@ -623,6 +656,7 @@ export type CouponsSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
 export type CouponsSelectScalar = {
   id?: boolean
   code?: boolean
+  type?: boolean
   discountValue?: boolean
   usageLimit?: boolean
   usedCount?: boolean
@@ -632,7 +666,7 @@ export type CouponsSelectScalar = {
   createdAt?: boolean
 }
 
-export type CouponsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "code" | "discountValue" | "usageLimit" | "usedCount" | "maximumDiscount" | "expiredAt" | "isActive" | "createdAt", ExtArgs["result"]["coupons"]>
+export type CouponsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "code" | "type" | "discountValue" | "usageLimit" | "usedCount" | "maximumDiscount" | "expiredAt" | "isActive" | "createdAt", ExtArgs["result"]["coupons"]>
 export type CouponsInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   bookings?: boolean | Prisma.Coupons$bookingsArgs<ExtArgs>
   _count?: boolean | Prisma.CouponsCountOutputTypeDefaultArgs<ExtArgs>
@@ -648,6 +682,7 @@ export type $CouponsPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     code: string
+    type: $Enums.CouponsType
     discountValue: runtime.Decimal
     usageLimit: number
     usedCount: number
@@ -1081,6 +1116,7 @@ export interface Prisma__CouponsClient<T, Null = never, ExtArgs extends runtime.
 export interface CouponsFieldRefs {
   readonly id: Prisma.FieldRef<"Coupons", 'String'>
   readonly code: Prisma.FieldRef<"Coupons", 'String'>
+  readonly type: Prisma.FieldRef<"Coupons", 'CouponsType'>
   readonly discountValue: Prisma.FieldRef<"Coupons", 'Decimal'>
   readonly usageLimit: Prisma.FieldRef<"Coupons", 'Int'>
   readonly usedCount: Prisma.FieldRef<"Coupons", 'Int'>

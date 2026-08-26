@@ -198,9 +198,26 @@ export type StringNullableWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedStringNullableFilter<$PrismaModel>
 }
 
+export type EnumCouponsTypeFilter<$PrismaModel = never> = {
+  equals?: $Enums.CouponsType | Prisma.EnumCouponsTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.CouponsType[] | Prisma.ListEnumCouponsTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.CouponsType[] | Prisma.ListEnumCouponsTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumCouponsTypeFilter<$PrismaModel> | $Enums.CouponsType
+}
+
 export type BoolFilter<$PrismaModel = never> = {
   equals?: boolean | Prisma.BooleanFieldRefInput<$PrismaModel>
   not?: Prisma.NestedBoolFilter<$PrismaModel> | boolean
+}
+
+export type EnumCouponsTypeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.CouponsType | Prisma.EnumCouponsTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.CouponsType[] | Prisma.ListEnumCouponsTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.CouponsType[] | Prisma.ListEnumCouponsTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumCouponsTypeWithAggregatesFilter<$PrismaModel> | $Enums.CouponsType
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumCouponsTypeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumCouponsTypeFilter<$PrismaModel>
 }
 
 export type BoolWithAggregatesFilter<$PrismaModel = never> = {
@@ -469,9 +486,26 @@ export type NestedIntNullableFilter<$PrismaModel = never> = {
   not?: Prisma.NestedIntNullableFilter<$PrismaModel> | number | null
 }
 
+export type NestedEnumCouponsTypeFilter<$PrismaModel = never> = {
+  equals?: $Enums.CouponsType | Prisma.EnumCouponsTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.CouponsType[] | Prisma.ListEnumCouponsTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.CouponsType[] | Prisma.ListEnumCouponsTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumCouponsTypeFilter<$PrismaModel> | $Enums.CouponsType
+}
+
 export type NestedBoolFilter<$PrismaModel = never> = {
   equals?: boolean | Prisma.BooleanFieldRefInput<$PrismaModel>
   not?: Prisma.NestedBoolFilter<$PrismaModel> | boolean
+}
+
+export type NestedEnumCouponsTypeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.CouponsType | Prisma.EnumCouponsTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.CouponsType[] | Prisma.ListEnumCouponsTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.CouponsType[] | Prisma.ListEnumCouponsTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumCouponsTypeWithAggregatesFilter<$PrismaModel> | $Enums.CouponsType
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumCouponsTypeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumCouponsTypeFilter<$PrismaModel>
 }
 
 export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {

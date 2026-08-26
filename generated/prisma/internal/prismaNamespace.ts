@@ -1111,6 +1111,7 @@ export type Vehicle_CategoriesScalarFieldEnum = (typeof Vehicle_CategoriesScalar
 export const CouponsScalarFieldEnum = {
   id: 'id',
   code: 'code',
+  type: 'type',
   discountValue: 'discountValue',
   usageLimit: 'usageLimit',
   usedCount: 'usedCount',
@@ -1282,6 +1283,20 @@ export type EnumStatus_vehiclesFieldRefInput<$PrismaModel> = FieldRefInputType<$
  * Reference to a field of type 'Status_vehicles[]'
  */
 export type ListEnumStatus_vehiclesFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Status_vehicles[]'>
+    
+
+
+/**
+ * Reference to a field of type 'CouponsType'
+ */
+export type EnumCouponsTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CouponsType'>
+    
+
+
+/**
+ * Reference to a field of type 'CouponsType[]'
+ */
+export type ListEnumCouponsTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CouponsType[]'>
     
 
 
