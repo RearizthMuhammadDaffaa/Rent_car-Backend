@@ -57,3 +57,12 @@ export const RentalStatus = {
 } as const
 
 export type RentalStatus = (typeof RentalStatus)[keyof typeof RentalStatus]
+
+
+export const DocumentStatus = {
+  PENDING: 'PENDING',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED'
+} as const
+
+export type DocumentStatus = (typeof DocumentStatus)[keyof typeof DocumentStatus]

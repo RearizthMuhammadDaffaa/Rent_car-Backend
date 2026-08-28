@@ -14,6 +14,7 @@ model User {
   password  String
   role      RoleStatus @default(CUSTOMER)
   booking Bookings[]
+  documents UserDocuments?
   createdAt DateTime   @default(now())
   updatedAt DateTime   @default(now()) @updatedAt
 }
@@ -166,5 +167,29 @@ model Rental {
   booking Bookings @relation(fields: [Booking_id],references: [id])
 
 }
+
+model UserDocuments { 
+  id String @id @default(uuid()) 
+  user_id String 
+  ktp_url String? 
+  ktp_public_id String?
+  sim_url String? 
+  sim_public_id String?
+  status DocumentStatus @default(PENDING) 
+  createdAt DateTime @default(now()) 
+  updatedAt DateTime @default(now()) @updatedAt 
+  user User @relation(fields: [user_id], references: [id]) 
+  @@unique([user_id]) 
+  @@index([status]) 
+  
+  } 
+  
+  enum DocumentStatus {
+     PENDING 
+     APPROVED 
+     REJECTED 
+    }
+
+
 
 

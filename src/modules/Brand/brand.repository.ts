@@ -1,11 +1,11 @@
 import {prisma} from "../../config/db";
 import { BrandType } from "../../shared/types/types";
-import { UpdateBrandDto } from "./brand.schema";
+import { CreateBrandDto, UpdateBrandDto } from "./brand.schema";
 
 
 
 export const brandRepository = {
-  create: async (data: BrandType) => {
+  create: async (data: CreateBrandDto) => {
     return prisma.brands.create({
       data,
     });

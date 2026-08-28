@@ -88,5 +88,24 @@ export const BookingController = {
       });
     }
 
+  },
+    async cencelBooking (req:Request,res:Response){
+       try {
+    const params = bookingParamSchema.parse(req.params);
+
+    const booking = await BookingService.cancelBooking(params.id);
+
+    res.status(200).json({
+      success: true,
+      message: "Booking berhasil dibatalkan",
+      data: booking,
+    });
+  } catch (error) {
+    console.error(error);
+
+      return res.status(500).json({
+        error,
+      });
   }
+    }
 };

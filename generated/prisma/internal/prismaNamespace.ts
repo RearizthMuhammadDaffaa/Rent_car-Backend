@@ -404,7 +404,8 @@ export const ModelName = {
   Coupons: 'Coupons',
   VehicleImage: 'VehicleImage',
   Bookings: 'Bookings',
-  Rental: 'Rental'
+  Rental: 'Rental',
+  UserDocuments: 'UserDocuments'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -420,7 +421,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "vehicles" | "brands" | "vehicle_Categories" | "coupons" | "vehicleImage" | "bookings" | "rental"
+    modelProps: "user" | "vehicles" | "brands" | "vehicle_Categories" | "coupons" | "vehicleImage" | "bookings" | "rental" | "userDocuments"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1016,6 +1017,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    UserDocuments: {
+      payload: Prisma.$UserDocumentsPayload<ExtArgs>
+      fields: Prisma.UserDocumentsFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.UserDocumentsFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserDocumentsPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.UserDocumentsFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserDocumentsPayload>
+        }
+        findFirst: {
+          args: Prisma.UserDocumentsFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserDocumentsPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.UserDocumentsFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserDocumentsPayload>
+        }
+        findMany: {
+          args: Prisma.UserDocumentsFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserDocumentsPayload>[]
+        }
+        create: {
+          args: Prisma.UserDocumentsCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserDocumentsPayload>
+        }
+        createMany: {
+          args: Prisma.UserDocumentsCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.UserDocumentsCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserDocumentsPayload>[]
+        }
+        delete: {
+          args: Prisma.UserDocumentsDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserDocumentsPayload>
+        }
+        update: {
+          args: Prisma.UserDocumentsUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserDocumentsPayload>
+        }
+        deleteMany: {
+          args: Prisma.UserDocumentsDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.UserDocumentsUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.UserDocumentsUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserDocumentsPayload>[]
+        }
+        upsert: {
+          args: Prisma.UserDocumentsUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserDocumentsPayload>
+        }
+        aggregate: {
+          args: Prisma.UserDocumentsAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateUserDocuments>
+        }
+        groupBy: {
+          args: Prisma.UserDocumentsGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.UserDocumentsGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.UserDocumentsCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.UserDocumentsCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -1170,6 +1245,21 @@ export const RentalScalarFieldEnum = {
 } as const
 
 export type RentalScalarFieldEnum = (typeof RentalScalarFieldEnum)[keyof typeof RentalScalarFieldEnum]
+
+
+export const UserDocumentsScalarFieldEnum = {
+  id: 'id',
+  user_id: 'user_id',
+  ktp_url: 'ktp_url',
+  ktp_public_id: 'ktp_public_id',
+  sim_url: 'sim_url',
+  sim_public_id: 'sim_public_id',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type UserDocumentsScalarFieldEnum = (typeof UserDocumentsScalarFieldEnum)[keyof typeof UserDocumentsScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -1332,6 +1422,20 @@ export type EnumRentalStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$Pri
  * Reference to a field of type 'RentalStatus[]'
  */
 export type ListEnumRentalStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'RentalStatus[]'>
+    
+
+
+/**
+ * Reference to a field of type 'DocumentStatus'
+ */
+export type EnumDocumentStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DocumentStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'DocumentStatus[]'
+ */
+export type ListEnumDocumentStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DocumentStatus[]'>
     
 
 
@@ -1507,6 +1611,7 @@ export type GlobalOmitConfig = {
   vehicleImage?: Prisma.VehicleImageOmit
   bookings?: Prisma.BookingsOmit
   rental?: Prisma.RentalOmit
+  userDocuments?: Prisma.UserDocumentsOmit
 }
 
 /* Types for Logging */

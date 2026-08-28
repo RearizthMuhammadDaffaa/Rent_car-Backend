@@ -1,8 +1,9 @@
-import { Prisma } from "../../../generated/prisma/client";
+import { BookingStatus, Prisma, Status_vehicles } from "../../../generated/prisma/client";
 import { prisma } from "../../config/db";
 import { NotFoundError } from "../../errors/NotFoundError";
 import { userParamDto } from "../authentication/auth.schema";
 import { couponRepository } from "../Coupons/coupon.repository";
+import { documentRepository } from "../DocumentVerification/document.repository";
 import { vehicleRepository } from "../Vehicle/vehicle.repository";
 import { BookingRepository } from "./booking.repository";
 import {
@@ -16,6 +17,11 @@ export const BookingService = {
     //  const vehicleCatSchema = createVehicleCatSchema.parse(data)
     // return await BookingRepository.create(vehicleCatSchema)
     return prisma.$transaction(async (tx) => {
+      const approvedDocuments = await documentRepository.findApprovedByUserId(userId, tx);
+      if (!approvedDocuments) {
+        throw new Error("Dokumen KTP dan SIM harus sudah APPROVED sebelum booking");
+      }
+
       // get Vehicle
       const vehicle = await vehicleRepository.getById(data.car_id,tx);
       if (!vehicle) {
@@ -116,8 +122,8 @@ export const BookingService = {
       const grandTotal = taxableAmount.add(tax);
 
       // create booking
-      const booking = await tx.bookings.create({
-        data: {
+      const booking = await BookingRepository.create(
+         {
           user: {
             connect: {
               id: userId,
@@ -156,9 +162,10 @@ export const BookingService = {
 
           status: "PENDING",
         },
-      });
+        tx
+      );
 
-      await vehicleRepository.updateStatus(data.car_id,tx)
+      await vehicleRepository.updateStatus(data.car_id,Status_vehicles.BOOKED,tx)
 
       return booking;
     });
@@ -182,12 +189,56 @@ export const BookingService = {
     return await BookingRepository.update(id, validatedData);
   },
   deleteBooking: async (id: string) => {
-    const booking = await BookingRepository.getbyId(id);
+
+    return prisma.$transaction(async (tx) => {
+    const booking = await BookingRepository.getbyId(id,tx);
+    
 
     if (!booking) {
       throw new NotFoundError("Vehile Categories Not Found");
     }
-
-    return await BookingRepository.delete(id);
+    await vehicleRepository.updateStatus(booking.car_id,Status_vehicles.AVAILABLE,tx)
+    return  BookingRepository.delete(id,tx);
+    })
+    
   },
+  cancelBooking : async (id:string) => {
+    return prisma.$transaction(async (tx) => {
+
+    // 1. Cari booking
+    const booking = await BookingRepository.getbyId(id, tx);
+
+    if (!booking) {
+      throw new NotFoundError("Booking tidak ditemukan");
+    }
+
+    // 2. Validasi status booking
+    if (booking.status === BookingStatus.CANCELLED) {
+      throw new Error("Booking sudah dibatalkan");
+    }
+
+    if (booking.status === BookingStatus.COMPLETED) {
+      throw new Error(
+        "Booking yang sudah selesai tidak dapat dibatalkan"
+      );
+    }
+
+    // 3. Cancel booking
+    const cancelledBooking =
+      await BookingRepository.updateStatus(
+        id,
+        BookingStatus.CANCELLED,
+        tx
+      );
+
+    // 4. Kembalikan vehicle menjadi AVAILABLE
+    await vehicleRepository.updateStatus(
+      booking.car_id,
+      Status_vehicles.AVAILABLE,
+      tx
+    );
+
+    return cancelledBooking;
+  });
+  }
 };

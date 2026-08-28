@@ -58,7 +58,8 @@ export const ModelName = {
   Coupons: 'Coupons',
   VehicleImage: 'VehicleImage',
   Bookings: 'Bookings',
-  Rental: 'Rental'
+  Rental: 'Rental',
+  UserDocuments: 'UserDocuments'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -192,6 +193,21 @@ export const RentalScalarFieldEnum = {
 } as const
 
 export type RentalScalarFieldEnum = (typeof RentalScalarFieldEnum)[keyof typeof RentalScalarFieldEnum]
+
+
+export const UserDocumentsScalarFieldEnum = {
+  id: 'id',
+  user_id: 'user_id',
+  ktp_url: 'ktp_url',
+  ktp_public_id: 'ktp_public_id',
+  sim_url: 'sim_url',
+  sim_public_id: 'sim_public_id',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type UserDocumentsScalarFieldEnum = (typeof UserDocumentsScalarFieldEnum)[keyof typeof UserDocumentsScalarFieldEnum]
 
 
 export const SortOrder = {

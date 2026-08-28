@@ -1,19 +1,21 @@
-import { Prisma } from "../../../generated/prisma/client";
+import { BookingStatus, Prisma } from "../../../generated/prisma/client";
 import { prisma } from "../../config/db";
 import { CreateBookingDto, UpdateBookingDto } from "./booking.schema";
 type Tx = Prisma.TransactionClient;
 
 export const BookingRepository = {
-  create: async (data: Prisma.BookingsCreateInput) => {
-    return prisma.bookings.create({
+  create: async (data: Prisma.BookingsCreateInput,tx?:Tx) => {
+    const db = tx ?? prisma
+    return db.bookings.create({
       data,
     });
   },
   get : async () => {
     return await prisma.bookings.findMany();
   },
-  getbyId : async (id:string) => {
-    return await prisma.bookings.findUnique({
+  getbyId : async (id:string,tx?:Tx) => {
+     const db = tx ?? prisma
+    return await db.bookings.findUnique({
       where : {id}
     })
   },
@@ -23,8 +25,9 @@ export const BookingRepository = {
       data
     })
   },
-  delete : async (id:string) => {
-    return await prisma.bookings.delete({
+  delete : async (id:string,tx?:Tx) => {
+    const db = tx ?? prisma
+    return await db.bookings.delete({
       where : {id}
     })
   },
@@ -56,4 +59,16 @@ export const BookingRepository = {
       },
     });
   },
+  updateStatus: async (
+  id: string,
+  status: BookingStatus,
+  tx?: Tx
+) => {
+  const db = tx ?? prisma;
+
+  return db.bookings.update({
+    where: { id },
+    data: { status },
+  });
+},
 };

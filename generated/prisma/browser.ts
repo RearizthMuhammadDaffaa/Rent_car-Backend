@@ -57,3 +57,8 @@ export type Bookings = Prisma.BookingsModel
  * 
  */
 export type Rental = Prisma.RentalModel
+/**
+ * Model UserDocuments
+ * 
+ */
+export type UserDocuments = Prisma.UserDocumentsModel

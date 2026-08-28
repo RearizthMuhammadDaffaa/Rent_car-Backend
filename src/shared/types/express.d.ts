@@ -8,7 +8,10 @@ declare global {
         id: string;
         name: string;
         email: string;
+        password: string;
         role: RoleStatus;
+        createdAt: Date;
+        updatedAt: Date;
       };
     }
   }

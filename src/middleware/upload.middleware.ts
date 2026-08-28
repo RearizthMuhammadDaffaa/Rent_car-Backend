@@ -32,3 +32,19 @@ export const upload = multer({
     cb(null, true);
   },
 });
+
+export const uploadDocuments = multer({
+  storage,
+  limits: {
+    fileSize: MAX_FILE_SIZE,
+    files: 2,
+  },
+  fileFilter: (_req, file, cb) => {
+    if (!ALLOWED_MIME_TYPES.includes(file.mimetype)) {
+      cb(new Error("Invalid file type. Only JPG, PNG, and WEBP are allowed."));
+      return;
+    }
+
+    cb(null, true);
+  },
+});
