@@ -8,6 +8,7 @@ import vehicleImageRoutes from "../modules/VehicleImage/vehicleImage.route";
 import authRoutes from "../modules/authentication/auth.route"
 import bookingRoutes from "../modules/Bookings/booking.route"
 import documentRoutes from "../modules/DocumentVerification/document.route"
+import paymentRoute from "../modules/payments/payment.route"
 
 const router = Router();
 
@@ -45,6 +46,11 @@ router.use(
 router.use(
   "/documents",
   documentRoutes
+);
+
+router.use(
+  "/payments",
+  paymentRoute
 );
 
 export default router;

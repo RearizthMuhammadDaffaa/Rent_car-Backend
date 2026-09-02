@@ -62,3 +62,8 @@ export type Rental = Prisma.RentalModel
  * 
  */
 export type UserDocuments = Prisma.UserDocumentsModel
+/**
+ * Model Payments
+ * 
+ */
+export type Payments = Prisma.PaymentsModel
