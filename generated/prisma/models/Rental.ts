@@ -270,10 +270,10 @@ export type RentalOrderByWithRelationInput = {
 
 export type RentalWhereUniqueInput = Prisma.AtLeast<{
   id?: string
+  Booking_id?: string
   AND?: Prisma.RentalWhereInput | Prisma.RentalWhereInput[]
   OR?: Prisma.RentalWhereInput[]
   NOT?: Prisma.RentalWhereInput | Prisma.RentalWhereInput[]
-  Booking_id?: Prisma.StringFilter<"Rental"> | string
   actual_pickup_at?: Prisma.DateTimeFilter<"Rental"> | Date | string
   actual_return_at?: Prisma.DateTimeFilter<"Rental"> | Date | string
   late_fee?: Prisma.DecimalFilter<"Rental"> | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -282,7 +282,7 @@ export type RentalWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeFilter<"Rental"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Rental"> | Date | string
   booking?: Prisma.XOR<Prisma.BookingsScalarRelationFilter, Prisma.BookingsWhereInput>
-}, "id">
+}, "id" | "Booking_id">
 
 export type RentalOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
@@ -399,14 +399,9 @@ export type RentalUncheckedUpdateManyInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
-export type RentalListRelationFilter = {
-  every?: Prisma.RentalWhereInput
-  some?: Prisma.RentalWhereInput
-  none?: Prisma.RentalWhereInput
-}
-
-export type RentalOrderByRelationAggregateInput = {
-  _count?: Prisma.SortOrder
+export type RentalNullableScalarRelationFilter = {
+  is?: Prisma.RentalWhereInput | null
+  isNot?: Prisma.RentalWhereInput | null
 }
 
 export type RentalCountOrderByAggregateInput = {
@@ -455,46 +450,36 @@ export type RentalSumOrderByAggregateInput = {
   damage_fee?: Prisma.SortOrder
 }
 
-export type RentalCreateNestedManyWithoutBookingInput = {
-  create?: Prisma.XOR<Prisma.RentalCreateWithoutBookingInput, Prisma.RentalUncheckedCreateWithoutBookingInput> | Prisma.RentalCreateWithoutBookingInput[] | Prisma.RentalUncheckedCreateWithoutBookingInput[]
-  connectOrCreate?: Prisma.RentalCreateOrConnectWithoutBookingInput | Prisma.RentalCreateOrConnectWithoutBookingInput[]
-  createMany?: Prisma.RentalCreateManyBookingInputEnvelope
-  connect?: Prisma.RentalWhereUniqueInput | Prisma.RentalWhereUniqueInput[]
+export type RentalCreateNestedOneWithoutBookingInput = {
+  create?: Prisma.XOR<Prisma.RentalCreateWithoutBookingInput, Prisma.RentalUncheckedCreateWithoutBookingInput>
+  connectOrCreate?: Prisma.RentalCreateOrConnectWithoutBookingInput
+  connect?: Prisma.RentalWhereUniqueInput
 }
 
-export type RentalUncheckedCreateNestedManyWithoutBookingInput = {
-  create?: Prisma.XOR<Prisma.RentalCreateWithoutBookingInput, Prisma.RentalUncheckedCreateWithoutBookingInput> | Prisma.RentalCreateWithoutBookingInput[] | Prisma.RentalUncheckedCreateWithoutBookingInput[]
-  connectOrCreate?: Prisma.RentalCreateOrConnectWithoutBookingInput | Prisma.RentalCreateOrConnectWithoutBookingInput[]
-  createMany?: Prisma.RentalCreateManyBookingInputEnvelope
-  connect?: Prisma.RentalWhereUniqueInput | Prisma.RentalWhereUniqueInput[]
+export type RentalUncheckedCreateNestedOneWithoutBookingInput = {
+  create?: Prisma.XOR<Prisma.RentalCreateWithoutBookingInput, Prisma.RentalUncheckedCreateWithoutBookingInput>
+  connectOrCreate?: Prisma.RentalCreateOrConnectWithoutBookingInput
+  connect?: Prisma.RentalWhereUniqueInput
 }
 
-export type RentalUpdateManyWithoutBookingNestedInput = {
-  create?: Prisma.XOR<Prisma.RentalCreateWithoutBookingInput, Prisma.RentalUncheckedCreateWithoutBookingInput> | Prisma.RentalCreateWithoutBookingInput[] | Prisma.RentalUncheckedCreateWithoutBookingInput[]
-  connectOrCreate?: Prisma.RentalCreateOrConnectWithoutBookingInput | Prisma.RentalCreateOrConnectWithoutBookingInput[]
-  upsert?: Prisma.RentalUpsertWithWhereUniqueWithoutBookingInput | Prisma.RentalUpsertWithWhereUniqueWithoutBookingInput[]
-  createMany?: Prisma.RentalCreateManyBookingInputEnvelope
-  set?: Prisma.RentalWhereUniqueInput | Prisma.RentalWhereUniqueInput[]
-  disconnect?: Prisma.RentalWhereUniqueInput | Prisma.RentalWhereUniqueInput[]
-  delete?: Prisma.RentalWhereUniqueInput | Prisma.RentalWhereUniqueInput[]
-  connect?: Prisma.RentalWhereUniqueInput | Prisma.RentalWhereUniqueInput[]
-  update?: Prisma.RentalUpdateWithWhereUniqueWithoutBookingInput | Prisma.RentalUpdateWithWhereUniqueWithoutBookingInput[]
-  updateMany?: Prisma.RentalUpdateManyWithWhereWithoutBookingInput | Prisma.RentalUpdateManyWithWhereWithoutBookingInput[]
-  deleteMany?: Prisma.RentalScalarWhereInput | Prisma.RentalScalarWhereInput[]
+export type RentalUpdateOneWithoutBookingNestedInput = {
+  create?: Prisma.XOR<Prisma.RentalCreateWithoutBookingInput, Prisma.RentalUncheckedCreateWithoutBookingInput>
+  connectOrCreate?: Prisma.RentalCreateOrConnectWithoutBookingInput
+  upsert?: Prisma.RentalUpsertWithoutBookingInput
+  disconnect?: Prisma.RentalWhereInput | boolean
+  delete?: Prisma.RentalWhereInput | boolean
+  connect?: Prisma.RentalWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.RentalUpdateToOneWithWhereWithoutBookingInput, Prisma.RentalUpdateWithoutBookingInput>, Prisma.RentalUncheckedUpdateWithoutBookingInput>
 }
 
-export type RentalUncheckedUpdateManyWithoutBookingNestedInput = {
-  create?: Prisma.XOR<Prisma.RentalCreateWithoutBookingInput, Prisma.RentalUncheckedCreateWithoutBookingInput> | Prisma.RentalCreateWithoutBookingInput[] | Prisma.RentalUncheckedCreateWithoutBookingInput[]
-  connectOrCreate?: Prisma.RentalCreateOrConnectWithoutBookingInput | Prisma.RentalCreateOrConnectWithoutBookingInput[]
-  upsert?: Prisma.RentalUpsertWithWhereUniqueWithoutBookingInput | Prisma.RentalUpsertWithWhereUniqueWithoutBookingInput[]
-  createMany?: Prisma.RentalCreateManyBookingInputEnvelope
-  set?: Prisma.RentalWhereUniqueInput | Prisma.RentalWhereUniqueInput[]
-  disconnect?: Prisma.RentalWhereUniqueInput | Prisma.RentalWhereUniqueInput[]
-  delete?: Prisma.RentalWhereUniqueInput | Prisma.RentalWhereUniqueInput[]
-  connect?: Prisma.RentalWhereUniqueInput | Prisma.RentalWhereUniqueInput[]
-  update?: Prisma.RentalUpdateWithWhereUniqueWithoutBookingInput | Prisma.RentalUpdateWithWhereUniqueWithoutBookingInput[]
-  updateMany?: Prisma.RentalUpdateManyWithWhereWithoutBookingInput | Prisma.RentalUpdateManyWithWhereWithoutBookingInput[]
-  deleteMany?: Prisma.RentalScalarWhereInput | Prisma.RentalScalarWhereInput[]
+export type RentalUncheckedUpdateOneWithoutBookingNestedInput = {
+  create?: Prisma.XOR<Prisma.RentalCreateWithoutBookingInput, Prisma.RentalUncheckedCreateWithoutBookingInput>
+  connectOrCreate?: Prisma.RentalCreateOrConnectWithoutBookingInput
+  upsert?: Prisma.RentalUpsertWithoutBookingInput
+  disconnect?: Prisma.RentalWhereInput | boolean
+  delete?: Prisma.RentalWhereInput | boolean
+  connect?: Prisma.RentalWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.RentalUpdateToOneWithWhereWithoutBookingInput, Prisma.RentalUpdateWithoutBookingInput>, Prisma.RentalUncheckedUpdateWithoutBookingInput>
 }
 
 export type EnumRentalStatusFieldUpdateOperationsInput = {
@@ -528,51 +513,15 @@ export type RentalCreateOrConnectWithoutBookingInput = {
   create: Prisma.XOR<Prisma.RentalCreateWithoutBookingInput, Prisma.RentalUncheckedCreateWithoutBookingInput>
 }
 
-export type RentalCreateManyBookingInputEnvelope = {
-  data: Prisma.RentalCreateManyBookingInput | Prisma.RentalCreateManyBookingInput[]
-  skipDuplicates?: boolean
-}
-
-export type RentalUpsertWithWhereUniqueWithoutBookingInput = {
-  where: Prisma.RentalWhereUniqueInput
+export type RentalUpsertWithoutBookingInput = {
   update: Prisma.XOR<Prisma.RentalUpdateWithoutBookingInput, Prisma.RentalUncheckedUpdateWithoutBookingInput>
   create: Prisma.XOR<Prisma.RentalCreateWithoutBookingInput, Prisma.RentalUncheckedCreateWithoutBookingInput>
+  where?: Prisma.RentalWhereInput
 }
 
-export type RentalUpdateWithWhereUniqueWithoutBookingInput = {
-  where: Prisma.RentalWhereUniqueInput
+export type RentalUpdateToOneWithWhereWithoutBookingInput = {
+  where?: Prisma.RentalWhereInput
   data: Prisma.XOR<Prisma.RentalUpdateWithoutBookingInput, Prisma.RentalUncheckedUpdateWithoutBookingInput>
-}
-
-export type RentalUpdateManyWithWhereWithoutBookingInput = {
-  where: Prisma.RentalScalarWhereInput
-  data: Prisma.XOR<Prisma.RentalUpdateManyMutationInput, Prisma.RentalUncheckedUpdateManyWithoutBookingInput>
-}
-
-export type RentalScalarWhereInput = {
-  AND?: Prisma.RentalScalarWhereInput | Prisma.RentalScalarWhereInput[]
-  OR?: Prisma.RentalScalarWhereInput[]
-  NOT?: Prisma.RentalScalarWhereInput | Prisma.RentalScalarWhereInput[]
-  id?: Prisma.StringFilter<"Rental"> | string
-  Booking_id?: Prisma.StringFilter<"Rental"> | string
-  actual_pickup_at?: Prisma.DateTimeFilter<"Rental"> | Date | string
-  actual_return_at?: Prisma.DateTimeFilter<"Rental"> | Date | string
-  late_fee?: Prisma.DecimalFilter<"Rental"> | runtime.Decimal | runtime.DecimalJsLike | number | string
-  damage_fee?: Prisma.DecimalFilter<"Rental"> | runtime.Decimal | runtime.DecimalJsLike | number | string
-  Status?: Prisma.EnumRentalStatusFilter<"Rental"> | $Enums.RentalStatus
-  createdAt?: Prisma.DateTimeFilter<"Rental"> | Date | string
-  updatedAt?: Prisma.DateTimeFilter<"Rental"> | Date | string
-}
-
-export type RentalCreateManyBookingInput = {
-  id?: string
-  actual_pickup_at: Date | string
-  actual_return_at: Date | string
-  late_fee: runtime.Decimal | runtime.DecimalJsLike | number | string
-  damage_fee: runtime.Decimal | runtime.DecimalJsLike | number | string
-  Status?: $Enums.RentalStatus
-  createdAt?: Date | string
-  updatedAt?: Date | string
 }
 
 export type RentalUpdateWithoutBookingInput = {
@@ -587,17 +536,6 @@ export type RentalUpdateWithoutBookingInput = {
 }
 
 export type RentalUncheckedUpdateWithoutBookingInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  actual_pickup_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  actual_return_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  late_fee?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  damage_fee?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  Status?: Prisma.EnumRentalStatusFieldUpdateOperationsInput | $Enums.RentalStatus
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-}
-
-export type RentalUncheckedUpdateManyWithoutBookingInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   actual_pickup_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   actual_return_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string

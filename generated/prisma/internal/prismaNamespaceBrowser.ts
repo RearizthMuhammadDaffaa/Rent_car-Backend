@@ -59,7 +59,8 @@ export const ModelName = {
   VehicleImage: 'VehicleImage',
   Bookings: 'Bookings',
   Rental: 'Rental',
-  UserDocuments: 'UserDocuments'
+  UserDocuments: 'UserDocuments',
+  Payments: 'Payments'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -208,6 +209,25 @@ export const UserDocumentsScalarFieldEnum = {
 } as const
 
 export type UserDocumentsScalarFieldEnum = (typeof UserDocumentsScalarFieldEnum)[keyof typeof UserDocumentsScalarFieldEnum]
+
+
+export const PaymentsScalarFieldEnum = {
+  id: 'id',
+  booking_id: 'booking_id',
+  order_id: 'order_id',
+  transaction_id: 'transaction_id',
+  amount: 'amount',
+  payment_type: 'payment_type',
+  status: 'status',
+  snap_token: 'snap_token',
+  redirect_url: 'redirect_url',
+  paid_at: 'paid_at',
+  expired_at: 'expired_at',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
+} as const
+
+export type PaymentsScalarFieldEnum = (typeof PaymentsScalarFieldEnum)[keyof typeof PaymentsScalarFieldEnum]
 
 
 export const SortOrder = {
