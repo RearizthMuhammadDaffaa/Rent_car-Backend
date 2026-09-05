@@ -1,3 +1,4 @@
+import { redis } from "../../config/upstash";
 import { NotFoundError } from "../../errors/NotFoundError";
 import { cloudinaryService } from "../../shared/service/cloudinary.service";
 import { vehicleRepository } from "./vehicle.repository";
@@ -11,15 +12,42 @@ import {
 export const VehicleService = {
   createVehicle: async (data: CreateVehicleDto) => {
     const vehicleSchema = createVehicleSchema.parse(data);
-    return vehicleRepository.create(vehicleSchema);
+    const vehicle = await vehicleRepository.create(vehicleSchema);
+     await redis.del("vehicles:all");
+    return vehicle;
   },
 
   getVehicles: async () => {
-    return vehicleRepository.get();
+    const key = "vehicles:all"
+
+    const cached = await redis.get(key)
+     if (cached) {
+      return cached;
+    }
+
+    const vehicles = await vehicleRepository.get();
+
+    await redis.set(key, vehicles, {
+      ex: 300,
+    });
+
+    return vehicles;
+
   },
 
   getVehicleById: async (id: string) => {
-    return vehicleRepository.getById(id);
+    const key = `vehicle:${id}`
+
+    const cached = await redis.get(key)
+     if (cached) {
+      return cached;
+    }
+    const vehicle = await vehicleRepository.getById(id);
+    await redis.set(key, vehicle, {
+      ex: 300,
+    });
+
+    return vehicle
   },
 
   updateVehicle: async (id: string, data: UpdateVehicleDto) => {
@@ -31,6 +59,9 @@ export const VehicleService = {
 
     const validatedData = updateVehicleSchema.parse(data);
     const updatedVehicle = await vehicleRepository.update(id, validatedData);
+    
+    await redis.del(`vehicle:${id}`);
+    await redis.del("vehicles:all");
 
     if (validatedData.thumbnail && validatedData.thumbnailPublicId && vehicle.thumbnailPublicId) {
       await cloudinaryService.deleteImage(vehicle.thumbnailPublicId);
@@ -50,6 +81,11 @@ export const VehicleService = {
       await cloudinaryService.deleteImage(vehicle.thumbnailPublicId);
     }
 
-    return vehicleRepository.delete(id);
+    const deletedVehicle = await vehicleRepository.delete(id);
+    
+    await redis.del(`vehicle:${id}`);
+    await redis.del("vehicles:all");
+
+    return deletedVehicle;
   },
 };

@@ -19,7 +19,12 @@ export const vehicleRepository = {
   },
 
   get: async () => {
-    return prisma.vehicles.findMany();
+    return prisma.vehicles.findMany({
+      include: {
+        brand:true,
+        category:true
+      }
+    });
   },
 
   getById: async (id: string,tx?:Tx) => {
