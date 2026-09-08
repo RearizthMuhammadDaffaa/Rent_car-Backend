@@ -8,7 +8,8 @@ const rateLimiter = async (
 ) => {
   try {
     // jika ada user ganti my-limit-key jadi userId
-    const {success} = await ratelimit.limit("my-rate-limit")
+    const identifier = req.ip ?? "unknown-ip";
+    const {success} = await ratelimit.limit(`login:${identifier}`)
 
     if(!success) {
       return res.status(429).json({
@@ -17,7 +18,6 @@ const rateLimiter = async (
     }
     next()
   } catch (error) {
-    console.log("Rate limit error",error)
     next(error);
   }
 }
