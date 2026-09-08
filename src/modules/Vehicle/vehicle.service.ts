@@ -22,7 +22,7 @@ export const VehicleService = {
   getVehicles: async () => {
     const key = vehicleCacheKeys.all;
 
-    const cached = await redis.get<VehicleWithRelations>(key)
+    const cached = await redis.get<VehicleWithRelations[]>(key)
      if (cached) {
       return cached;
     }

@@ -7,7 +7,7 @@ const router = Router();
 router.post("/", authMiddleware(['ADMIN']),upload.single("thumbnail"), vehicleController.createVehicle);
 router.get("/", vehicleController.getVehicles);
 router.get("/:id",vehicleController.getVehicleById);
-router.put("/:id", upload.single("thumbnail"), vehicleController.updateVehicle);
+router.put("/:id", authMiddleware(['ADMIN']),upload.single("thumbnail"), vehicleController.updateVehicle);
 router.delete("/:id", authMiddleware(['ADMIN']),vehicleController.deleteVehicle);
 
 export default router;
