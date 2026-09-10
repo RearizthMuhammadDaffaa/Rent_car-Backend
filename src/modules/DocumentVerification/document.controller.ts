@@ -1,4 +1,4 @@
-import type { Request, Response } from "express";
+import type { Request, Response,NextFunction } from "express";
 import { cloudinaryService } from "../../shared/service/cloudinary.service";
 import { documentParamSchema, updateDocumentStatusSchema } from "./document.schema";
 import { documentService } from "./document.service";
@@ -39,8 +39,17 @@ export const documentController = {
     return res.status(200).json({ message: "Documents deleted successfully", data: await documentService.deleteOwn(req.user.id) });
   },
 
-  async getAll(_req: Request, res: Response) {
-    return res.status(200).json({ data: await documentService.getAll() });
+  async getAll(_req: Request, res: Response,next: NextFunction) {
+    try {
+    const documents = await documentService.getAll();
+
+    return res.status(200).json({
+      success: true,
+      data: documents,
+    });
+  } catch (error) {
+    return next(error);
+  }
   },
 
   async updateStatus(req: Request, res: Response) {

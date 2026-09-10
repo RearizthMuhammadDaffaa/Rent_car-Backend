@@ -1,5 +1,5 @@
 
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 
 import { PaymentService } from "./payment.service";
 
@@ -7,10 +7,11 @@ import {
   paymentParamSchema,
   createPaymentSchema,
   CreatePaymentDto,
+  PaymentParam,
   PaymentBookingParam,
 } from "./payment.schema";
 
-import { PaymentParam } from "./payment.schema";
+
 
 export const paymentController = {
   /**
@@ -18,7 +19,8 @@ export const paymentController = {
    */
   async createPayment(
     req: Request,
-    res: Response
+    res: Response,
+    next:NextFunction
   ) {
     try {
       const userId =
@@ -42,11 +44,7 @@ export const paymentController = {
         data: payment,
       });
     } catch (error) {
-      console.error(error);
-
-      return res.status(500).json({
-        error,
-      });
+      return next(error)
     }
   },
 
@@ -55,7 +53,8 @@ export const paymentController = {
    */
   async getPayments(
     req: Request,
-    res: Response
+    res: Response,
+    next:NextFunction
   ) {
     try {
       const payments =
@@ -65,11 +64,7 @@ export const paymentController = {
         payments,
       });
     } catch (error) {
-      console.error(error);
-
-      return res.status(500).json({
-        error,
-      });
+      return next(error)
     }
   },
 
@@ -78,7 +73,8 @@ export const paymentController = {
    */
   async getPaymentById(
     req: Request<PaymentParam>,
-    res: Response
+    res: Response,
+    next:NextFunction
   ) {
     try {
       const params =
@@ -88,7 +84,9 @@ export const paymentController = {
 
       const payment =
         await PaymentService.getPaymentById(
-          params.id
+          params.id,
+          req.user.id,
+          req.user.role
         );
 
       if (!payment) {
@@ -102,11 +100,7 @@ export const paymentController = {
         payment,
       });
     } catch (error) {
-      console.error(error);
-
-      return res.status(500).json({
-        error,
-      });
+      return next(error)
     }
   },
 
@@ -115,7 +109,8 @@ export const paymentController = {
    */
   async getPaymentByBookingId(
     req:Request<PaymentBookingParam>,
-    res: Response
+    res: Response,
+    next:NextFunction
   ) {
     try {
       
@@ -125,18 +120,16 @@ export const paymentController = {
       const payment =
         await PaymentService
           .getPaymentByBookingId(
-            bookingId
+            bookingId,
+            req.user.id,
+            req.user.role
           );
 
       return res.status(200).json({
         payment,
       });
     } catch (error) {
-      console.error(error);
-
-      return res.status(500).json({
-        error,
-      });
+     return next(error)
     }
   },
 
@@ -145,7 +138,8 @@ export const paymentController = {
    */
   async midtransNotification(
     req: Request,
-    res: Response
+    res: Response,
+    next:NextFunction
   ) {
     try {
       const result =
@@ -163,9 +157,7 @@ export const paymentController = {
         error
       );
 
-      return res.status(500).json({
-        error,
-      });
+      return next(error)
     }
   },
 };

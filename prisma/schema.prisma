@@ -15,6 +15,7 @@ model User {
   role      RoleStatus @default(CUSTOMER)
   booking Bookings[]
   documents UserDocuments?
+  refreshTokens RefreshToken[]
   createdAt DateTime   @default(now())
   updatedAt DateTime   @default(now()) @updatedAt
 }
@@ -220,6 +221,19 @@ enum PaymentStatus {
   FAILED
   EXPIRED
   CANCELLED
+}
+
+model RefreshToken {
+  id        String   @id @default(uuid())
+  tokenHash String   @unique
+  userId    String
+  expiresAt DateTime
+  revokedAt DateTime?
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId],references: [id], onDelete: Cascade)
+
+  @@index([userId])
 }
 
 

@@ -28,7 +28,11 @@ export const paymentRepository = {
         id,
       },
       include: {
-        booking: true,
+        booking: {
+          select : {
+            user_id:true
+          }
+        },
       },
     });
   },
@@ -38,6 +42,13 @@ export const paymentRepository = {
       where: {
         booking_id: bookingId,
       },
+      include : {
+        booking: {
+          select: {
+            user_id:true
+          }
+        }
+      }
     });
   },
 

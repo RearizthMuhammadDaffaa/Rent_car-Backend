@@ -32,20 +32,30 @@ export const couponRepository = {
   },
 
   incrementUsedCount: async (
-    id: string,
-    tx: Tx
-  ) => {
-    return tx.coupons.update({
-      where: {
-        id,
+  id: string,
+  usageLimit: number | null,
+  tx: Tx
+) => {
+  const result = await tx.coupons.updateMany({
+    where: {
+      id,
+      ...(usageLimit !== null
+        ? {
+            usedCount: {
+              lt: usageLimit,
+            },
+          }
+        : {}),
+    },
+    data: {
+      usedCount: {
+        increment: 1,
       },
-      data: {
-        usedCount: {
-          increment: 1,
-        },
-      },
-    });
-  },
+    },
+  });
+
+  return result.count;
+},
 
   update: async (id: string, data: UpdateCouponDto) => {
     return prisma.coupons.update({

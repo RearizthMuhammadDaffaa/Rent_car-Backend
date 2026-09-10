@@ -1,6 +1,13 @@
+import type {
+  Request,
+  Response,
+  NextFunction,
+} from "express";
 
-import type { Request, Response, NextFunction } from "express";
-import jwt, { type JwtPayload } from "jsonwebtoken";
+import jwt, {
+  type JwtPayload,
+} from "jsonwebtoken";
+
 import { prisma } from "../config/db";
 import { RoleStatus } from "../../generated/prisma/enums";
 
@@ -10,56 +17,71 @@ interface AuthPayload extends JwtPayload {
 }
 
 export const authMiddleware = (
-  allowedRoles: RoleStatus[] = [RoleStatus.CUSTOMER]
+  allowedRoles: RoleStatus[] = [
+    RoleStatus.CUSTOMER,
+  ]
 ) => {
   return async (
     req: Request,
     res: Response,
     next: NextFunction
   ): Promise<void> => {
-    console.log("Auth middleware reached");
-  
     let token: string | undefined;
 
-    // Get token from Authorization header
+    // =========================
+    // BEARER TOKEN
+    // =========================
+
+    const authorization =
+      req.headers.authorization;
+
     if (
-      req.headers.authorization &&
-      req.headers.authorization.startsWith("Bearer ")
+      authorization?.startsWith("Bearer ")
     ) {
-      token = req.headers.authorization.split(" ")[1];
+      token = authorization
+        .slice(7)
+        .trim();
     }
 
-    // Get token from cookie
+    // =========================
+    // COOKIE ACCESS TOKEN
+    // =========================
+
     else if (req.cookies?.jwt) {
       token = req.cookies.jwt;
     }
 
-    // Token doesn't exist
     if (!token) {
       res.status(401).json({
         success: false,
-        message: "Unauthorized - token not provided",
+        message:
+          "Unauthorized - token not provided",
       });
+
       return;
     }
 
     try {
-      const secret = process.env.JWT_SECRET;
+      const secret =
+        process.env.JWT_SECRET;
 
       if (!secret) {
-        throw new Error("JWT_SECRET is not defined");
+        throw new Error(
+          "JWT_SECRET is not defined"
+        );
       }
 
-      // Verify token
-      const decoded = jwt.verify(token, secret) as AuthPayload;
+      const decoded =
+        jwt.verify(
+          token,
+          secret
+        ) as AuthPayload;
 
-      // Validate payload
       if (
         typeof decoded !== "object" ||
         decoded === null ||
         typeof decoded.id !== "string"
       ) {
-
         res.status(401).json({
           success: false,
           message:
@@ -69,48 +91,49 @@ export const authMiddleware = (
         return;
       }
 
+      const user =
+        await prisma.user.findUnique({
+          where: {
+            id: decoded.id,
+          },
+        });
 
-      // Find user
-      const user = await prisma.user.findUnique({
-        where: {
-          id: decoded.id,
-        },
-      });
-
-      // User no longer exists
       if (!user) {
         res.status(401).json({
           success: false,
-          message: "User no longer exists",
+          message:
+            "User no longer exists",
         });
+
         return;
       }
 
-      // Check role
-      if (!allowedRoles.includes(user.role)) {
+      if (
+        !allowedRoles.includes(user.role)
+      ) {
         res.status(403).json({
           success: false,
-          message: "Forbidden - insufficient permissions",
+          message:
+            "Forbidden - insufficient permissions",
         });
+
         return;
       }
 
-      // Attach user to request
       req.user = user;
-
-      console.log("User Role:", user.role);
-      console.log("User ID:",user.id);
-      
 
       next();
     } catch (error) {
-      console.error("Auth middleware error:", error);
-      
+      console.error(
+        "Auth middleware error:",
+        error
+      );
+
       res.status(401).json({
         success: false,
-        message: "Unauthorized - invalid or expired token",
+        message:
+          "Unauthorized - invalid or expired token",
       });
     }
   };
 };
-

@@ -41,3 +41,53 @@ export const authRepository = {
   },
 };
 
+export const refreshTokenRepository = {
+  create: async (
+    tokenHash: string,
+    userId: string,
+    expiresAt: Date
+  ) => {
+    return await prisma.refreshToken.create({
+      data: {
+        tokenHash,
+        userId,
+        expiresAt,
+      },
+    });
+  },
+
+  findByHash: async (tokenHash: string) => {
+    return await prisma.refreshToken.findUnique({
+      where: {
+        tokenHash,
+      },
+      include: {
+        user: true,
+      },
+    });
+  },
+
+  revoke: async (id: string) => {
+    return await prisma.refreshToken.update({
+      where: {
+        id,
+      },
+      data: {
+        revokedAt: new Date(),
+      },
+    });
+  },
+
+  revokeByHash: async (tokenHash: string) => {
+    return await prisma.refreshToken.updateMany({
+      where: {
+        tokenHash,
+        revokedAt: null,
+      },
+      data: {
+        revokedAt: new Date(),
+      },
+    });
+  },
+};
+

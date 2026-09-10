@@ -30,7 +30,7 @@ router.get(
  */
 router.get(
   "/:id",
-  authMiddleware(["CUSTOMER", "ADMIN"]),
+  authMiddleware(["CUSTOMER", "ADMIN","SUPERADMIN"]),
   paymentController.getPaymentById
 );
 
@@ -39,7 +39,7 @@ router.get(
  */
 router.get(
   "/booking/:bookingId",
-  authMiddleware(["CUSTOMER", "ADMIN"]),
+  authMiddleware(["CUSTOMER", "ADMIN","SUPERADMIN"]),
   paymentController.getPaymentByBookingId
 );
 

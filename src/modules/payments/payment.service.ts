@@ -14,6 +14,8 @@ import {
   type CreatePaymentDto,
   type MidtransNotificationDto,
 } from "./payment.schema";
+import { ForbiddenError } from "../../errors/ForbiddenError";
+import { RoleStatus } from "../../../generated/prisma/enums";
 
 export const PaymentService = {
   /**
@@ -51,7 +53,7 @@ export const PaymentService = {
      * Make sure booking belongs to current user
      */
     if (booking.user_id !== userId) {
-      throw new Error(
+      throw new ForbiddenError(
         "You are not allowed to pay this booking"
       );
     }
@@ -60,7 +62,7 @@ export const PaymentService = {
      * Booking must be PENDING
      */
     if (booking.status !== "PENDING") {
-      throw new Error(
+      throw new ForbiddenError(
         "Booking cannot be paid"
       );
     }
@@ -207,33 +209,57 @@ export const PaymentService = {
   /**
    * Get payment by ID
    */
-  getPaymentById: async (
-    id: string
-  ) => {
-    return await paymentRepository.getById(
-      id
+ getPaymentById: async (
+  id: string,
+  userId: string,
+  role: RoleStatus
+) => {
+  const payment = await paymentRepository.getById(id);
+
+  if (!payment) {
+    throw new NotFoundError("Payment Not Found");
+  }
+
+  if (
+    role !== "ADMIN" &&
+    role !== "SUPERADMIN" &&
+    payment.booking.user_id !== userId
+  ) {
+    throw new ForbiddenError(
+      "Anda tidak memiliki akses ke payment ini"
     );
-  },
+  }
+
+  return payment;
+},
 
   /**
    * Get payment by booking
    */
-  getPaymentByBookingId: async (
-    bookingId: string
-  ) => {
-    const payment =
-      await paymentRepository.getByBookingId(
-        bookingId
-      );
+ getPaymentByBookingId: async (
+  bookingId: string,
+  userId: string,
+  role: RoleStatus
+) => {
+  const payment =
+    await paymentRepository.getByBookingId(bookingId);
 
-    if (!payment) {
-      throw new NotFoundError(
-        "Payment Not Found"
-      );
-    }
+  if (!payment) {
+    throw new NotFoundError("Payment Not Found");
+  }
 
-    return payment;
-  },
+  if (
+    role !== "ADMIN" &&
+    role !== "SUPERADMIN" &&
+    payment.booking.user_id !== userId
+  ) {
+    throw new ForbiddenError(
+      "Anda tidak memiliki akses ke payment ini"
+    );
+  }
+
+  return payment;
+},
 
   /**
    * Verify Midtrans signature
@@ -447,54 +473,49 @@ export const PaymentService = {
    * Handle successful payment
    */
   handleSuccessPayment: async (
-    paymentId: string,
-    bookingId: string,
-    notification: MidtransNotificationDto
-  ) => {
-    return await prisma.$transaction(
-      async (tx) => {
-        /**
-         * Update payment
-         */
-        await tx.payments.update({
-          where: {
-            id: paymentId,
-          },
+  paymentId: string,
+  bookingId: string,
+  notification: MidtransNotificationDto
+) => {
+  return await prisma.$transaction(async (tx) => {
+    const bookingResult = await tx.bookings.updateMany({
+      where: {
+        id: bookingId,
+        status: "PENDING",
+      },
+      data: {
+        status: "CONFIRMED",
+      },
+    });
 
-          data: {
-            status: "PAID",
+    if (bookingResult.count === 0) {
+      return {
+        message: "Booking is no longer available for confirmation",
+      };
+    }
 
-            transaction_id:
-              notification.transaction_id,
+    const paymentResult = await tx.payments.updateMany({
+      where: {
+        id: paymentId,
+        status: "PENDING",
+      },
+      data: {
+        status: "PAID",
+        transaction_id: notification.transaction_id,
+        payment_type: notification.payment_type,
+        paid_at: new Date(),
+      },
+    });
 
-            payment_type:
-              notification.payment_type,
+    if (paymentResult.count === 0) {
+      throw new Error("Payment is no longer payable");
+    }
 
-            paid_at:
-              new Date(),
-          },
-        });
-
-        /**
-         * Update booking
-         */
-        await tx.bookings.update({
-          where: {
-            id: bookingId,
-          },
-
-          data: {
-            status: "CONFIRMED",
-          },
-        });
-
-        return {
-          message:
-            "Payment successful",
-        };
-      }
-    );
-  },
+    return {
+      message: "Payment successful",
+    };
+  });
+},
 
   /**
    * Handle expired payment
@@ -506,39 +527,38 @@ export const PaymentService = {
   ) => {
     return await prisma.$transaction(
       async (tx) => {
-        await tx.payments.update({
-          where: {
-            id: paymentId,
-          },
+        const paymentResult = await tx.payments.updateMany({
+            where: {
+              id: paymentId,
+              status: "PENDING",
+            },
+            data: {
+              status: "EXPIRED",
+              transaction_id: notification.transaction_id,
+              payment_type: notification.payment_type,
+              expired_at: new Date(),
+            },
+          });
 
-          data: {
-            status: "EXPIRED",
+          if (paymentResult.count === 0) {
+            return {
+              message: "Payment already processed",
+            };
+          }
 
-            transaction_id:
-              notification.transaction_id,
+          await tx.bookings.updateMany({
+            where: {
+              id: bookingId,
+              status: "PENDING",
+            },
+            data: {
+              status: "CANCELLED",
+            },
+          });
 
-            payment_type:
-              notification.payment_type,
-
-            expired_at:
-              new Date(),
-          },
-        });
-
-        await tx.bookings.update({
-          where: {
-            id: bookingId,
-          },
-
-          data: {
-            status: "CANCELLED",
-          },
-        });
-
-        return {
-          message:
-            "Payment expired",
-        };
+          return {
+            message: "Payment expired",
+          };
       }
     );
   },
@@ -553,35 +573,35 @@ export const PaymentService = {
   ) => {
     return await prisma.$transaction(
       async (tx) => {
-        await tx.payments.update({
+        const paymentResult = await tx.payments.updateMany({
           where: {
             id: paymentId,
+            status: "PENDING",
           },
-
           data: {
             status: "FAILED",
-
-            transaction_id:
-              notification.transaction_id,
-
-            payment_type:
-              notification.payment_type,
+            transaction_id: notification.transaction_id,
+            payment_type: notification.payment_type,
           },
         });
 
-        await tx.bookings.update({
+        if (paymentResult.count === 0) {
+          return {
+            message: "Payment already processed",
+          };
+        }
+
+        await tx.bookings.updateMany({
           where: {
             id: bookingId,
+            status: "PENDING",
           },
-
           data: {
             status: "CANCELLED",
           },
         });
-
         return {
-          message:
-            "Payment failed",
+          message: "Payment failed",
         };
       }
     );

@@ -1,10 +1,10 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { cloudinaryService } from "../../shared/service/cloudinary.service";
 import { VehicleService } from "./vehicle.service";
 import { vehicleParamSchema, VehicleParamsDto } from "./vehicle.schema";
 
 export const vehicleController = {
-  async createVehicle(req: Request, res: Response) {
+  async createVehicle(req: Request, res: Response,next:NextFunction) {
     try {
       if (!req.file) {
         res.status(400).json({ message: "Thumbnail is required" });
@@ -25,15 +25,11 @@ export const vehicleController = {
         data: vehicle,
       });
     } catch (error) {
-      console.error(error);
-
-      return res.status(500).json({
-        error,
-      });
+      return next(error);
     }
   },
 
-  async getVehicles(req: Request, res: Response) {
+  async getVehicles(req: Request, res: Response,next:NextFunction) {
     try {
       const vehicles = await VehicleService.getVehicles();
 
@@ -41,15 +37,11 @@ export const vehicleController = {
         vehicles,
       });
     } catch (error) {
-      console.error(error);
-
-      return res.status(500).json({
-        error,
-      });
+       return next(error);
     }
   },
 
-  async getVehicleById(req: Request<VehicleParamsDto>, res: Response) {
+  async getVehicleById(req: Request<VehicleParamsDto>, res: Response,next:NextFunction) {
     try {
       const params = vehicleParamSchema.parse(req.params);
       const vehicle = await VehicleService.getVehicleById(params.id);
@@ -58,15 +50,11 @@ export const vehicleController = {
         vehicle,
       });
     } catch (error) {
-      console.error(error);
-
-      return res.status(500).json({
-        error,
-      });
+       return next(error);
     }
   },
 
-  async updateVehicle(req: Request<VehicleParamsDto>, res: Response) {
+  async updateVehicle(req: Request<VehicleParamsDto>, res: Response,next:NextFunction) {
     try {
       const params = vehicleParamSchema.parse(req.params);
       let thumbnail: string | undefined;
@@ -90,15 +78,11 @@ export const vehicleController = {
         vehicle,
       });
     } catch (error) {
-      console.error(error);
-
-      return res.status(500).json({
-        error,
-      });
+       return next(error);
     }
   },
 
-  async deleteVehicle(req: Request<VehicleParamsDto>, res: Response) {
+  async deleteVehicle(req: Request<VehicleParamsDto>, res: Response,next:NextFunction) {
     try {
       const params = vehicleParamSchema.parse(req.params);
       await VehicleService.deleteVehicle(params.id);
@@ -107,11 +91,7 @@ export const vehicleController = {
         message: "Data success deleted",
       });
     } catch (error) {
-      console.error(error);
-
-      return res.status(500).json({
-        error,
-      });
+       return next(error);
     }
   },
 };

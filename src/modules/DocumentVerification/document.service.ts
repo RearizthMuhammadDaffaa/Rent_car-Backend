@@ -46,7 +46,19 @@ export const documentService = {
     return deleted;
   },
 
-  getAll: async () => documentRepository.findAll(),
+  getAll: async () => {
+     const documents = await documentRepository.findAll();
+
+     return documents.map((document) => ({
+        id: document.id,
+        user_id: document.user_id,
+        ktp_url: document.ktp_url,
+        sim_url: document.sim_url,
+        status: document.status,
+        createdAt: document.createdAt,
+        updatedAt: document.updatedAt,
+  }));
+  },
 
   updateStatus: async (id: string, data: UpdateDocumentStatusDto) => {
     const existing = await documentRepository.findById(id);

@@ -10,8 +10,12 @@ export const BookingRepository = {
       data,
     });
   },
-  get : async () => {
-    return await prisma.bookings.findMany();
+  get : async (user_id:string) => {
+    return await prisma.bookings.findMany({
+      where:{
+        user_id:user_id
+      }
+    });
   },
   getbyId : async (id:string,tx?:Tx) => {
      const db = tx ?? prisma

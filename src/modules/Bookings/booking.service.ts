@@ -1,6 +1,9 @@
-import { BookingStatus, Prisma, Status_vehicles } from "../../../generated/prisma/client";
+import { BookingStatus, Prisma } from "../../../generated/prisma/client";
 import { prisma } from "../../config/db";
+import { BadRequestError } from "../../errors/BadRequestError";
+import { ForbiddenError } from "../../errors/ForbiddenError";
 import { NotFoundError } from "../../errors/NotFoundError";
+import { calculateTotalDays } from "../../shared/utils/rental-calculator";
 import { userParamDto } from "../authentication/auth.schema";
 import { couponRepository } from "../Coupons/coupon.repository";
 import { documentRepository } from "../DocumentVerification/document.repository";
@@ -49,10 +52,10 @@ export const BookingService = {
         throw new Error("Vehicle sudah dibooking pada tanggal tersebut");
       }
       // calculate days
-      const totalDays = Math.ceil(
-        (data.return_at.getTime() - data.pickup_at.getTime()) /
-          (1000 * 60 * 60 * 24),
-      );
+      const totalDays = calculateTotalDays(
+        data.pickup_at,
+        data.return_at
+      )
       // price
       const pricePerDay = new Prisma.Decimal(vehicle.pricePerDay);
 
@@ -93,13 +96,32 @@ export const BookingService = {
         }
 
         couponId = coupon.id;
-         if (coupon.type === "PERCENTAGE") {
-      discount = subtotal.mul(coupon.discountValue).div(100);
 
-    if (coupon.maximumDiscount && discount.greaterThan(coupon.maximumDiscount)) {
-      discount = coupon.maximumDiscount;
-    }
+        const updated = await couponRepository.incrementUsedCount(
+          coupon.id,
+          coupon.usageLimit,
+          tx
+        );
+
+        if (updated === 0) {
+          throw new Error("Coupon sudah mencapai batas penggunaan");
+        }
+
+
+       if (coupon.type === "PERCENTAGE") {
+            discount = subtotal
+              .mul(coupon.discountValue)
+              .div(100);
+
+  if (
+    coupon.maximumDiscount &&
+    discount.greaterThan(coupon.maximumDiscount)
+  ) {
+    discount = coupon.maximumDiscount;
   }
+} else if (coupon.type === "FIXED") {
+  discount = new Prisma.Decimal(coupon.discountValue);
+}
 
         // Discount tidak boleh
         // lebih besar dari subtotal
@@ -107,11 +129,7 @@ export const BookingService = {
           discount = subtotal;
         }
 
-         // Increment usage
-        await couponRepository.incrementUsedCount(
-          coupon.id,
-          tx
-        );
+      
       }
 
       // tax
@@ -165,13 +183,13 @@ export const BookingService = {
         tx
       );
 
-      await vehicleRepository.updateStatus(data.car_id,Status_vehicles.BOOKED,tx)
+      
 
       return booking;
     });
   },
-  getBooking: async () => {
-    const booking = await BookingRepository.get();
+  getBooking: async (user_id:string) => {
+    const booking = await BookingRepository.get(user_id);
     return booking;
   },
   getBookingById: async (id: string) => {
@@ -181,28 +199,30 @@ export const BookingService = {
     const booking = await BookingRepository.getbyId(id);
 
     if (!booking) {
-      throw new NotFoundError("Vehile Categories Not Found");
+      throw new NotFoundError("Booking Not Found");
     }
 
     const validatedData = updateBookingSchema.parse(data);
 
     return await BookingRepository.update(id, validatedData);
   },
-  deleteBooking: async (id: string) => {
+  // deleteBooking: async (id: string) => {
 
-    return prisma.$transaction(async (tx) => {
-    const booking = await BookingRepository.getbyId(id,tx);
+  //   return prisma.$transaction(async (tx) => {
+  //   const booking = await BookingRepository.getbyId(id,tx);
+    
+  //   if (!booking) {
+  //     throw new NotFoundError("Booking Not Found");
+  //   }
+
     
 
-    if (!booking) {
-      throw new NotFoundError("Vehile Categories Not Found");
-    }
-    await vehicleRepository.updateStatus(booking.car_id,Status_vehicles.AVAILABLE,tx)
-    return  BookingRepository.delete(id,tx);
-    })
+  //   await vehicleRepository.updateStatus(booking.car_id,Status_vehicles.AVAILABLE,tx)
+  //   return  BookingRepository.delete(id,tx);
+  //   })
     
-  },
-  cancelBooking : async (id:string) => {
+  // },
+  cancelBooking : async (id:string,userId:string) => {
     return prisma.$transaction(async (tx) => {
 
     // 1. Cari booking
@@ -212,16 +232,15 @@ export const BookingService = {
       throw new NotFoundError("Booking tidak ditemukan");
     }
 
-    // 2. Validasi status booking
-    if (booking.status === BookingStatus.CANCELLED) {
-      throw new Error("Booking sudah dibatalkan");
-    }
+    if (booking.user_id !== userId) {
+    throw new ForbiddenError("Anda tidak memiliki akses ke booking ini");
+  }
 
-    if (booking.status === BookingStatus.COMPLETED) {
-      throw new Error(
-        "Booking yang sudah selesai tidak dapat dibatalkan"
-      );
-    }
+    if (booking.status !== BookingStatus.PENDING) {
+    throw new BadRequestError(
+      "Booking hanya dapat dibatalkan saat status PENDING"
+    );
+}
 
     // 3. Cancel booking
     const cancelledBooking =
@@ -232,11 +251,11 @@ export const BookingService = {
       );
 
     // 4. Kembalikan vehicle menjadi AVAILABLE
-    await vehicleRepository.updateStatus(
-      booking.car_id,
-      Status_vehicles.AVAILABLE,
-      tx
-    );
+    // await vehicleRepository.updateStatus(
+    //   booking.car_id,
+    //   Status_vehicles.AVAILABLE,
+    //   tx
+    // );
 
     return cancelledBooking;
   });

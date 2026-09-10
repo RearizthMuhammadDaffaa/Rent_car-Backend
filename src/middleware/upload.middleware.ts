@@ -1,35 +1,15 @@
 import multer from "multer";
-
-const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5 MB
-
-const ALLOWED_MIME_TYPES = [
-  "image/jpeg",
-  "image/png",
-  "image/webp",
-];
+import { fileTypeFromBuffer } from "file-type";
+import { NextFunction } from "express";
+const MAX_FILE_SIZE = 5 * 1024 * 1024;
 
 const storage = multer.memoryStorage();
 
 export const upload = multer({
   storage,
-
   limits: {
     fileSize: MAX_FILE_SIZE,
     files: 1,
-  },
-
-  fileFilter: (_req, file, cb) => {
-    if (!ALLOWED_MIME_TYPES.includes(file.mimetype)) {
-      cb(
-        new Error(
-          "Invalid file type. Only JPG, PNG, and WEBP are allowed."
-        )
-      );
-
-      return;
-    }
-
-    cb(null, true);
   },
 });
 
@@ -39,12 +19,43 @@ export const uploadDocuments = multer({
     fileSize: MAX_FILE_SIZE,
     files: 2,
   },
-  fileFilter: (_req, file, cb) => {
-    if (!ALLOWED_MIME_TYPES.includes(file.mimetype)) {
-      cb(new Error("Invalid file type. Only JPG, PNG, and WEBP are allowed."));
-      return;
+});
+
+const ALLOWED_MIME_TYPES = [
+  "image/jpeg",
+  "image/png",
+  "image/webp",
+];
+
+export const validateImageFile = async (
+  req: Express.Request,
+  _res: Express.Response,
+  next: NextFunction
+) => {
+  try {
+    const files = req.files
+      ? Array.isArray(req.files)
+        ? req.files
+        : Object.values(req.files).flat()
+      : req.file
+        ? [req.file]
+        : [];
+
+    for (const file of files) {
+      const detectedType = await fileTypeFromBuffer(file.buffer);
+
+      if (
+        !detectedType ||
+        !ALLOWED_MIME_TYPES.includes(detectedType.mime)
+      ) {
+        throw new Error(
+          "Invalid file type. Only JPG, PNG, and WEBP are allowed."
+        );
+      }
     }
 
-    cb(null, true);
-  },
-});
+    next();
+  } catch (error) {
+    next(error);
+  }
+};

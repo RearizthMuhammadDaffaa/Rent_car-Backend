@@ -67,3 +67,8 @@ export type UserDocuments = Prisma.UserDocumentsModel
  * 
  */
 export type Payments = Prisma.PaymentsModel
+/**
+ * Model RefreshToken
+ * 
+ */
+export type RefreshToken = Prisma.RefreshTokenModel

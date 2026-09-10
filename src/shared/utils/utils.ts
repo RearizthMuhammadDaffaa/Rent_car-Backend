@@ -1,5 +1,6 @@
 import jwt, { type SignOptions } from "jsonwebtoken";
 import type { Response } from "express";
+import crypto from "crypto";
 
 export const generateToken = (
   userId: string,
@@ -25,12 +26,16 @@ export const generateToken = (
     options
   );
 
-  res.cookie("jwt", token, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "strict",
-    maxAge: 1000 * 60 * 60 * 24 * 7,
-  });
-
   return token;
+};
+
+export const generateRefreshToken = () => {
+  return crypto.randomBytes(64).toString("hex");
+};
+
+export const hashRefreshToken = (token: string) => {
+  return crypto
+    .createHash("sha256")
+    .update(token)
+    .digest("hex");
 };
