@@ -36,7 +36,8 @@ export const authController = {
   ): Promise<void> => {
     try {
       const data = loginSchema.parse(req.body);
-
+      // console.log(req.user.role);
+      
       const result = await authService.login(
         data,
         res

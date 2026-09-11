@@ -39,7 +39,6 @@ export const authService = {
     // Generate JWT
     const token = generateToken(
       user.id,
-      res,
       user.role
     );
 
@@ -80,7 +79,6 @@ export const authService = {
     // Generate JWT
     const token = generateToken(
       user.id,
-      res,
       user.role
     );
 
@@ -99,6 +97,14 @@ export const authService = {
       user.id,
       expiresAt
     );
+
+    res.cookie("jwt", token, {
+    httpOnly: true,
+    secure:
+      process.env.NODE_ENV === "production",
+    sameSite: "strict",
+    maxAge: 15 * 60 * 1000,
+  });
 
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
@@ -160,7 +166,6 @@ export const authService = {
 
     const accessToken = generateToken(
       user.id,
-      res,
       user.role
     );
 
@@ -203,6 +208,16 @@ export const authService = {
     // NEW COOKIE
     // =========================
 
+    
+
+    res.cookie("jwt", accessToken, {
+    httpOnly: true,
+    secure:
+      process.env.NODE_ENV === "production",
+    sameSite: "strict",
+    maxAge: 15 * 60 * 1000,
+  });
+
     res.cookie("refreshToken", newRefreshToken, {
       httpOnly: true,
       secure:
@@ -229,6 +244,12 @@ export const authService = {
       );
     }
 
+    res.clearCookie("jwt", {
+      httpOnly: true,
+      secure:
+        process.env.NODE_ENV === "production",
+      sameSite: "strict",
+    });
     res.clearCookie("refreshToken", {
       httpOnly: true,
       secure:

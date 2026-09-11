@@ -3,35 +3,21 @@ import { cloudinaryService } from "../../shared/service/cloudinary.service";
 import { documentRepository } from "./document.repository";
 import { documentStatusSchema, type UpdateDocumentStatusDto } from "./document.schema";
 
-type UploadedDocuments = {
-  ktp: { url: string; publicId: string };
-  sim: { url: string; publicId: string };
-};
+
+
 
 export const documentService = {
-  getOwn: async (userId: string) => documentRepository.findByUserId(userId),
+  // getOwn: async (userId: string) => documentRepository.findByUserId(userId),
 
-  submit: async (userId: string, documents: UploadedDocuments) => {
-    const existing = await documentRepository.findByUserId(userId);
-    const data = {
-      ktp_url: documents.ktp.url,
-      ktp_public_id: documents.ktp.publicId,
-      sim_url: documents.sim.url,
-      sim_public_id: documents.sim.publicId,
-      status: "PENDING" as const,
-    };
-
-    const saved = existing
-      ? await documentRepository.update(existing.id, data)
-      : await documentRepository.create({ user_id: userId, ...data });
-
-    await Promise.all(
-      [existing?.ktp_public_id, existing?.sim_public_id]
-        .filter((publicId): publicId is string => Boolean(publicId))
-        .map((publicId) => cloudinaryService.deleteImage(publicId)),
-    );
-    return saved;
-  },
+  submit:async ({
+  userId,
+  ktpPublicId,
+  simPublicId,
+}: {
+  userId: string;
+  ktpPublicId: string;
+  simPublicId: string;
+}) => documentRepository.upload(userId,ktpPublicId,simPublicId),
 
   deleteOwn: async (userId: string) => {
     const existing = await documentRepository.findByUserId(userId);
@@ -41,7 +27,7 @@ export const documentService = {
     await Promise.all(
       [existing.ktp_public_id, existing.sim_public_id]
         .filter((publicId): publicId is string => Boolean(publicId))
-        .map((publicId) => cloudinaryService.deleteImage(publicId)),
+        .map((publicId) => cloudinaryService.deletePrivateDocument(publicId)),
     );
     return deleted;
   },
@@ -52,8 +38,6 @@ export const documentService = {
      return documents.map((document) => ({
         id: document.id,
         user_id: document.user_id,
-        ktp_url: document.ktp_url,
-        sim_url: document.sim_url,
         status: document.status,
         createdAt: document.createdAt,
         updatedAt: document.updatedAt,
@@ -66,4 +50,60 @@ export const documentService = {
 
     return documentRepository.update(id, { status: documentStatusSchema.parse(data.status) });
   },
+  getMyDocument: async (userId: string) => {
+  const document = await documentRepository.findByUserId(userId);
+
+  if (!document) {
+    throw new NotFoundError("Document tidak ditemukan");
+  }
+
+  return {
+    id: document.id,
+    status: document.status,
+  };
+},
+getDocumentForAdmin: async (id: string) => {
+  const document =
+    await documentRepository.findById(id);
+
+  if (!document) {
+    throw new NotFoundError(
+      "Document tidak ditemukan"
+    );
+  }
+
+  return {
+    id: document.id,
+    userId: document.user_id,
+    status: document.status,
+
+    ktpUrl: document.ktp_public_id
+      ? cloudinaryService.generatePrivateDocumentUrl(
+          document.ktp_public_id
+        )
+      : null,
+
+    simUrl: document.sim_public_id
+      ? cloudinaryService.generatePrivateDocumentUrl(
+          document.sim_public_id
+        )
+      : null,
+  };
+},
+reject: async (
+  id: string
+) => {
+  const document =
+    await documentRepository.findById(id);
+
+  if (!document) {
+    throw new NotFoundError(
+      "Document tidak ditemukan"
+    );
+  }
+
+  return documentRepository.update(id, {
+    status: "REJECTED",
+  });
+},
 };

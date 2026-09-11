@@ -4,7 +4,6 @@ import crypto from "crypto";
 
 export const generateToken = (
   userId: string,
-  res: Response,
   userRole: string
 ): string => {
   const secret = process.env.JWT_SECRET;

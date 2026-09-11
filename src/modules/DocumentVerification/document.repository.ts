@@ -35,4 +35,22 @@ export const documentRepository = {
   delete: async (id: string) => {
     return prisma.userDocuments.delete({ where: { id } });
   },
+  upload:async (userId:string,ktpPublicId:string,simPublicId:string) => {
+      return prisma.userDocuments.upsert({
+        where: {
+          user_id: userId,
+        },
+        create: {
+          user_id: userId,
+          ktp_public_id: ktpPublicId,
+          sim_public_id: simPublicId,
+          status: "PENDING",
+        },
+        update: {
+          ktp_public_id: ktpPublicId,
+          sim_public_id: simPublicId,
+          status: "PENDING",
+        },
+      });
+  },
 };
