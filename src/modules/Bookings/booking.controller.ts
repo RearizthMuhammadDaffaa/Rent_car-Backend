@@ -1,51 +1,60 @@
 import { NextFunction, Request, Response } from "express";
 import { BookingService } from "./booking.service";
-import { bookingParamSchema, BookingParamsDto, createBookingSchema, UpdateBookingDto } from "./booking.schema";
+import {
+  bookingParamSchema,
+  BookingParamsDto,
+  createBookingSchema,
+  UpdateBookingDto,
+} from "./booking.schema";
 
 export const BookingController = {
-  async createBooking(req: Request, res: Response,next:NextFunction) {
+  async createBooking(req: Request, res: Response, next: NextFunction) {
     try {
-      const userId = req.user?.id
+      const userId = req.user?.id;
       const validatedData = createBookingSchema.parse(req.body);
-      const booking = await BookingService.createBooking(userId,validatedData);
+      const booking = await BookingService.createBooking(userId, validatedData);
 
       return res.status(201).json({
         message: "Booking Berhasil Dibuat",
         data: booking,
       });
     } catch (error) {
-      return next(error)
+      return next(error);
     }
   },
 
-  async getBookings (req:Request,res:Response,next:NextFunction){
+  async getBookings(req: Request, res: Response, next: NextFunction) {
     try {
       const userId = req.user!.id;
-      
+
       const booking = await BookingService.getBooking(userId);
       res.status(200).json({
-        booking
-      })
+        booking,
+      });
     } catch (error) {
-       return next(error)
+      return next(error);
     }
-
   },
 
-  async getBookingById (req:Request<BookingParamsDto>,res:Response,next:NextFunction){
+  async getBookingById(
+    req: Request<BookingParamsDto>,
+    res: Response,
+    next: NextFunction,
+  ) {
     try {
       const params = bookingParamSchema.parse(req.params);
-      const booking = await BookingService.getBookingById(params.id);
+      const booking = await BookingService.getBookingById(
+        params.id,
+        req.user.id,
+      );
       res.status(200).json({
-        booking
-      })
+        booking,
+      });
     } catch (error) {
-      return next(error)
+      return next(error);
     }
-
   },
 
-  
   //  async deleteBooking (req:Request<BookingParamsDto>,res:Response){
   //   try {
   //      const params = bookingParamSchema.parse(req.params);
@@ -62,19 +71,22 @@ export const BookingController = {
   //   }
 
   // },
-    async cencelBooking (req:Request,res:Response,next:NextFunction){
-       try {
-    const params = bookingParamSchema.parse(req.params);
+  async cencelBooking(req: Request, res: Response, next: NextFunction) {
+    try {
+      const params = bookingParamSchema.parse(req.params);
 
-    const booking = await BookingService.cancelBooking(params.id,req.user.id);
+      const booking = await BookingService.cancelBooking(
+        params.id,
+        req.user.id,
+      );
 
-    res.status(200).json({
-      success: true,
-      message: "Booking berhasil dibatalkan",
-      data: booking,
-    });
-  } catch (error) {
-    return next(error)
-  }
+      res.status(200).json({
+        success: true,
+        message: "Booking berhasil dibatalkan",
+        data: booking,
+      });
+    } catch (error) {
+      return next(error);
     }
+  },
 };

@@ -1,4 +1,7 @@
 import { cloudinary } from "../../config/cloudinary";
+import dotenv from "dotenv"
+
+dotenv.config();
 
 export const cloudinaryService = {
   uploadImage: async (
@@ -82,7 +85,7 @@ export const cloudinaryService = {
     type: "authenticated",
     resource_type: "image",
     sign_url: true,
-    secure: true,
+    secure: true
   });
 },
 deletePrivateDocument: async (publicId: string) => {

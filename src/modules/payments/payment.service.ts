@@ -1,4 +1,3 @@
-
 import crypto from "crypto";
 
 import { prisma } from "../../config/db";
@@ -15,74 +14,98 @@ import {
   type MidtransNotificationDto,
 } from "./payment.schema";
 import { ForbiddenError } from "../../errors/ForbiddenError";
-import { RoleStatus } from "../../../generated/prisma/enums";
+import { PaymentStatus, RoleStatus } from "../../../generated/prisma/enums";
+import { acquirePaymentLock, releasePaymentLock } from "../../shared/service/redis-lock.service";
+import { ConflictError } from "../../errors/ConflictError";
+
+const terminalStatuses: PaymentStatus[] = [
+  PaymentStatus.PAID,
+  PaymentStatus.FAILED,
+  PaymentStatus.CANCELLED,
+  PaymentStatus.EXPIRED,
+];
+
+
 
 export const PaymentService = {
   /**
    * Create Midtrans Payment
    */
   createPayment: async (
-    userId: string,
-    data: CreatePaymentDto
-  ) => {
-    const validatedData =
-      createPaymentSchema.parse(data);
+  userId: string,
+  data: CreatePaymentDto,
+) => {
+  const validatedData = createPaymentSchema.parse(data);
 
-    /**
-     * Find booking
-     */
-    const booking = await prisma.bookings.findUnique({
-      where: {
-        id: validatedData.booking_id,
-      },
-      include: {
-        user: true,
-         car: {
-      include: {
-        brand: true
-      }
+  /**
+   * Find booking
+   */
+  const booking = await prisma.bookings.findUnique({
+    where: {
+      id: validatedData.booking_id,
     },
+    include: {
+      user: true,
+      car: {
+        include: {
+          brand: true,
+        },
       },
-    });
+    },
+  });
 
-    if (!booking) {
-      throw new NotFoundError("Booking Not Found");
-    }
+  if (!booking) {
+    throw new NotFoundError("Booking Not Found");
+  }
 
+  /**
+   * Make sure booking belongs to current user
+   */
+  if (booking.user_id !== userId) {
+    throw new ForbiddenError(
+      "You are not allowed to pay this booking",
+    );
+  }
+
+  /**
+   * Booking must be PENDING
+   */
+  if (booking.status !== "PENDING") {
+    throw new ForbiddenError(
+      "Booking cannot be paid",
+    );
+  }
+
+  /**
+   * Acquire distributed lock
+   */
+  const lock = await acquirePaymentLock(
+    booking.id,
+  );
+
+  if (!lock) {
+    throw new ConflictError(
+      "Payment creation is already in progress",
+    );
+  }
+
+  try {
     /**
-     * Make sure booking belongs to current user
-     */
-    if (booking.user_id !== userId) {
-      throw new ForbiddenError(
-        "You are not allowed to pay this booking"
-      );
-    }
-
-    /**
-     * Booking must be PENDING
-     */
-    if (booking.status !== "PENDING") {
-      throw new ForbiddenError(
-        "Booking cannot be paid"
-      );
-    }
-
-    /**
-     * Check existing payment
+     * IMPORTANT:
+     * Check existing payment AGAIN
+     * after acquiring the lock.
      */
     const existingPayment =
       await paymentRepository.getByBookingId(
-        booking.id
+        booking.id,
       );
 
     /**
      * If payment already paid
      */
-    if (
-      existingPayment?.status === "PAID"
-    ) {
-      throw new Error(
-        "Booking has already been paid"
+    if (existingPayment?.status === "PAID") {
+      throw new ConflictError(
+        "Booking has already been paid",
       );
     }
 
@@ -96,8 +119,7 @@ export const PaymentService = {
     ) {
       return {
         payment: existingPayment,
-        snap_token:
-          existingPayment.snap_token,
+        snap_token: existingPayment.snap_token,
         redirect_url:
           existingPayment.redirect_url,
       };
@@ -106,15 +128,14 @@ export const PaymentService = {
     /**
      * Generate Midtrans Order ID
      */
-    const orderId =
-      `BOOKING-${booking.id}`;
+    const orderId = `BOOKING-${booking.id}`;
 
     const grossAmount =
       Number(booking.grandTotal);
 
     if (grossAmount <= 0) {
       throw new Error(
-        "Invalid payment amount"
+        "Invalid payment amount",
       );
     }
 
@@ -132,27 +153,34 @@ export const PaymentService = {
         email: booking.user.email,
       },
 
-     item_details: [
-  {
-    id: booking.car.id,
-    price: Number(booking.pricePerDay),
-    quantity: booking.total_days,
-    name: `Rental ${booking.car.brand.name}`,
-  },
-  {
-    id: `TAX-${booking.id}`,
-    price: Number(booking.tax ?? 0),
-    quantity: 1,
-    name: "Tax",
-  },
-  {
-    id: `DISCOUNT-${booking.id}`,
-    price: -Number(booking.discount ?? 0),
-    quantity: 1,
-    name: "Discount",
-  },
-],
+      item_details: [
+        {
+          id: booking.car.id,
+          price: Number(
+            booking.pricePerDay,
+          ),
+          quantity: booking.total_days,
+          name: `Rental ${booking.car.brand.name}`,
+        },
 
+        {
+          id: `TAX-${booking.id}`,
+          price: Number(
+            booking.tax ?? 0,
+          ),
+          quantity: 1,
+          name: "Tax",
+        },
+
+        {
+          id: `DISCOUNT-${booking.id}`,
+          price: -Number(
+            booking.discount ?? 0,
+          ),
+          quantity: 1,
+          name: "Discount",
+        },
+      ],
     };
 
     /**
@@ -160,7 +188,7 @@ export const PaymentService = {
      */
     const transaction =
       await snap.createTransaction(
-        parameter
+        parameter,
       );
 
     /**
@@ -176,13 +204,11 @@ export const PaymentService = {
 
         order_id: orderId,
 
-        amount:
-          booking.grandTotal,
+        amount: booking.grandTotal,
 
         status: "PENDING",
 
-        snap_token:
-          transaction.token,
+        snap_token: transaction.token,
 
         redirect_url:
           transaction.redirect_url,
@@ -190,14 +216,20 @@ export const PaymentService = {
 
     return {
       payment,
-
-      snap_token:
-        transaction.token,
-
+      snap_token: transaction.token,
       redirect_url:
         transaction.redirect_url,
     };
-  },
+  } finally {
+    /**
+     * Always release lock
+     */
+    await releasePaymentLock(
+      lock.key,
+      lock.value,
+    );
+  }
+},
 
   /**
    * Get all payments
@@ -209,71 +241,57 @@ export const PaymentService = {
   /**
    * Get payment by ID
    */
- getPaymentById: async (
-  id: string,
-  userId: string,
-  role: RoleStatus
-) => {
-  const payment = await paymentRepository.getById(id);
+  getPaymentById: async (id: string, userId: string, role: RoleStatus) => {
+    const payment = await paymentRepository.getById(id);
 
-  if (!payment) {
-    throw new NotFoundError("Payment Not Found");
-  }
+    if (!payment) {
+      throw new NotFoundError("Payment Not Found");
+    }
 
-  if (
-    role !== "ADMIN" &&
-    role !== "SUPERADMIN" &&
-    payment.booking.user_id !== userId
-  ) {
-    throw new ForbiddenError(
-      "Anda tidak memiliki akses ke payment ini"
-    );
-  }
+    if (
+      role !== "ADMIN" &&
+      role !== "SUPERADMIN" &&
+      payment.booking.user_id !== userId
+    ) {
+      throw new ForbiddenError("Anda tidak memiliki akses ke payment ini");
+    }
 
-  return payment;
-},
+    return payment;
+  },
 
   /**
    * Get payment by booking
    */
- getPaymentByBookingId: async (
-  bookingId: string,
-  userId: string,
-  role: RoleStatus
-) => {
-  const payment =
-    await paymentRepository.getByBookingId(bookingId);
+  getPaymentByBookingId: async (
+    bookingId: string,
+    userId: string,
+    role: RoleStatus,
+  ) => {
+    const payment = await paymentRepository.getByBookingId(bookingId);
 
-  if (!payment) {
-    throw new NotFoundError("Payment Not Found");
-  }
+    if (!payment) {
+      throw new NotFoundError("Payment Not Found");
+    }
 
-  if (
-    role !== "ADMIN" &&
-    role !== "SUPERADMIN" &&
-    payment.booking.user_id !== userId
-  ) {
-    throw new ForbiddenError(
-      "Anda tidak memiliki akses ke payment ini"
-    );
-  }
+    if (
+      role !== "ADMIN" &&
+      role !== "SUPERADMIN" &&
+      payment.booking.user_id !== userId
+    ) {
+      throw new ForbiddenError("Anda tidak memiliki akses ke payment ini");
+    }
 
-  return payment;
-},
+    return payment;
+  },
 
   /**
    * Verify Midtrans signature
    */
-  verifySignature: (
-    notification: MidtransNotificationDto
-  ) => {
-    const serverKey =
-      process.env.MIDTRANS_SERVER_KEY;
+  verifySignature: (notification: MidtransNotificationDto) => {
+    const serverKey = process.env.MIDTRANS_SERVER_KEY;
 
     if (!serverKey) {
-      throw new Error(
-        "MIDTRANS_SERVER_KEY is not configured"
-      );
+      throw new Error("MIDTRANS_SERVER_KEY is not configured");
     }
 
     const input =
@@ -282,75 +300,44 @@ export const PaymentService = {
       notification.gross_amount +
       serverKey;
 
-    const signature =
-      crypto
-        .createHash("sha512")
-        .update(input)
-        .digest("hex");
+    const signature = crypto.createHash("sha512").update(input).digest("hex");
 
-    return (
-      signature ===
-      notification.signature_key
-    );
+    return signature === notification.signature_key;
   },
 
   /**
    * Handle Midtrans Notification
    */
-  handleNotification: async (
-    data: MidtransNotificationDto
-  ) => {
-    const notification =
-      midtransNotificationSchema.parse(
-        data
-      );
+  handleNotification: async (data: MidtransNotificationDto) => {
+    const notification = midtransNotificationSchema.parse(data);
 
     /**
      * Verify signature
      */
-    const valid =
-      PaymentService.verifySignature(
-        notification
-      );
+    const valid = PaymentService.verifySignature(notification);
 
     if (!valid) {
-      throw new Error(
-        "Invalid Midtrans Signature"
-      );
+      throw new Error("Invalid Midtrans Signature");
     }
 
     /**
      * Find payment
      */
-    const payment =
-      await paymentRepository.getByOrderId(
-        notification.order_id
-      );
+    const payment = await paymentRepository.getByOrderId(notification.order_id);
 
     if (!payment) {
-      throw new NotFoundError(
-        "Payment Not Found"
-      );
+      throw new NotFoundError("Payment Not Found");
     }
 
     /**
      * Check amount
      */
-    const databaseAmount =
-      Number(payment.amount).toFixed(2);
+    const databaseAmount = Number(payment.amount).toFixed(2);
 
-    const midtransAmount =
-      Number(
-        notification.gross_amount
-      ).toFixed(2);
+    const midtransAmount = Number(notification.gross_amount).toFixed(2);
 
-    if (
-      databaseAmount !==
-      midtransAmount
-    ) {
-      throw new Error(
-        "Payment amount mismatch"
-      );
+    if (databaseAmount !== midtransAmount) {
+      throw new Error("Payment amount mismatch");
     }
 
     /**
@@ -359,31 +346,23 @@ export const PaymentService = {
      * If payment is already PAID,
      * don't process it again.
      */
-    if (
-      payment.status === "PAID"
-    ) {
-      return {
-        message:
-          "Payment already processed",
-      };
-    }
+    if (terminalStatuses.includes(payment.status)) {
+  return {
+    message: `Payment already finalized with status ${payment.status}`,
+  };
+}
 
-    const transactionStatus =
-      notification.transaction_status;
+    const transactionStatus = notification.transaction_status;
 
     /**
      * SUCCESS
      */
-    if (
-      transactionStatus ===
-      "settlement"
-    ) {
-      return await PaymentService
-        .handleSuccessPayment(
-          payment.id,
-          payment.booking_id,
-          notification
-        );
+    if (transactionStatus === "settlement") {
+      return await PaymentService.handleSuccessPayment(
+        payment.id,
+        payment.booking_id,
+        notification,
+      );
     }
 
     /**
@@ -392,80 +371,60 @@ export const PaymentService = {
      * Used mainly for credit card
      */
     if (
-      transactionStatus ===
-        "capture" &&
-      notification.fraud_status ===
-        "accept"
+      transactionStatus === "capture" &&
+      notification.fraud_status === "accept"
     ) {
-      return await PaymentService
-        .handleSuccessPayment(
-          payment.id,
-          payment.booking_id,
-          notification
-        );
+      return await PaymentService.handleSuccessPayment(
+        payment.id,
+        payment.booking_id,
+        notification,
+      );
     }
 
     /**
      * PENDING
      */
-    if (
-      transactionStatus ===
-      "pending"
-    ) {
-      await paymentRepository.update(
-        payment.id,
-        {
-          status: "PENDING",
+    if (transactionStatus === "pending") {
+      const result = await paymentRepository.updatePending(payment.id, {
+        transaction_id: notification.transaction_id,
+        payment_type: notification.payment_type,
+      });
 
-          transaction_id:
-            notification.transaction_id,
-
-          payment_type:
-            notification.payment_type,
-        }
-      );
+      if (result.count === 0) {
+        return {
+          message: "Payment state has already changed",
+        };
+      }
 
       return {
-        message:
-          "Payment is pending",
+        message: "Payment is pending",
       };
     }
 
     /**
      * EXPIRED
      */
-    if (
-      transactionStatus ===
-      "expire"
-    ) {
-      return await PaymentService
-        .handleExpiredPayment(
-          payment.id,
-          payment.booking_id,
-          notification
-        );
+    if (transactionStatus === "expire") {
+      return await PaymentService.handleExpiredPayment(
+        payment.id,
+        payment.booking_id,
+        notification,
+      );
     }
 
     /**
      * FAILED / CANCELLED
      */
-    if (
-      transactionStatus ===
-        "deny" ||
-      transactionStatus ===
-        "cancel"
-    ) {
-      return await PaymentService
-        .handleFailedPayment(
-          payment.id,
-          payment.booking_id,
-          notification
-        );
+    if (transactionStatus === "deny" || transactionStatus === "cancel") {
+      return await PaymentService.handleFailedPayment(
+        payment.id,
+        payment.booking_id,
+        notification,
+      );
     }
 
     return {
-      message:
-        "Notification received",
+      message: "Notification received",
     };
   },
 
@@ -473,49 +432,49 @@ export const PaymentService = {
    * Handle successful payment
    */
   handleSuccessPayment: async (
-  paymentId: string,
-  bookingId: string,
-  notification: MidtransNotificationDto
-) => {
-  return await prisma.$transaction(async (tx) => {
-    const bookingResult = await tx.bookings.updateMany({
-      where: {
-        id: bookingId,
-        status: "PENDING",
-      },
-      data: {
-        status: "CONFIRMED",
-      },
-    });
+    paymentId: string,
+    bookingId: string,
+    notification: MidtransNotificationDto,
+  ) => {
+    return await prisma.$transaction(async (tx) => {
+      const bookingResult = await tx.bookings.updateMany({
+        where: {
+          id: bookingId,
+          status: "PENDING",
+        },
+        data: {
+          status: "CONFIRMED",
+        },
+      });
 
-    if (bookingResult.count === 0) {
+      if (bookingResult.count === 0) {
+        return {
+          message: "Booking is no longer available for confirmation",
+        };
+      }
+
+      const paymentResult = await tx.payments.updateMany({
+        where: {
+          id: paymentId,
+          status: "PENDING",
+        },
+        data: {
+          status: "PAID",
+          transaction_id: notification.transaction_id,
+          payment_type: notification.payment_type,
+          paid_at: new Date(),
+        },
+      });
+
+      if (paymentResult.count === 0) {
+        throw new Error("Payment is no longer payable");
+      }
+
       return {
-        message: "Booking is no longer available for confirmation",
+        message: "Payment successful",
       };
-    }
-
-    const paymentResult = await tx.payments.updateMany({
-      where: {
-        id: paymentId,
-        status: "PENDING",
-      },
-      data: {
-        status: "PAID",
-        transaction_id: notification.transaction_id,
-        payment_type: notification.payment_type,
-        paid_at: new Date(),
-      },
     });
-
-    if (paymentResult.count === 0) {
-      throw new Error("Payment is no longer payable");
-    }
-
-    return {
-      message: "Payment successful",
-    };
-  });
-},
+  },
 
   /**
    * Handle expired payment
@@ -523,44 +482,42 @@ export const PaymentService = {
   handleExpiredPayment: async (
     paymentId: string,
     bookingId: string,
-    notification: MidtransNotificationDto
+    notification: MidtransNotificationDto,
   ) => {
-    return await prisma.$transaction(
-      async (tx) => {
-        const paymentResult = await tx.payments.updateMany({
-            where: {
-              id: paymentId,
-              status: "PENDING",
-            },
-            data: {
-              status: "EXPIRED",
-              transaction_id: notification.transaction_id,
-              payment_type: notification.payment_type,
-              expired_at: new Date(),
-            },
-          });
+    return await prisma.$transaction(async (tx) => {
+      const paymentResult = await tx.payments.updateMany({
+        where: {
+          id: paymentId,
+          status: "PENDING",
+        },
+        data: {
+          status: "EXPIRED",
+          transaction_id: notification.transaction_id,
+          payment_type: notification.payment_type,
+          expired_at: new Date(),
+        },
+      });
 
-          if (paymentResult.count === 0) {
-            return {
-              message: "Payment already processed",
-            };
-          }
-
-          await tx.bookings.updateMany({
-            where: {
-              id: bookingId,
-              status: "PENDING",
-            },
-            data: {
-              status: "CANCELLED",
-            },
-          });
-
-          return {
-            message: "Payment expired",
-          };
+      if (paymentResult.count === 0) {
+        return {
+          message: "Payment already processed",
+        };
       }
-    );
+
+      await tx.bookings.updateMany({
+        where: {
+          id: bookingId,
+          status: "PENDING",
+        },
+        data: {
+          status: "CANCELLED",
+        },
+      });
+
+      return {
+        message: "Payment expired",
+      };
+    });
   },
 
   /**
@@ -569,42 +526,39 @@ export const PaymentService = {
   handleFailedPayment: async (
     paymentId: string,
     bookingId: string,
-    notification: MidtransNotificationDto
+    notification: MidtransNotificationDto,
   ) => {
-    return await prisma.$transaction(
-      async (tx) => {
-        const paymentResult = await tx.payments.updateMany({
-          where: {
-            id: paymentId,
-            status: "PENDING",
-          },
-          data: {
-            status: "FAILED",
-            transaction_id: notification.transaction_id,
-            payment_type: notification.payment_type,
-          },
-        });
+    return await prisma.$transaction(async (tx) => {
+      const paymentResult = await tx.payments.updateMany({
+        where: {
+          id: paymentId,
+          status: "PENDING",
+        },
+        data: {
+          status: "FAILED",
+          transaction_id: notification.transaction_id,
+          payment_type: notification.payment_type,
+        },
+      });
 
-        if (paymentResult.count === 0) {
-          return {
-            message: "Payment already processed",
-          };
-        }
-
-        await tx.bookings.updateMany({
-          where: {
-            id: bookingId,
-            status: "PENDING",
-          },
-          data: {
-            status: "CANCELLED",
-          },
-        });
+      if (paymentResult.count === 0) {
         return {
-          message: "Payment failed",
+          message: "Payment already processed",
         };
       }
-    );
+
+      await tx.bookings.updateMany({
+        where: {
+          id: bookingId,
+          status: "PENDING",
+        },
+        data: {
+          status: "CANCELLED",
+        },
+      });
+      return {
+        message: "Payment failed",
+      };
+    });
   },
 };
-

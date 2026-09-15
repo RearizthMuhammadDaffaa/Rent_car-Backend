@@ -5,6 +5,8 @@ import multer from "multer";
 import { NotFoundError } from "../errors/NotFoundError";
 import { ForbiddenError } from "../errors/ForbiddenError";
 import { ConflictError } from "../errors/ConflictError";
+import { UnauthorizedError } from "../errors/UnauthorizedError";
+import { AppError } from "../errors/AppError";
 
 export const errorMiddleware = (
   err: unknown,
@@ -56,6 +58,20 @@ export const errorMiddleware = (
       message: "Database operation failed",
     });
   }
+
+  if (err instanceof UnauthorizedError) {
+  return res.status(401).json({
+    success: false,
+    message: err.message,
+  });
+}
+
+if (err instanceof AppError) {
+  return res.status(err.statusCode).json({
+    success: false,
+    message: err.message,
+  });
+}
 
   return res.status(500).json({
     success: false,

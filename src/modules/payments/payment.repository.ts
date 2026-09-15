@@ -74,5 +74,23 @@ export const paymentRepository = {
       data,
     });
   },
+  updatePending: async (
+  id: string,
+  data: {
+    transaction_id: string;
+    payment_type?: string;
+  }
+) => {
+  return prisma.payments.updateMany({
+    where: {
+      id,
+      status: "PENDING",
+    },
+    data: {
+      transaction_id: data.transaction_id,
+      payment_type: data.payment_type,
+    },
+  });
+},
 };
 

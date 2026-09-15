@@ -1,33 +1,32 @@
-
 import bcrypt from "bcrypt";
 import type { Response } from "express";
 
 import { authRepository, refreshTokenRepository } from "./auth.repository";
-import type { RegisterInput,LoginInput } from "./auth.schema";
-import { generateRefreshToken, generateToken, hashRefreshToken } from "../../shared/utils/utils";
+import type { RegisterInput, LoginInput } from "./auth.schema";
+import {
+  generateRefreshToken,
+  generateToken,
+  hashRefreshToken,
+} from "../../shared/utils/utils";
 import { prisma } from "../../config/db";
+import { UnauthorizedError } from "../../errors/UnauthorizedError";
+import { ConflictError } from "../../errors/ConflictError";
 
 const REFRESH_TOKEN_EXPIRES_IN = 7 * 24 * 60 * 60 * 1000;
 
 export const authService = {
-  register: async (
-    data: RegisterInput,
-    res: Response
-  ) => {
+  register: async (data: RegisterInput, res: Response) => {
     // Check existing user
     const userExists = await authRepository.findByEmail(data.email);
 
     if (userExists) {
-      throw new Error("User already exists with this email");
+     throw new ConflictError("Email is already registered");
     }
 
     // Hash password
     const salt = await bcrypt.genSalt(10);
 
-    const hashedPassword = await bcrypt.hash(
-      data.password,
-      salt
-    );
+    const hashedPassword = await bcrypt.hash(data.password, salt);
 
     // Create user
     const user = await authRepository.createUser({
@@ -37,10 +36,7 @@ export const authService = {
     });
 
     // Generate JWT
-    const token = generateToken(
-      user.id,
-      user.role
-    );
+    const token = generateToken(user.id, user.role);
 
     return {
       user: {
@@ -53,63 +49,42 @@ export const authService = {
     };
   },
 
-  login: async (
-    data: LoginInput,
-    res: Response
-  ) => {
+  login: async (data: LoginInput, res: Response) => {
     // Find user
-    const user = await authRepository.findByEmail(
-      data.email
-    );
+    const user = await authRepository.findByEmail(data.email);
 
     if (!user) {
-      throw new Error("Invalid email or password");
+      throw new UnauthorizedError("Invalid email or password");
     }
 
     // Verify password
-    const isPasswordValid = await bcrypt.compare(
-      data.password,
-      user.password
-    );
+    const isPasswordValid = await bcrypt.compare(data.password, user.password);
 
     if (!isPasswordValid) {
-      throw new Error("Invalid email or password");
+      throw new UnauthorizedError("Invalid email or password");
     }
 
     // Generate JWT
-    const token = generateToken(
-      user.id,
-      user.role
-    );
+    const token = generateToken(user.id, user.role);
 
-    const refreshToken =
-      generateRefreshToken();
+    const refreshToken = generateRefreshToken();
 
-    const refreshTokenHash =
-      hashRefreshToken(refreshToken);
+    const refreshTokenHash = hashRefreshToken(refreshToken);
 
-    const expiresAt = new Date(
-      Date.now() + REFRESH_TOKEN_EXPIRES_IN
-    );
+    const expiresAt = new Date(Date.now() + REFRESH_TOKEN_EXPIRES_IN);
 
-    await refreshTokenRepository.create(
-      refreshTokenHash,
-      user.id,
-      expiresAt
-    );
+    await refreshTokenRepository.create(refreshTokenHash, user.id, expiresAt);
 
     res.cookie("jwt", token, {
-    httpOnly: true,
-    secure:
-      process.env.NODE_ENV === "production",
-    sameSite: "strict",
-    maxAge: 15 * 60 * 1000,
-  });
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      maxAge: 15 * 60 * 1000,
+    });
 
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
-      secure:
-        process.env.NODE_ENV === "production",
+      secure: process.env.NODE_ENV === "production",
       sameSite: "strict",
       maxAge: REFRESH_TOKEN_EXPIRES_IN,
     });
@@ -125,38 +100,28 @@ export const authService = {
     };
   },
 
-  refresh: async (
-    refreshToken: string,
-    res: Response
-  ) => {
-    const tokenHash =
-      hashRefreshToken(refreshToken);
+  refresh: async (refreshToken: string, res: Response) => {
+     const now = new Date();
 
-    const storedToken =
-      await refreshTokenRepository.findByHash(
-        tokenHash
-      );
+    const tokenHash = hashRefreshToken(refreshToken);
 
-    if (!storedToken) {
-      throw new Error("Invalid refresh token");
-    }
+    const storedToken = await refreshTokenRepository.findByHash(tokenHash);
 
-    // Token sudah logout / digunakan
-    if (storedToken.revokedAt) {
-      throw new Error(
-        "Refresh token has been revoked"
-      );
-    }
+     if (!storedToken) {
+    throw new UnauthorizedError("Invalid refresh token");
+  }
 
-    // Token expired
-    if (
-      storedToken.expiresAt.getTime() <
-      Date.now()
-    ) {
-      throw new Error(
-        "Refresh token has expired"
-      );
-    }
+  if (storedToken.revokedAt) {
+    throw new UnauthorizedError(
+      "Refresh token has been revoked"
+    );
+  }
+
+  if (storedToken.expiresAt <= now) {
+    throw new UnauthorizedError(
+      "Refresh token has expired"
+    );
+  }
 
     const user = storedToken.user;
 
@@ -164,35 +129,32 @@ export const authService = {
     // NEW ACCESS TOKEN
     // =========================
 
-    const accessToken = generateToken(
-      user.id,
-      user.role
-    );
+    const accessToken = generateToken(user.id, user.role);
 
     // =========================
     // REFRESH TOKEN ROTATION
     // =========================
 
-    const newRefreshToken =
-      generateRefreshToken();
+    const newRefreshToken = generateRefreshToken();
 
-    const newRefreshTokenHash =
-      hashRefreshToken(newRefreshToken);
+    const newRefreshTokenHash = hashRefreshToken(newRefreshToken);
 
-    const newExpiresAt = new Date(
-      Date.now() + REFRESH_TOKEN_EXPIRES_IN
-    );
+    const newExpiresAt = new Date(Date.now() + REFRESH_TOKEN_EXPIRES_IN);
 
     await prisma.$transaction(async (tx) => {
       // Revoke old refresh token
-      await tx.refreshToken.update({
+      const result = await tx.refreshToken.updateMany({
         where: {
           id: storedToken.id,
+          revokedAt: null,
+          expiresAt: { gt: new Date() },
         },
-        data: {
-          revokedAt: new Date(),
-        },
+        data: { revokedAt: new Date() },
       });
+
+      if (result.count !== 1) {
+        throw new UnauthorizedError("Invalid refresh token");
+      }
 
       // Create new refresh token
       await tx.refreshToken.create({
@@ -208,20 +170,16 @@ export const authService = {
     // NEW COOKIE
     // =========================
 
-    
-
     res.cookie("jwt", accessToken, {
-    httpOnly: true,
-    secure:
-      process.env.NODE_ENV === "production",
-    sameSite: "strict",
-    maxAge: 15 * 60 * 1000,
-  });
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      maxAge: 15 * 60 * 1000,
+    });
 
     res.cookie("refreshToken", newRefreshToken, {
       httpOnly: true,
-      secure:
-        process.env.NODE_ENV === "production",
+      secure: process.env.NODE_ENV === "production",
       sameSite: "strict",
       maxAge: REFRESH_TOKEN_EXPIRES_IN,
     });
@@ -231,29 +189,21 @@ export const authService = {
     };
   },
 
-  logout: async (
-    refreshToken: string | undefined,
-    res: Response
-  ) => {
+  logout: async (refreshToken: string | undefined, res: Response) => {
     if (refreshToken) {
-      const tokenHash =
-        hashRefreshToken(refreshToken);
+      const tokenHash = hashRefreshToken(refreshToken);
 
-      await refreshTokenRepository.revokeByHash(
-        tokenHash
-      );
+      await refreshTokenRepository.revokeByHash(tokenHash);
     }
 
     res.clearCookie("jwt", {
       httpOnly: true,
-      secure:
-        process.env.NODE_ENV === "production",
+      secure: process.env.NODE_ENV === "production",
       sameSite: "strict",
     });
     res.clearCookie("refreshToken", {
       httpOnly: true,
-      secure:
-        process.env.NODE_ENV === "production",
+      secure: process.env.NODE_ENV === "production",
       sameSite: "strict",
     });
 
@@ -266,23 +216,18 @@ export const authService = {
   // CREATE ADMIN
   // =========================
 
-  createAdmin: async (
-    data: RegisterInput,
-    res: Response
-  ) => {
-    const existingUser =
-      await prisma.user.findUnique({
-        where: {
-          email: data.email,
-        },
-      });
+  createAdmin: async (data: RegisterInput, res: Response) => {
+    const existingUser = await prisma.user.findUnique({
+      where: {
+        email: data.email,
+      },
+    });
 
     if (existingUser) {
-      throw new Error("Email sudah digunakan");
+      throw new ConflictError("Email is already registered");
     }
 
-    const hashedPassword =
-      await bcrypt.hash(data.password, 12);
+    const hashedPassword = await bcrypt.hash(data.password, 12);
 
     const user = await prisma.user.create({
       data: {
@@ -300,6 +245,4 @@ export const authService = {
       role: user.role,
     };
   },
-
 };
-

@@ -192,9 +192,19 @@ export const BookingService = {
     const booking = await BookingRepository.get(user_id);
     return booking;
   },
-  getBookingById: async (id: string) => {
-    return await BookingRepository.getbyId(id);
-  },
+  getBookingById: async (id: string, userId: string) => {
+  const booking = await BookingRepository.getbyId(id);
+
+  if (!booking) {
+    throw new NotFoundError("Booking not found");
+  }
+
+  if (booking.user_id !== userId) {
+    throw new ForbiddenError("You are not allowed to access this booking");
+  }
+
+  return booking;
+},
   updateBooking: async (id: string, data: UpdateBookingDto) => {
     const booking = await BookingRepository.getbyId(id);
 
