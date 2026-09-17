@@ -1,12 +1,31 @@
-
-import createDefaultPreset from "ts-jest";
-
-const tsJestTransformCfg = createDefaultPreset().transform;
-
-/** @type {import("jest").Config} **/
+/** @type {import("jest").Config} */
 export default {
   testEnvironment: "node",
+
   transform: {
-    ...tsJestTransformCfg,
+    "^.+\\.tsx?$": [
+      "@swc/jest",
+      {
+        jsc: {
+          parser: {
+            syntax: "typescript",
+          },
+          target: "es2023",
+        },
+        module: {
+          type: "es6",
+        },
+      },
+    ],
   },
+
+  extensionsToTreatAsEsm: [".ts"],
+
+  transformIgnorePatterns: [
+    "node_modules/(?!(file-type)/)",
+  ],
+
+  testMatch: [
+    "**/tests/**/*.test.ts",
+  ],
 };
