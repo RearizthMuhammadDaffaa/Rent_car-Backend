@@ -14,6 +14,13 @@ export const BookingRepository = {
     return await prisma.bookings.findMany({
       where:{
         user_id:user_id
+      },include: {
+        car:{
+          include: {
+            brand:true,
+            category:true
+          }
+        }
       }
     });
   },

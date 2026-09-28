@@ -132,5 +132,17 @@ export const authController = {
       return next(error);
     }
   },
+
+  getMe : async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  res.status(200).json({
+    status: "success",
+    data: {
+      user: req.user,
+    },
+  });
+},
 };
 
