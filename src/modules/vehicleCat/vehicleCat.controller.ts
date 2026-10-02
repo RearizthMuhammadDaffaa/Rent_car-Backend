@@ -23,9 +23,9 @@ export const VehicleCatController = {
 
   async getVehileCats (req:Request,res:Response){
     try {
-      const brands = await VehicleCatService.getVehileCats();
+      const vehiclesCat = await VehicleCatService.getVehileCats();
       res.status(200).json({
-        brands
+        vehiclesCat
       })
     } catch (error) {
        console.error(error);
