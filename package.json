@@ -6,12 +6,16 @@
   "scripts": {
     "test": "cross-env NODE_OPTIONS=--experimental-vm-modules jest",
      "test:run": "cross-env NODE_OPTIONS=--experimental-vm-modules jest --runInBand",
+     "build": "prisma generate && tsc",
     "dev": "tsx watch src/index.ts",
     "db:push": "prisma db push",
     "db:migrate": "prisma migrate dev",
     "db:generate": "prisma generate",
     "db:studio": "prisma studio",
     "db:reset": "prisma migrate reset"
+  },
+  "engines": {
+    "node": "24.x"
   },
   "keywords": [],
   "author": "",
