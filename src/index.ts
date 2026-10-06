@@ -1,6 +1,6 @@
 
 import { Server } from "http";
-import { disconnectDB } from './config/db';
+import { disconnectDB } from './config/db.js';
 import { app } from "./app";
 
 
