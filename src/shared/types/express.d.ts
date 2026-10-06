@@ -1,5 +1,5 @@
 
-import type { RoleStatus } from "../../../generated/prisma/enums";
+import type { RoleStatus } from "../../../generated/prisma/enums.js";
 
 declare global {
   namespace Express {
