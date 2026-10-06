@@ -1,6 +1,6 @@
-import { BookingStatus, Prisma } from "../../../generated/prisma/client";
-import { prisma } from "../../config/db";
-import { CreateBookingDto, UpdateBookingDto } from "./booking.schema";
+import { BookingStatus, Prisma } from "../../../generated/prisma/client.js";
+import { prisma } from "../../config/db.js";
+import { CreateBookingDto, UpdateBookingDto } from "./booking.schema.js";
 type Tx = Prisma.TransactionClient;
 
 export const BookingRepository = {

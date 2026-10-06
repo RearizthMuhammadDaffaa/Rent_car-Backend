@@ -1,7 +1,7 @@
 import type { Request, Response,NextFunction } from "express";
-import { cloudinaryService } from "../../shared/service/cloudinary.service";
-import { documentParamSchema, updateDocumentStatusSchema } from "./document.schema";
-import { documentService } from "./document.service";
+import { cloudinaryService } from "../../shared/service/cloudinary.service.js";
+import { documentParamSchema, updateDocumentStatusSchema } from "./document.schema.js";
+import { documentService } from "./document.service.js";
 
 type DocumentFiles = {
   ktp?: Express.Multer.File[];

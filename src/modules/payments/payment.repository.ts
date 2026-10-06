@@ -1,6 +1,6 @@
 
-import { prisma } from "../../config/db";
-import { Prisma } from "../../../generated/prisma/client";
+import { prisma } from "../../config/db.js";
+import { Prisma } from "../../../generated/prisma/client.js";
 
 export const paymentRepository = {
   create: async (

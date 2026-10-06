@@ -1,22 +1,22 @@
 import crypto from "crypto";
 
-import { prisma } from "../../config/db";
-import { snap } from "../../config/midtrans";
+import { prisma } from "../../config/db.js";
+import { snap } from "../../config/midtrans.js";
 
-import { NotFoundError } from "../../errors/NotFoundError";
+import { NotFoundError } from "../../errors/NotFoundError.js";
 
-import { paymentRepository } from "./payment.repository";
+import { paymentRepository } from "./payment.repository.js";
 
 import {
   createPaymentSchema,
   midtransNotificationSchema,
   type CreatePaymentDto,
   type MidtransNotificationDto,
-} from "./payment.schema";
-import { ForbiddenError } from "../../errors/ForbiddenError";
-import { PaymentStatus, RoleStatus } from "../../../generated/prisma/enums";
-import { acquirePaymentLock, releasePaymentLock } from "../../shared/service/redis-lock.service";
-import { ConflictError } from "../../errors/ConflictError";
+} from "./payment.schema.js";
+import { ForbiddenError } from "../../errors/ForbiddenError.js";
+import { PaymentStatus, RoleStatus } from "../../../generated/prisma/enums.js";
+import { acquirePaymentLock, releasePaymentLock } from "../../shared/service/redis-lock.service.js";
+import { ConflictError } from "../../errors/ConflictError.js";
 
 const terminalStatuses: PaymentStatus[] = [
   PaymentStatus.PAID,

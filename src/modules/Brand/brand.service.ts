@@ -1,13 +1,13 @@
-import { prisma } from "../../config/db";
-import { NotFoundError } from "../../errors/NotFoundError";
-import { cloudinaryService } from "../../shared/service/cloudinary.service";
-import { BrandType } from "../../shared/types/types";
-import { brandRepository } from "./brand.repository";
+import { prisma } from "../../config/db.js";
+import { NotFoundError } from "../../errors/NotFoundError.js";
+import { cloudinaryService } from "../../shared/service/cloudinary.service.js";
+import { BrandType } from "../../shared/types/types.js";
+import { brandRepository } from "./brand.repository.js";
 import {
   createBrandSchema,
   updateBrandSchema,
   type UpdateBrandDto,
-} from "./brand.schema";
+} from "./brand.schema.js";
 
 export const BrandService = {
   createBrand: async (data: {

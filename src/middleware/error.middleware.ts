@@ -1,12 +1,12 @@
 import { Request, Response, NextFunction } from "express";
 import { ZodError } from "zod";
-import { Prisma } from "../../generated/prisma/client"; 
+import { Prisma } from "../../generated/prisma/client.js"; 
 import multer from "multer";
-import { NotFoundError } from "../errors/NotFoundError";
-import { ForbiddenError } from "../errors/ForbiddenError";
-import { ConflictError } from "../errors/ConflictError";
-import { UnauthorizedError } from "../errors/UnauthorizedError";
-import { AppError } from "../errors/AppError";
+import { NotFoundError } from "../errors/NotFoundError.js";
+import { ForbiddenError } from "../errors/ForbiddenError.js";
+import { ConflictError } from "../errors/ConflictError.js";
+import { UnauthorizedError } from "../errors/UnauthorizedError.js";
+import { AppError } from "../errors/AppError.js";
 
 export const errorMiddleware = (
   err: unknown,

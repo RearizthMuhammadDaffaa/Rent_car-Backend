@@ -7,7 +7,7 @@
     "test": "cross-env NODE_OPTIONS=--experimental-vm-modules jest",
      "test:run": "cross-env NODE_OPTIONS=--experimental-vm-modules jest --runInBand",
      "build": "prisma generate && tsc",
-    "dev": "tsx watch src/index.ts",
+    "dev": "tsx watch src/server.ts",
     "db:push": "prisma db push",
     "db:migrate": "prisma migrate dev",
     "db:generate": "prisma generate",

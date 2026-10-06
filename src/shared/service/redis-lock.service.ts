@@ -1,5 +1,5 @@
 import crypto from "crypto";
-import { redis } from "../../config/upstash"; 
+import { redis } from "../../config/upstash.js"; 
 
 const PAYMENT_LOCK_TTL = 120;
 

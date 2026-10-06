@@ -8,10 +8,10 @@ import {
   removeAllTestBrands,
   removeTestAdmin,
   removeTestUser,
-} from "./test-utils";
+} from "./test-utils.js";
 import bcrypt from "bcrypt";
-import { app } from "../../app";
-import { prisma } from "../../config/db";
+import { app } from "../../app.js";
+import { prisma } from "../../config/db.js";
 import { email } from "zod";
 import path from "path";
 import fs from "fs";

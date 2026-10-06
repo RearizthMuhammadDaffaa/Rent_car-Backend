@@ -1,11 +1,11 @@
 import express from 'express';
 import dotenv from "dotenv";
 import { Server } from "http";
-import { disconnectDB } from './config/db';
-import router from './routes';
+import { disconnectDB } from './config/db.js';
+import router from './routes/index.js';
 import cookieParser from 'cookie-parser';
-import { errorMiddleware } from './middleware/error.middleware';
-import { multerErrorHandler } from './middleware/multer-error.middleware';
+import { errorMiddleware } from './middleware/error.middleware.js';
+import { multerErrorHandler } from './middleware/multer-error.middleware.js';
 import cors from "cors";
 
 dotenv.config();

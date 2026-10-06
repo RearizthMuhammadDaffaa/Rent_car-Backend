@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
-import { BrandService } from "./brand.service";
-import { brandParamSchema, createBrandSchema } from "./brand.schema";
-import { BrandParams } from "../../shared/types/types";
-import { cloudinaryService } from "../../shared/service/cloudinary.service";
+import { BrandService } from "./brand.service.js";
+import { brandParamSchema, createBrandSchema } from "./brand.schema.js";
+import { BrandParams } from "../../shared/types/types.js";
+import { cloudinaryService } from "../../shared/service/cloudinary.service.js";
 
 export const brandController = {
   async createBrand(req: Request, res: Response) {

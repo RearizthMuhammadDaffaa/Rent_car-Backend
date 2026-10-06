@@ -8,8 +8,8 @@ import jwt, {
   type JwtPayload,
 } from "jsonwebtoken";
 
-import { prisma } from "../config/db";
-import { RoleStatus } from "../../generated/prisma/enums";
+import { prisma } from "../config/db.js";
+import { RoleStatus } from "../../generated/prisma/enums.js";
 
 interface AuthPayload extends JwtPayload {
   id: string;

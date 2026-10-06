@@ -1,12 +1,12 @@
-import { NotFoundError } from "../../errors/NotFoundError";
-import { cloudinaryService } from "../../shared/service/cloudinary.service";
-import { vehicleImageRepository } from "./vehicleImage.repository";
+import { NotFoundError } from "../../errors/NotFoundError.js";
+import { cloudinaryService } from "../../shared/service/cloudinary.service.js";
+import { vehicleImageRepository } from "./vehicleImage.repository.js";
 import {
   CreateVehicleImageDto,
   createVehicleImageSchema,
   UpdateVehicleImageDto,
   updateVehicleImageSchema,
-} from "./vehicleImage.schema";
+} from "./vehicleImage.schema.js";
 
 export const VehicleImageService = {
   createVehicleImage: async (data: CreateVehicleImageDto) => {

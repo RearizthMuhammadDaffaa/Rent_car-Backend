@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import { VehicleCatService } from "./vehicleCat.service";
-import { vehicleCatParamSchema , VehicleCatParamsDto } from "./vehicleCat.schema";
+import { VehicleCatService } from "./vehicleCat.service.js";
+import { vehicleCatParamSchema , VehicleCatParamsDto } from "./vehicleCat.schema.js";
 
 export const VehicleCatController = {
   async createVehileCat(req: Request, res: Response) {

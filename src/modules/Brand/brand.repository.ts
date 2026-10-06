@@ -1,6 +1,6 @@
-import {prisma} from "../../config/db";
-import { BrandType } from "../../shared/types/types";
-import { CreateBrandDto, UpdateBrandDto } from "./brand.schema";
+import {prisma} from "../../config/db.js";
+import { BrandType } from "../../shared/types/types.js";
+import { CreateBrandDto, UpdateBrandDto } from "./brand.schema.js";
 
 
 

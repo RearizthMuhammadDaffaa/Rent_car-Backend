@@ -1,7 +1,7 @@
 import { Router } from "express";
-import { upload, validateImageFile } from "../../middleware/upload.middleware";
-import { vehicleController } from "./vehicle.controller";
-import { authMiddleware } from "../../middleware/auth.middleware";
+import { upload, validateImageFile } from "../../middleware/upload.middleware.js";
+import { vehicleController } from "./vehicle.controller.js";
+import { authMiddleware } from "../../middleware/auth.middleware.js";
 const router = Router();
 
 router.post("/", authMiddleware(['ADMIN']),upload.single("thumbnail"),validateImageFile, vehicleController.createVehicle);

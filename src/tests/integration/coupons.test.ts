@@ -1,7 +1,7 @@
 import supertest from "supertest";
 import jwt from "jsonwebtoken";
-import { app } from "../../app";
-import { prisma } from "../../config/db";
+import { app } from "../../app.js";
+import { prisma } from "../../config/db.js";
 import {
   createTestAdmin,
   createTestCoupon,
@@ -9,7 +9,7 @@ import {
   removeTestAdmin,
   removeTestCoupons,
   removeTestUser,
-} from "./test-utils";
+} from "./test-utils.js";
 
 const couponPayload = (code = "SAVE10") => ({
   code,

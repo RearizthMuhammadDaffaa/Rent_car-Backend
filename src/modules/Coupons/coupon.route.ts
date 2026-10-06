@@ -1,6 +1,6 @@
 import { Router } from "express";
-import { couponController } from "./coupon.controller";
-import { authMiddleware } from "../../middleware/auth.middleware";
+import { couponController } from "./coupon.controller.js";
+import { authMiddleware } from "../../middleware/auth.middleware.js";
 const router = Router();
 
 router.post("/", authMiddleware(['ADMIN']),couponController.createCoupon);

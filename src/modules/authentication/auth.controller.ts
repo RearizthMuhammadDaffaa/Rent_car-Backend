@@ -1,10 +1,10 @@
 
 import type { NextFunction, Request, Response } from "express";
-import { authService } from "./auth.service";
+import { authService } from "./auth.service.js";
 import {
   registerSchema,
   loginSchema,
-} from "./auth.schema";
+} from "./auth.schema.js";
 
 export const authController = {
   register: async (

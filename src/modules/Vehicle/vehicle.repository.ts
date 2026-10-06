@@ -1,6 +1,6 @@
-import { Prisma, Status_vehicles } from "../../../generated/prisma/client";
-import { prisma } from "../../config/db";
-import { CreateVehicleDto, UpdateVehicleDto } from "./vehicle.schema";
+import { Prisma, Status_vehicles } from "../../../generated/prisma/client.js";
+import { prisma } from "../../config/db.js";
+import { CreateVehicleDto, UpdateVehicleDto } from "./vehicle.schema.js";
 type Tx = Prisma.TransactionClient;
 type VehicleStatusAction = "update" | "delete";
 

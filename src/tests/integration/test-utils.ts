@@ -1,5 +1,5 @@
 import bcrypt from "bcrypt";
-import { prisma } from "../../config/db";
+import { prisma } from "../../config/db.js";
 import path from "path";
 import fs from "fs";
 

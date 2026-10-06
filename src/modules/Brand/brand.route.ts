@@ -1,8 +1,8 @@
 import { Router } from "express";
 
-import { brandController } from "./brand.controller";
-import { upload, validateImageFile } from "../../middleware/upload.middleware";
-import { authMiddleware } from "../../middleware/auth.middleware";
+import { brandController } from "./brand.controller.js";
+import { upload, validateImageFile } from "../../middleware/upload.middleware.js";
+import { authMiddleware } from "../../middleware/auth.middleware.js";
 
 const router = Router();
 

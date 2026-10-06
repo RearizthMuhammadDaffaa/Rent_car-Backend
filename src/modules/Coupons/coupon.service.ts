@@ -1,11 +1,11 @@
-import { NotFoundError } from "../../errors/NotFoundError";
-import { couponRepository } from "./coupon.repository";
+import { NotFoundError } from "../../errors/NotFoundError.js";
+import { couponRepository } from "./coupon.repository.js";
 import {
   CreateCouponDto,
   createCouponSchema,
   UpdateCouponDto,
   updateCouponSchema,
-} from "./coupon.schema";
+} from "./coupon.schema.js";
 
 export const CouponService = {
   createCoupon: async (data: CreateCouponDto) => {

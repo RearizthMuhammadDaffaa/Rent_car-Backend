@@ -1,19 +1,19 @@
-import { BookingStatus, Prisma } from "../../../generated/prisma/client";
-import { prisma } from "../../config/db";
-import { BadRequestError } from "../../errors/BadRequestError";
-import { ForbiddenError } from "../../errors/ForbiddenError";
-import { NotFoundError } from "../../errors/NotFoundError";
-import { calculateTotalDays } from "../../shared/utils/rental-calculator";
-import { userParamDto } from "../authentication/auth.schema";
-import { couponRepository } from "../Coupons/coupon.repository";
-import { documentRepository } from "../DocumentVerification/document.repository";
-import { vehicleRepository } from "../Vehicle/vehicle.repository";
-import { BookingRepository } from "./booking.repository";
+import { BookingStatus, Prisma } from "../../../generated/prisma/client.js";
+import { prisma } from "../../config/db.js";
+import { BadRequestError } from "../../errors/BadRequestError.js";
+import { ForbiddenError } from "../../errors/ForbiddenError.js";
+import { NotFoundError } from "../../errors/NotFoundError.js";
+import { calculateTotalDays } from "../../shared/utils/rental-calculator.js";
+import { userParamDto } from "../authentication/auth.schema.js";
+import { couponRepository } from "../Coupons/coupon.repository.js";
+import { documentRepository } from "../DocumentVerification/document.repository.js";
+import { vehicleRepository } from "../Vehicle/vehicle.repository.js";
+import { BookingRepository } from "./booking.repository.js";
 import {
   CreateBookingDto,
   UpdateBookingDto,
   updateBookingSchema,
-} from "./booking.schema";
+} from "./booking.schema.js";
 
 export const BookingService = {
   createBooking: async (userId: string, data: CreateBookingDto) => {

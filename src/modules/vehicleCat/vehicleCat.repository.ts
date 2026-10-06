@@ -1,5 +1,5 @@
-import { prisma } from "../../config/db";
-import { CreateVehicleCatDto, UpdateVehicleCatDto } from "./vehicleCat.schema";
+import { prisma } from "../../config/db.js";
+import { CreateVehicleCatDto, UpdateVehicleCatDto } from "./vehicleCat.schema.js";
 
 export const VehicleCatRepository = {
   create: async (data: CreateVehicleCatDto) => {

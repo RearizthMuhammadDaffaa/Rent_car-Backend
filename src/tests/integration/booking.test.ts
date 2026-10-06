@@ -1,8 +1,8 @@
 import supertest from "supertest";
 import jwt from "jsonwebtoken";
-import { app } from "../../app";
-import { prisma } from "../../config/db";
-import { createTestCategory, createTestUser, createTestVehicle, removeTestCategories, removeTestUser, removeTestVehicles } from "./test-utils";
+import { app } from "../../app.js";
+import { prisma } from "../../config/db.js";
+import { createTestCategory, createTestUser, createTestVehicle, removeTestCategories, removeTestUser, removeTestVehicles } from "./test-utils.js";
 
 const auth = async () => {
   const user = await prisma.user.findUniqueOrThrow({ where: { email: "test@gmail.com" } });

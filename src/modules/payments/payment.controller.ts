@@ -1,7 +1,7 @@
 
 import { NextFunction, Request, Response } from "express";
 
-import { PaymentService } from "./payment.service";
+import { PaymentService } from "./payment.service.js";
 
 import {
   paymentParamSchema,
@@ -9,7 +9,7 @@ import {
   CreatePaymentDto,
   PaymentParam,
   PaymentBookingParam,
-} from "./payment.schema";
+} from "./payment.schema.js";
 
 
 

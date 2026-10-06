@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
-import { cloudinaryService } from "../../shared/service/cloudinary.service";
-import { VehicleImageService } from "./vehicleImage.service";
-import { vehicleImageParamSchema, VehicleImageParamsDto } from "./vehicleImage.schema";
+import { cloudinaryService } from "../../shared/service/cloudinary.service.js";
+import { VehicleImageService } from "./vehicleImage.service.js";
+import { vehicleImageParamSchema, VehicleImageParamsDto } from "./vehicleImage.schema.js";
 
 export const vehicleImageController = {
   async createVehicleImage(req: Request, res: Response) {

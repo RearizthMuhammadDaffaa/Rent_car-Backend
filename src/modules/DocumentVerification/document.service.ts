@@ -1,7 +1,7 @@
-import { NotFoundError } from "../../errors/NotFoundError";
-import { cloudinaryService } from "../../shared/service/cloudinary.service";
-import { documentRepository } from "./document.repository";
-import { documentStatusSchema, type UpdateDocumentStatusDto } from "./document.schema";
+import { NotFoundError } from "../../errors/NotFoundError.js";
+import { cloudinaryService } from "../../shared/service/cloudinary.service.js";
+import { documentRepository } from "./document.repository.js";
+import { documentStatusSchema, type UpdateDocumentStatusDto } from "./document.schema.js";
 
 
 

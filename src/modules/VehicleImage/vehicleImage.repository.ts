@@ -1,5 +1,5 @@
-import { prisma } from "../../config/db";
-import { CreateVehicleImageDto, UpdateVehicleImageDto } from "./vehicleImage.schema";
+import { prisma } from "../../config/db.js";
+import { CreateVehicleImageDto, UpdateVehicleImageDto } from "./vehicleImage.schema.js";
 
 export const vehicleImageRepository = {
   create: async (data: CreateVehicleImageDto) => {

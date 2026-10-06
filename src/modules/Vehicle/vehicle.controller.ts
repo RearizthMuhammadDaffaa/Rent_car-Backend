@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
-import { cloudinaryService } from "../../shared/service/cloudinary.service";
-import { VehicleService } from "./vehicle.service";
-import { vehicleParamSchema, VehicleParamsDto } from "./vehicle.schema";
+import { cloudinaryService } from "../../shared/service/cloudinary.service.js";
+import { VehicleService } from "./vehicle.service.js";
+import { vehicleParamSchema, VehicleParamsDto } from "./vehicle.schema.js";
 
 export const vehicleController = {
   async createVehicle(req: Request, res: Response,next:NextFunction) {

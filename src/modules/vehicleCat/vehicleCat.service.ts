@@ -1,6 +1,6 @@
-import { NotFoundError } from "../../errors/NotFoundError"
-import { VehicleCatRepository } from "./vehicleCat.repository"
-import { CreateVehicleCatDto, createVehicleCatSchema, UpdateVehicleCatDto, updateVehicleCatSchema } from "./vehicleCat.schema"
+import { NotFoundError } from "../../errors/NotFoundError.js"
+import { VehicleCatRepository } from "./vehicleCat.repository.js"
+import { CreateVehicleCatDto, createVehicleCatSchema, UpdateVehicleCatDto, updateVehicleCatSchema } from "./vehicleCat.schema.js"
 
 export const VehicleCatService = {
   createVehileCat : async (data:CreateVehicleCatDto) => {

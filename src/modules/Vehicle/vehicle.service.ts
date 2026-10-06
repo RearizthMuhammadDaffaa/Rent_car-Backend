@@ -1,15 +1,15 @@
-import { redis } from "../../config/upstash";
-import { NotFoundError } from "../../errors/NotFoundError";
-import { cloudinaryService } from "../../shared/service/cloudinary.service";
-import { VehicleWithRelations } from "../../shared/types/types";
-import { vehicleCacheKeys } from "./vehicle.cache";
-import { vehicleRepository } from "./vehicle.repository";
+import { redis } from "../../config/upstash.js";
+import { NotFoundError } from "../../errors/NotFoundError.js";
+import { cloudinaryService } from "../../shared/service/cloudinary.service.js";
+import { VehicleWithRelations } from "../../shared/types/types.js";
+import { vehicleCacheKeys } from "./vehicle.cache.js";
+import { vehicleRepository } from "./vehicle.repository.js";
 import {
   CreateVehicleDto,
   createVehicleSchema,
   UpdateVehicleDto,
   updateVehicleSchema,
-} from "./vehicle.schema";
+} from "./vehicle.schema.js";
 
 export const VehicleService = {
   createVehicle: async (data: CreateVehicleDto) => {

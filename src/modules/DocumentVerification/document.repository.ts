@@ -1,5 +1,5 @@
-import { Prisma } from "../../../generated/prisma/client";
-import { prisma } from "../../config/db";
+import { Prisma } from "../../../generated/prisma/client.js";
+import { prisma } from "../../config/db.js";
 
 type Tx = Prisma.TransactionClient;
 

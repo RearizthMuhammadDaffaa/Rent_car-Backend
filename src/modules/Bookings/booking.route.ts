@@ -1,7 +1,7 @@
 import { Router } from "express";
 
-import { BookingController } from "./booking.controller";
-import { authMiddleware } from "../../middleware/auth.middleware";
+import { BookingController } from "./booking.controller.js";
+import { authMiddleware } from "../../middleware/auth.middleware.js";
 const router = Router();
 
 router.post('/',authMiddleware(['CUSTOMER']),BookingController.createBooking)

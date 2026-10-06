@@ -1,8 +1,8 @@
 import { Router } from "express";
-import { authMiddleware } from "../../middleware/auth.middleware";
-import { uploadDocuments, validateImageFile } from "../../middleware/upload.middleware";
-import { documentController } from "./document.controller";
-import { RoleStatus } from "../../../generated/prisma/enums";
+import { authMiddleware } from "../../middleware/auth.middleware.js";
+import { uploadDocuments, validateImageFile } from "../../middleware/upload.middleware.js";
+import { documentController } from "./document.controller.js";
+import { RoleStatus } from "../../../generated/prisma/enums.js";
 
 const router = Router();
 

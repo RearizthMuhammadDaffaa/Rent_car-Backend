@@ -1,9 +1,9 @@
 import { Router } from "express";
 
-import { authController } from "./auth.controller";
-import rateLimiter from "../../middleware/rate-limit.middleware";
-import { authMiddleware } from "../../middleware/auth.middleware";
-import { RoleStatus } from "../../../generated/prisma/enums";
+import { authController } from "./auth.controller.js";
+import rateLimiter from "../../middleware/rate-limit.middleware.js";
+import { authMiddleware } from "../../middleware/auth.middleware.js";
+import { RoleStatus } from "../../../generated/prisma/enums.js";
 
 const router = Router();
 

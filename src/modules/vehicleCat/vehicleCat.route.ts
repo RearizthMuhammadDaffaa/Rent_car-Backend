@@ -1,7 +1,7 @@
 import { Router } from "express";
 
-import { VehicleCatController } from "./vehicleCat.controller";
-import { authMiddleware } from "../../middleware/auth.middleware";
+import { VehicleCatController } from "./vehicleCat.controller.js";
+import { authMiddleware } from "../../middleware/auth.middleware.js";
 const router = Router();
 
 router.post('/',authMiddleware(['ADMIN']),VehicleCatController.createVehileCat)

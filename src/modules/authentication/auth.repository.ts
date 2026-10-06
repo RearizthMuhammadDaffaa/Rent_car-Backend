@@ -1,7 +1,7 @@
 
-import { prisma } from "../../config/db";
-import { RegisterInput } from "./auth.schema";
-import { RoleStatus } from "../../../generated/prisma/enums";
+import { prisma } from "../../config/db.js";
+import { RegisterInput } from "./auth.schema.js";
+import { RoleStatus } from "../../../generated/prisma/enums.js";
 
 export const authRepository = {
   findByEmail: async (email: string) => {

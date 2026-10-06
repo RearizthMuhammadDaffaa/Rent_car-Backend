@@ -1,11 +1,11 @@
 import { NextFunction, Request, Response } from "express";
-import { BookingService } from "./booking.service";
+import { BookingService } from "./booking.service.js";
 import {
   bookingParamSchema,
   BookingParamsDto,
   createBookingSchema,
   UpdateBookingDto,
-} from "./booking.schema";
+} from "./booking.schema.js";
 
 export const BookingController = {
   async createBooking(req: Request, res: Response, next: NextFunction) {

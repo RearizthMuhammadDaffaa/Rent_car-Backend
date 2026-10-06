@@ -1,16 +1,16 @@
 import bcrypt from "bcrypt";
 import type { Response } from "express";
 
-import { authRepository, refreshTokenRepository } from "./auth.repository";
-import type { RegisterInput, LoginInput } from "./auth.schema";
+import { authRepository, refreshTokenRepository } from "./auth.repository.js";
+import type { RegisterInput, LoginInput } from "./auth.schema.js";
 import {
   generateRefreshToken,
   generateToken,
   hashRefreshToken,
-} from "../../shared/utils/utils";
-import { prisma } from "../../config/db";
-import { UnauthorizedError } from "../../errors/UnauthorizedError";
-import { ConflictError } from "../../errors/ConflictError";
+} from "../../shared/utils/utils.js";
+import { prisma } from "../../config/db.js";
+import { UnauthorizedError } from "../../errors/UnauthorizedError.js";
+import { ConflictError } from "../../errors/ConflictError.js";
 
 const REFRESH_TOKEN_EXPIRES_IN = 7 * 24 * 60 * 60 * 1000;
 

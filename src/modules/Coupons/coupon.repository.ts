@@ -1,6 +1,6 @@
-import { Prisma } from "../../../generated/prisma/client";
-import { prisma } from "../../config/db";
-import { CreateCouponDto, UpdateCouponDto } from "./coupon.schema";
+import { Prisma } from "../../../generated/prisma/client.js";
+import { prisma } from "../../config/db.js";
+import { CreateCouponDto, UpdateCouponDto } from "./coupon.schema.js";
 type Tx = Prisma.TransactionClient;
 
 export const couponRepository = {

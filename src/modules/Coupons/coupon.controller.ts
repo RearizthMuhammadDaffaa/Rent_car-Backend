@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import { CouponService } from "./coupon.service";
-import { couponParamSchema, CouponParamsDto } from "./coupon.schema";
+import { CouponService } from "./coupon.service.js";
+import { couponParamSchema, CouponParamsDto } from "./coupon.schema.js";
 
 export const couponController = {
   async createCoupon(req: Request, res: Response) {
