@@ -431,50 +431,49 @@ export const PaymentService = {
   /**
    * Handle successful payment
    */
-  handleSuccessPayment: async (
-    paymentId: string,
-    bookingId: string,
-    notification: MidtransNotificationDto,
-  ) => {
-    return await prisma.$transaction(async (tx) => {
-      const bookingResult = await tx.bookings.updateMany({
-        where: {
-          id: bookingId,
-          status: "PENDING",
-        },
-        data: {
-          status: "CONFIRMED",
-        },
-      });
-
-      if (bookingResult.count === 0) {
-        return {
-          message: "Booking is no longer available for confirmation",
-        };
-      }
-
-      const paymentResult = await tx.payments.updateMany({
-        where: {
-          id: paymentId,
-          status: "PENDING",
-        },
-        data: {
-          status: "PAID",
-          transaction_id: notification.transaction_id,
-          payment_type: notification.payment_type,
-          paid_at: new Date(),
-        },
-      });
-
-      if (paymentResult.count === 0) {
-        throw new Error("Payment is no longer payable");
-      }
-
-      return {
-        message: "Payment successful",
-      };
+ handleSuccessPayment: async (
+  paymentId: string,
+  bookingId: string,
+  notification: MidtransNotificationDto,
+) => {
+  return await prisma.$transaction(async (tx) => {
+    // 1. Update payment menjadi PAID
+    const paymentResult = await tx.payments.updateMany({
+      where: {
+        id: paymentId,
+        status: "PENDING",
+      },
+      data: {
+        status: "PAID",
+        transaction_id: notification.transaction_id,
+        payment_type: notification.payment_type,
+        paid_at: new Date(),
+      },
     });
-  },
+
+    // Payment sudah pernah diproses
+    if (paymentResult.count === 0) {
+      return {
+        message: "Payment already processed",
+      };
+    }
+
+    // 2. Setelah payment berhasil, confirm booking
+    await tx.bookings.updateMany({
+      where: {
+        id: bookingId,
+        status: "PENDING",
+      },
+      data: {
+        status: "CONFIRMED",
+      },
+    });
+
+    return {
+      message: "Payment successful",
+    };
+  });
+},
 
   /**
    * Handle expired payment
