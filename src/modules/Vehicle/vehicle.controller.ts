@@ -31,7 +31,9 @@ export const vehicleController = {
 
   async getVehicles(req: Request, res: Response,next:NextFunction) {
     try {
-      const vehicles = await VehicleService.getVehicles();
+      const page = Number(req.query.page ?? 1);
+      const limit = Number(req.query.limit ?? 5);
+      const vehicles = await VehicleService.getVehicles(page, limit);
 
       return res.status(200).json({
         vehicles,

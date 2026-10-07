@@ -18,8 +18,8 @@ export const BrandService = {
     const brandSchema = createBrandSchema.parse(data);
     return await brandRepository.create(brandSchema);
   },
-  getBrands: async () => {
-    const brands = await brandRepository.get();
+  getBrands: async (page:number,limit:number) => {
+    const brands = await brandRepository.get(page,limit);
     return brands;
   },
   getBrandById: async (id: string) => {

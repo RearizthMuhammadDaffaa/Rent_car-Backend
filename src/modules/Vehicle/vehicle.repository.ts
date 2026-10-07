@@ -18,13 +18,27 @@ export const vehicleRepository = {
     });
   },
 
-  get: async () => {
-    return prisma.vehicles.findMany({
+  get: async (page: number, limit: number) => {
+    const total = await prisma.vehicles.count();
+    const vehicles = await prisma.vehicles.findMany({
       include: {
         brand:true,
         category:true
-      }
+      },
+      skip: (page - 1) * limit,
+      take: limit,
+      orderBy: {
+        createdAt: "desc",
+      },
     });
+    const totalPage = Math.ceil(total / limit);
+    return {
+      vehicles,
+      pagination: {
+        total,
+        totalPage,
+      },
+    };
   },
 
   getById: async (id: string,tx?:Tx) => {

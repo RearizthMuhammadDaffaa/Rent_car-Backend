@@ -14,8 +14,8 @@ export const VehicleImageService = {
     return vehicleImageRepository.create(vehicleImageSchema);
   },
 
-  getVehicleImages: async () => {
-    return vehicleImageRepository.get();
+  getVehicleImages: async (page: number, limit: number) => {
+    return vehicleImageRepository.get(page, limit);
   },
 
   getVehicleImageById: async (id: string) => {

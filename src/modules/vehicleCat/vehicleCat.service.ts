@@ -7,8 +7,8 @@ export const VehicleCatService = {
      const vehicleCatSchema = createVehicleCatSchema.parse(data)
     return await VehicleCatRepository.create(vehicleCatSchema)
   },
-  getVehileCats : async () => {
-    const vehicleCats = await VehicleCatRepository.get()
+  getVehileCats : async (page: number, limit: number) => {
+    const vehicleCats = await VehicleCatRepository.get(page, limit)
     return vehicleCats
   },
   getVehileCatById: async (id:string) => {

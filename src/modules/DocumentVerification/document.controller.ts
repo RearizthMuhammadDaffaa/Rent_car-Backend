@@ -66,9 +66,11 @@ export const documentController = {
     return res.status(200).json({ message: "Documents deleted successfully", data: await documentService.deleteOwn(req.user.id) });
   },
 
-  async getAll(_req: Request, res: Response,next: NextFunction) {
+  async getAll(req: Request, res: Response,next: NextFunction) {
     try {
-    const documents = await documentService.getAll();
+    const page = Number(req.query.page ?? 1);
+    const limit = Number(req.query.limit ?? 5);
+    const documents = await documentService.getAll(page, limit);
 
     return res.status(200).json({
       success: true,

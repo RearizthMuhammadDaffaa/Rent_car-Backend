@@ -11,6 +11,8 @@ import {
   updateVehicleSchema,
 } from "./vehicle.schema.js";
 
+type VehicleListResult = Awaited<ReturnType<typeof vehicleRepository.get>>;
+
 export const VehicleService = {
   createVehicle: async (data: CreateVehicleDto) => {
     const vehicleSchema = createVehicleSchema.parse(data);
@@ -19,17 +21,22 @@ export const VehicleService = {
     return vehicle;
   },
 
-  getVehicles: async () => {
+  getVehicles: async (page: number, limit: number) => {
     const key = vehicleCacheKeys.all;
+    const pageKey = `${page}:${limit}`;
 
-    const cached = await redis.get<VehicleWithRelations[]>(key)
-     if (cached) {
-      return cached;
+    const cached = await redis.get<Record<string, VehicleListResult>>(key);
+    const cachedPage = cached?.[pageKey];
+    if (cachedPage) {
+      return cachedPage;
     }
 
-    const vehicles = await vehicleRepository.get();
+    const vehicles = await vehicleRepository.get(page, limit);
 
-    await redis.set(key, vehicles, {
+    await redis.set(key, {
+      ...cached,
+      [pageKey]: vehicles,
+    }, {
       ex: 300,
     });
 

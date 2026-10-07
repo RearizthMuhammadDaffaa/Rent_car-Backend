@@ -23,7 +23,9 @@ export const VehicleCatController = {
 
   async getVehileCats (req:Request,res:Response){
     try {
-      const vehiclesCat = await VehicleCatService.getVehileCats();
+      const page = Number(req.query.page ?? 1);
+      const limit = Number(req.query.limit ?? 5);
+      const vehiclesCat = await VehicleCatService.getVehileCats(page, limit);
       res.status(200).json({
         vehiclesCat
       })

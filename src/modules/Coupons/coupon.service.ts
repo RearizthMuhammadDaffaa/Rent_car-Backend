@@ -13,8 +13,8 @@ export const CouponService = {
     return couponRepository.create(couponSchema);
   },
 
-  getCoupons: async () => {
-    return couponRepository.get();
+  getCoupons: async (page: number, limit: number) => {
+    return couponRepository.get(page, limit);
   },
 
   getCouponById: async (id: string) => {

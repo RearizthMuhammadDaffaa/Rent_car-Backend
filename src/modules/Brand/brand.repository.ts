@@ -10,8 +10,20 @@ export const brandRepository = {
       data,
     });
   },
-  get : async () => {
-    return await prisma.brands.findMany();
+  get : async (page:number,limit:number) => {
+    const total = await prisma.brands.count();
+    const brands =  await prisma.brands.findMany({
+      skip:(page - 1) * limit,
+      take:limit,
+    });
+    const totalPage = Math.ceil(total/limit);
+    return {
+      brands,
+      pagination: {
+        total,
+        totalPage
+      }
+    }
   },
   getbyId : async (id:string) => {
     return await prisma.brands.findUnique({

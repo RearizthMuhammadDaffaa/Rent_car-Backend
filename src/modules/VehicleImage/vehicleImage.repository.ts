@@ -8,8 +8,23 @@ export const vehicleImageRepository = {
     });
   },
 
-  get: async () => {
-    return prisma.vehicleImage.findMany();
+  get: async (page: number, limit: number) => {
+    const total = await prisma.vehicleImage.count();
+    const vehicleImages = await prisma.vehicleImage.findMany({
+      skip: (page - 1) * limit,
+      take: limit,
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+    const totalPage = Math.ceil(total / limit);
+    return {
+      vehicleImages,
+      pagination: {
+        total,
+        totalPage,
+      },
+    };
   },
 
   getById: async (id: string) => {

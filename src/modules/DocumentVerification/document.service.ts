@@ -32,16 +32,19 @@ export const documentService = {
     return deleted;
   },
 
-  getAll: async () => {
-     const documents = await documentRepository.findAll();
+  getAll: async (page: number, limit: number) => {
+     const { documents, pagination } = await documentRepository.findAll(page, limit);
 
-     return documents.map((document) => ({
-        id: document.id,
-        user_id: document.user_id,
-        status: document.status,
-        createdAt: document.createdAt,
-        updatedAt: document.updatedAt,
-  }));
+     return {
+       documents: documents.map((document) => ({
+          id: document.id,
+          user_id: document.user_id,
+          status: document.status,
+          createdAt: document.createdAt,
+          updatedAt: document.updatedAt,
+       })),
+       pagination,
+     };
   },
 
   updateStatus: async (id: string, data: UpdateDocumentStatusDto) => {

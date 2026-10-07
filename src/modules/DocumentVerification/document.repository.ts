@@ -20,8 +20,23 @@ export const documentRepository = {
     return prisma.userDocuments.findUnique({ where: { id } });
   },
 
-  findAll: async () => {
-    return prisma.userDocuments.findMany({ orderBy: { updatedAt: "desc" } });
+  findAll: async (page: number, limit: number) => {
+    const total = await prisma.userDocuments.count();
+    const documents = await prisma.userDocuments.findMany({
+      skip: (page - 1) * limit,
+      take: limit,
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+    const totalPage = Math.ceil(total / limit);
+    return {
+      documents,
+      pagination: {
+        total,
+        totalPage,
+      },
+    };
   },
 
   create: async (data: Prisma.UserDocumentsUncheckedCreateInput) => {

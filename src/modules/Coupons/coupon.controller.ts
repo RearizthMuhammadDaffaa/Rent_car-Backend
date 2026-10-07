@@ -22,7 +22,9 @@ export const couponController = {
 
   async getCoupons(req: Request, res: Response) {
     try {
-      const coupons = await CouponService.getCoupons();
+      const page = Number(req.query.page ?? 1);
+      const limit = Number(req.query.limit ?? 5);
+      const coupons = await CouponService.getCoupons(page, limit);
 
       return res.status(200).json({
         coupons,

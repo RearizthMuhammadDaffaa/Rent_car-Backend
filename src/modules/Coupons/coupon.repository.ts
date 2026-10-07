@@ -10,8 +10,23 @@ export const couponRepository = {
     });
   },
 
-  get: async () => {
-    return prisma.coupons.findMany();
+  get: async (page: number, limit: number) => {
+    const total = await prisma.coupons.count();
+    const coupons = await prisma.coupons.findMany({
+      skip: (page - 1) * limit,
+      take: limit,
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+    const totalPage = Math.ceil(total / limit);
+    return {
+      coupons,
+      pagination: {
+        total,
+        totalPage,
+      },
+    };
   },
 
   getById: async (id: string) => {
