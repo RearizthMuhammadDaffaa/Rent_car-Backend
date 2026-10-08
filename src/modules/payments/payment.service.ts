@@ -181,6 +181,9 @@ export const PaymentService = {
           name: "Discount",
         },
       ],
+      callbacks:{
+         finish: `http://localhost:5173/payment/finish?bookingId=${booking.id}`,
+      }
     };
 
     /**

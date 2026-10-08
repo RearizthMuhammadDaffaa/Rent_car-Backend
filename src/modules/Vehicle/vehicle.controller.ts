@@ -43,6 +43,49 @@ export const vehicleController = {
     }
   },
 
+  async getAvailability(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const pickupAt = new Date(
+      String(req.query.pickup_at)
+    );
+
+    const returnAt = new Date(
+      String(req.query.return_at)
+    );
+
+    if (
+      isNaN(pickupAt.getTime()) ||
+      isNaN(returnAt.getTime())
+    ) {
+      return res.status(400).json({
+        message: "Invalid pickup_at or return_at",
+      });
+    }
+
+    if (pickupAt >= returnAt) {
+      return res.status(400).json({
+        message: "return_at must be after pickup_at",
+      });
+    }
+
+    const availability =
+      await VehicleService.getAvailability(
+        pickupAt,
+        returnAt
+      );
+
+    return res.status(200).json({
+       unavailableVehicleIds: availability,
+    });
+  } catch (error) {
+    return next(error);
+  }
+},
+
   async getVehicleById(req: Request<VehicleParamsDto>, res: Response,next:NextFunction) {
     try {
       const params = vehicleParamSchema.parse(req.params);

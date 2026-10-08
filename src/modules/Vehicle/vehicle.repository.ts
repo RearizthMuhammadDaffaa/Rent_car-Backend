@@ -41,6 +41,34 @@ export const vehicleRepository = {
     };
   },
 
+getAvailability: async (
+  pickupAt: Date,
+  returnAt: Date
+) => {
+  const overlappingBookings =
+    await prisma.bookings.findMany({
+      where: {
+        status: {
+          in: ["PENDING", "CONFIRMED"],
+        },
+        pickup_at: {
+          lt: returnAt,
+        },
+        return_at: {
+          gt: pickupAt,
+        },
+      },
+      select: {
+        car_id: true,
+      },
+    });
+
+  return overlappingBookings.map(
+    (booking) => booking.car_id
+  );
+},
+ 
+
   getById: async (id: string,tx?:Tx) => {
     const db = tx ?? prisma;
     return db.vehicles.findUnique({

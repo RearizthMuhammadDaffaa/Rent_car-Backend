@@ -44,6 +44,16 @@ export const VehicleService = {
 
   },
 
+  getAvailability: async (
+  pickupAt: Date,
+  returnAt: Date
+) => {
+  return vehicleRepository.getAvailability(
+    pickupAt,
+    returnAt
+  );
+},
+
   getVehicleById: async (id: string) => {
     const key = vehicleCacheKeys.byId(id)
 
